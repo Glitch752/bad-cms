@@ -3,7 +3,6 @@
 const developmentEnvironments = ['development', 'test'];
 
 const developmentPlugins = [require('@babel/plugin-transform-runtime')];
-const { generateScopedNameFactory } = require('@dr.pogodin/babel-plugin-react-css-modules/utils');
 
 const productionPlugins = [
   require('babel-plugin-dev-expression'),
@@ -43,14 +42,6 @@ module.exports = (api) => {
         { loose: false },
       ],
       require('@babel/plugin-proposal-do-expressions'),
-
-      ["@dr.pogodin/react-css-modules", {
-        generateScopedName:
-          // The classname template MUST match "localIdentName" option value
-          // you passed to "css-loader".
-          generateScopedNameFactory("[path]___[name]__[local]___[hash:base64:6]"),
-      }],
-
       // Stage 2
       [require('@babel/plugin-proposal-decorators'), { legacy: true }],
       require('@babel/plugin-proposal-function-sent'),

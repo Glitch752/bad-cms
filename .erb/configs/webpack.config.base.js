@@ -6,19 +6,6 @@ import path from 'path';
 import webpack from 'webpack';
 import { dependencies as externals } from '../../src/package.json';
 
-const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
-
-const { getLocalIdent } = require('@dr.pogodin/babel-plugin-react-css-modules/utils');
-
-const cssLoaderOptions = {
-  modules: {
-    getLocalIdent,
-    localIdentName: '[path]___[name]__[local]___[hash:base64:6]',
-  },
-  importLoaders: 1, // if specifying more loaders
-  sourceMap: false,
-};
-
 export default {
   externals: [...Object.keys(externals || {})],
 
@@ -36,24 +23,20 @@ export default {
       },
       {
         test: /\.css$/i,
-        use: [
-          {
-            loader: ExtractCssChunks.loader,
-            options: { hot: true }
-          },
-          {
-            loader: "css-loader", //generating unique classname
-            options: cssLoaderOptions,
-          }
-        ]
+        use: ['style-loader', 'css-loader'],
       },
+     {
+       test: /\.(png|svg|jpg|jpeg|gif)$/i,
+       type: 'asset/resource',
+     },
     ],
   },
 
   output: {
-    path: path.join(__dirname, '../../src'),
+    path: path.join(__dirname, 'dist'),
     // https://github.com/webpack/webpack/issues/1114
     libraryTarget: 'commonjs2',
+    clean: true,
   },
 
   /**
@@ -68,11 +51,5 @@ export default {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
     }),
-    // new ExtractCssChunks({
-    //   // Options similar to the same options in webpackOptions.output
-    //   // both options are optional
-    //   filename: '[name].css',
-    //   chunkFilename: '[id].css'
-    // })
   ],
 };

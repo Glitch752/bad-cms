@@ -82,24 +82,6 @@ export default merge(baseConfig, {
           },
         ],
       },
-      {
-        test: /^((?!\.global).)*\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-              },
-              sourceMap: true,
-              importLoaders: 1,
-            },
-          },
-        ],
-      },
       // SASS support - compile all .global.scss files and pipe it to style.css
       {
         test: /\.global\.(scss|sass)$/,
@@ -203,11 +185,15 @@ export default merge(baseConfig, {
           },
         },
       },
-      // Common Image Formats
-      {
-        test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-        use: 'url-loader',
-      },
+      // // Common Image Formats
+      // {
+      //   test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
+      //   use: 'url-loader',
+      // },
+     {
+      test: /\.(png|svg|jpg|jpeg|gif)$/i,
+      type: 'asset/resource',
+    },
     ],
   },
   plugins: [
@@ -252,25 +238,33 @@ export default merge(baseConfig, {
 
   devServer: {
     port,
-    publicPath,
+    devMiddleware: {
+      publicPath,
+      stats: 'errors-only',
+    },
     compress: true,
-    noInfo: false,
-    stats: 'errors-only',
-    inline: true,
-    lazy: false,
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: path.join(__dirname, 'dist'),
-    watchOptions: {
-      aggregateTimeout: 300,
-      ignored: /node_modules/,
-      poll: 100,
+    // contentBase: path.join(__dirname, 'dist'),
+    static: {
+      directory: path.resolve(__dirname, "dist"),
+      // staticOptions: {},
+      // Don't be confused with `devMiddleware.publicPath`, it is `publicPath` for static directory
+      // Can be:
+      // publicPath: ['/static-public-path-one/', '/static-public-path-two/'],
+      // publicPath: "/static-public-path/",
+      serveIndex: true,
+      watch: {
+        aggregateTimeout: 300,
+        ignored: /node_modules/,
+        poll: 100,
+      },
     },
     historyApiFallback: {
       verbose: true,
       disableDotRule: false,
     },
-    before() {
+    onBeforeSetupMiddleware() {
       console.log('Starting Main Process...');
         spawn('npm', ['run', 'start:main'], {
           shell: true,

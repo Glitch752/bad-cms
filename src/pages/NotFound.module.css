@@ -16,7 +16,7 @@
     transform: translateY(-10px);
     box-shadow: 0px 10px #1d574a;
     position: absolute;
-    left: calc(var(--start-button-width) * -1);
+    margin-top: 7em;
   }
   .goHome:hover {
     box-shadow: 0px 10px #1e5c4e;

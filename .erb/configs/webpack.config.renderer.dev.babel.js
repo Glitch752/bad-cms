@@ -228,7 +228,9 @@ export default merge(baseConfig, {
       debug: true,
     }),
 
-    new ReactRefreshWebpackPlugin(),
+    new ReactRefreshWebpackPlugin({
+      overlay: false,
+    }),
   ],
 
   node: {
@@ -263,6 +265,17 @@ export default merge(baseConfig, {
     historyApiFallback: {
       verbose: true,
       disableDotRule: false,
+    },
+    client: {
+      // Can be `string`:
+      //
+      // To get protocol/hostname/port from browser
+      // webSocketURL: 'auto://0.0.0.0:0/ws'
+      webSocketURL: {
+        hostname: "localhost",
+        pathname: "/ws",
+        port,
+      },
     },
     onBeforeSetupMiddleware() {
       console.log('Starting Main Process...');

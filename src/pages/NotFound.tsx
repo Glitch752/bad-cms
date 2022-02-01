@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './NotFound.css';
+import styles from './NotFound.module.css';
 
 
 export default function NotFound(props) {
@@ -14,7 +14,8 @@ export default function NotFound(props) {
         <main>
             <h1>404</h1>
             <p>Couldn't find the page you're looking for!</p>
-            <button styleName="goHome" onClick={NavigateTo}>Go back home</button>
+            <p>Page: {window.location.href.substring(window.location.href.indexOf('#') + 1)}</p>
+            <button className={styles.goHome} onClick={NavigateTo}>Go back home</button>
         </main>
     );
 }

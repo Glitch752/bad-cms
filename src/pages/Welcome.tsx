@@ -15,7 +15,6 @@ export default function Welcome() {
     return (
         <main>
             <h1>Welcome</h1>
-            {/* <img src="../assets/cursor.png"></img> -- loads???*/}
             <p>Welcome to Bad CMS for devs! We hope this CMS isn't actually <i>that</i> bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?</p>
             <button className={styles.start} onClick={NavigateTo}>Get started!</button>
         </main>

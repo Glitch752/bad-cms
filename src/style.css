@@ -10,12 +10,12 @@ body {
   position: absolute;
   overflow: hidden;
 }
-main h1 {
+main > h1 {
   margin: 0 0 10px 0;
   font-weight: 600;
   line-height: 1.2;
 }
-main p {
+main > p {
   max-width: 60%;
   margin-top: 10px;
   color: #808080;

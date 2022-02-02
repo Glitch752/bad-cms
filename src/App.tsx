@@ -4,6 +4,7 @@ import { HashRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import GetStarted from './pages/GetStarted';
 import NotFound from './pages/NotFound';
 import Welcome from './pages/Welcome';
+import Redirect from './pages/Redirect';
 
 //Makes it so you can type "extends Component" instead of "extends React.Component<any, any>". Very hacky solution
 // export class Component extends React.Component<any, any> {
@@ -47,7 +48,8 @@ export class App extends Component<any, any> {
           <HashRouter>
             <Routes>
               <Route path="*" element={<NotFound />} />
-              <Route path="/" element={<Welcome />} />
+              <Route path="/" element={<Redirect />} />
+              <Route path="/Welcome" element={<Welcome />} />
               <Route path="/GetStarted" element={<GetStarted />} />
             </Routes>
           </HashRouter>

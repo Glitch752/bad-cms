@@ -3,13 +3,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Welcome.module.css';
 
+import { store } from '../store';
+
+// store.delete('unicorn');
+// console.log(store.get('unicorn'));
+
 export default function Welcome() {
     const navigate = useNavigate();
-    console.log(navigate);
     const NavigateTo = e => {
         e.preventDefault();
-        // navigate(-1);
-        console.log("e");
+
+        store.set('hasBeenWelcomed', true);
+
         navigate('/GetStarted');
     }
     return (

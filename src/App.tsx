@@ -5,26 +5,10 @@ import GetStarted from './pages/GetStarted';
 import NotFound from './pages/NotFound';
 import Welcome from './pages/Welcome';
 import Redirect from './pages/Redirect';
+import Dashboard from './pages/Dashboard';
+import Template from './pages/Template';
+import Editor from './pages/Editor';
 
-//Makes it so you can type "extends Component" instead of "extends React.Component<any, any>". Very hacky solution
-// export class Component extends React.Component<any, any> {
-//   Component() {return new React.Component<any, any>(this.props)}
-// }
-
-// ------------------------------------------- APP
-
-// <main>
-//   <h1>Welcome</h1>
-//   <p>Welcome to Bad CMS for devs! We hope this CMS isn't actually <i>that</i> bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?</p>
-//   <button className="start" onClick={() => loadPage('getStarted')}>Get started!</button>
-// </main>
-
-// <Routes>
-// <div>
-//   <Route path="/" element={<Welcome />} />
-//    <Route path="/" element={<GetStarted />}></Route>
-// </div>
-// </Routes>
 
 export class App extends Component<any, any> {
   render() {
@@ -51,6 +35,9 @@ export class App extends Component<any, any> {
               <Route path="/" element={<Redirect />} />
               <Route path="/Welcome" element={<Welcome />} />
               <Route path="/GetStarted" element={<GetStarted />} />
+              <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/template/:type" element={<Template />} />
+              <Route path="/Editor/project/:id" element={<Editor />} />
             </Routes>
           </HashRouter>
         </div>

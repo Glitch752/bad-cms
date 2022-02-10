@@ -15,10 +15,59 @@ import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+import fs from 'fs';
 
 const Store = require('electron-store');
 
 Store.initRenderer();
+
+const ipc = require('electron').ipcMain;
+ipc.on('CreateProject', (event, args) => {
+  var projectPath = path.join(app.getPath('userData'), "/projects", args.name);
+  if (fs.existsSync(projectPath)) {
+    event.sender.send('CreateProjectReply', false);
+  } else {
+    const app = require('electron').app;
+
+    var templatePath = path.join(app.getAppPath(), "/templates", args.template);
+
+    var ncp = require('ncp').ncp;
+
+    fs.mkdirSync(projectPath, { recursive: true })
+
+    ncp(templatePath, projectPath, 
+    function (err) {
+      if (err) {
+          console.log('ncp error');
+          return console.error(err);
+      }
+
+      console.log('Folders copied recursively');
+    });
+
+    event.sender.send('CreateProjectReply', projectPath);
+  }
+ });
+
+ ipc.once('getFiles', (event, args) => {
+    event.sender.send('getFilesReply', getFilesFromDirectory(args.directory));
+ });
+
+ const getFilesFromDirectory = (directoryPath) => {
+  const filesInDirectory = fs.readdirSync(directoryPath);
+  const files = filesInDirectory.map((file) => {
+      const filePath = path.join(directoryPath, file);
+      const stats = fs.statSync(filePath);
+
+      if (stats.isDirectory()) {
+          return getFilesFromDirectory(filePath);
+      } else {
+          return filePath;
+      }
+  });
+
+  return files.filter((file) => file.length);
+};
 
 export default class AppUpdater {
   constructor() {

@@ -113,6 +113,7 @@
   },
   "dependencies": {
     "@dr.pogodin/babel-plugin-react-css-modules": "^6.5.4",
+    "@monaco-editor/react": "^4.3.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
     "acorn": "^8.7.0",
     "css-url-relative-plugin": "^1.1.0",
@@ -124,6 +125,7 @@
     "extract-css-chunks-webpack-plugin": "^4.9.0",
     "history": "^5.0.0",
     "logrocket": "^2.0.0",
+    "ncp": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.1",
     "react-native": "^0.66.4",

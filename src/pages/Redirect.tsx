@@ -10,7 +10,8 @@ export default function Welcome() {
     
     useEffect(() => {
         if(store.get('hasBeenWelcomed')) {
-            navigate("/GetStarted");
+            //navigate("/GetStarted");
+            navigate("/Dashboard");
         } else {
             navigate("/Welcome");
         }

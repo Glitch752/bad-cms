@@ -123,6 +123,7 @@
     "electron-store": "^8.0.1",
     "electron-updater": "4.3.9",
     "extract-css-chunks-webpack-plugin": "^4.9.0",
+    "handlebars": "^4.7.7",
     "history": "^5.0.0",
     "logrocket": "^2.0.0",
     "ncp": "^2.0.0",

@@ -17,12 +17,14 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import fs from 'fs';
 
+const Handlebars = require("handlebars");
+
 const Store = require('electron-store');
 
 Store.initRenderer();
 
 const ipc = require('electron').ipcMain;
-ipc.on('CreateProject', (event, args) => {
+ipc.once('CreateProject', (event, args) => {
   var projectPath = path.join(app.getPath('userData'), "/projects", args.name);
   if (fs.existsSync(projectPath)) {
     event.sender.send('CreateProjectReply', false);
@@ -41,11 +43,23 @@ ipc.on('CreateProject', (event, args) => {
           console.log('ncp error');
           return console.error(err);
       }
-
-      console.log('Folders copied recursively');
+  
+      var files = getFilesFromDirectory(projectPath);
+      for(var i = 0; i < files.length; i++) {
+        const file = files[i];
+        const extnames = [".html", ".js", ".css"];
+        if(extnames.includes(path.extname(file))) {
+          const template = Handlebars.compile(fs.readFileSync(file, 'utf8'));
+          var saveText = template({ 
+            name: args.name,
+            user: "you",
+          });
+          fs.writeFileSync(file, saveText);
+        }
+      }
+  
+      event.sender.send('CreateProjectReply', projectPath);
     });
-
-    event.sender.send('CreateProjectReply', projectPath);
   }
  });
 
@@ -53,21 +67,19 @@ ipc.on('CreateProject', (event, args) => {
     event.sender.send('getFilesReply', getFilesFromDirectory(args.directory));
  });
 
- const getFilesFromDirectory = (directoryPath) => {
-  const filesInDirectory = fs.readdirSync(directoryPath);
-  const files = filesInDirectory.map((file) => {
-      const filePath = path.join(directoryPath, file);
-      const stats = fs.statSync(filePath);
+ const getFilesFromDirectory = function(dirPath, arrayOfFiles = []) {
+  var files = fs.readdirSync(dirPath)
 
-      if (stats.isDirectory()) {
-          return getFilesFromDirectory(filePath);
-      } else {
-          return filePath;
-      }
-  });
+  files.forEach(function(file) {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles = getFilesFromDirectory(dirPath + "/" + file, arrayOfFiles)
+    } else {
+      arrayOfFiles.push(path.join(dirPath, "/", file))
+    }
+  })
 
-  return files.filter((file) => file.length);
-};
+  return arrayOfFiles
+}
 
 export default class AppUpdater {
   constructor() {

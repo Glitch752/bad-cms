@@ -18,7 +18,7 @@ export default function Template() {
 
     ipc.send('CreateProject', {name: projectName, icon: projectIcon, template: type});
 
-    ipc.on('CreateProjectReply', (event, args) => {
+    ipc.once('CreateProjectReply', (event, args) => {
         if(args == false) navigate("/GetStarted");
         console.log(args);
         var currentProjects = store.get('projects', []);

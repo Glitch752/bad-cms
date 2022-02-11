@@ -1,0 +1,126 @@
+:root {
+    --primairy-text-color-light: white; 
+    --primairy-text-color-grey: grey;
+    --primairy-text-color-dark: black;
+    --primairy-link-fade-color: #A32C32;
+
+    --navbar-padding: 1.5em;
+    --navbar-height: calc(var(--navbar-padding) * 2);
+    --navbar-height-negative: calc(var(--navbar-height) * -1)
+}
+html {
+    font-family: 'Lato';
+}
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+main {
+    /* flexbox */ 
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+    flex-direction: column;
+}
+.post {
+    padding-top: 3em;
+    width: 80vw;
+}
+.post:last-of-type {
+    padding-bottom: 2em;
+}
+.post * {
+    transition: color 0.25s ease;
+}
+.post .title, .post .author {
+    color: var(--primairy-text-color-dark);
+}
+.post .author {
+    display: inline;
+}
+.post .time {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
+    display: inline;
+    margin-left: 4em;
+    color: var(--primairy-text-color-grey);
+}
+.post a:hover * {
+    color: var(--primairy-link-fade-color);
+}
+.post .readmore {
+    color: var(--primairy-text-color-grey);
+    font-weight: 400;
+}
+.toparea {
+    z-index: 10;
+    align-items: center;
+    /* background-color:#121317; */
+    color: var(--primairy-text-color-light);
+    width: 100vw;
+    height: 80vh;
+    
+    /* flexbox */
+    
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+
+    /* font */
+
+    font-size: 1.9em;
+    text-shadow: 0px 0px 15px black;
+    font-weight: 900;
+
+    /* background image */
+    
+    background-image: 
+        url("background.jpg"),
+        linear-gradient(#121317, #282a33);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.navbar {
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    display: block;
+    width: 100vw;
+    background-color: rgba(36, 38, 46, 0);
+    color: white;
+    top: 0;
+    opacity: 1;
+    transition: top 0.15s ease, opacity 0.25s ease, background-color 0.25s ease;
+    padding: var(--navbar-padding);
+}
+.navbar h2, .navbar a {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    transition: color 0.25s ease;
+    font-weight: 100;
+    font-size: 1.2rem;
+    /* text-shadow: 0px 0px 15px silver; */
+}
+a:not(.normala) {
+    color: white;
+    text-decoration: inherit;
+    font-weight: inherit;
+}
+a:not(.normala):hover {
+    color: #A32C32;
+}
+footer {
+    display: block;
+    background-color: #343644;
+    color: white;
+    width: 100vw;
+    height: 4em;
+  
+    /* flexbox */
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}

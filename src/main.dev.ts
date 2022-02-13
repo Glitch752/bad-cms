@@ -24,7 +24,7 @@ const Store = require('electron-store');
 Store.initRenderer();
 
 const ipc = require('electron').ipcMain;
-ipc.once('CreateProject', (event, args) => {
+ipc.on('CreateProject', (event, args) => {
   var projectPath = path.join(app.getPath('userData'), "/projects", args.name);
   if (fs.existsSync(projectPath)) {
     event.sender.send('CreateProjectReply', false);
@@ -63,9 +63,18 @@ ipc.once('CreateProject', (event, args) => {
   }
  });
 
- ipc.once('getFiles', (event, args) => {
-    event.sender.send('getFilesReply', getFilesFromDirectory(args.directory));
+ ipc.on('getFiles', (event, args) => {
+    var dirFiles = getFilesFromDirectory(args.directory);
+    for(var i = 0; i < dirFiles.length; i++) {
+      dirFiles[i] = dirFiles[i].replace(args.directory, "");
+    }
+    event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
  });
+
+ ipc.on('getFile', (event, args) => {
+    var file = fs.readFileSync(args.file, 'utf8');
+    event.sender.send('getFileReply', {content: file, fileName: args.file});
+ })
 
  const getFilesFromDirectory = function(dirPath, arrayOfFiles = []) {
   var files = fs.readdirSync(dirPath)

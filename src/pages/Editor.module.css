@@ -39,3 +39,13 @@
     z-index: 1;
     height: calc(100vh - 125px);
   }
+  /* .editorSelection {
+    background-color: #2a3d50;
+  } */
+  .editorSelectionIcon {
+    margin-right: 10px;
+    margin-left: 5px;
+  }
+  .selectedSelection {
+    background-color: #223141;
+  }

@@ -8,6 +8,7 @@ import Redirect from './pages/Redirect';
 import Dashboard from './pages/Dashboard';
 import Template from './pages/Template';
 import Editor from './pages/Editor';
+import EditorPopout from './pages/EditorPopout';
 
 
 export class App extends Component<any, any> {
@@ -38,6 +39,7 @@ export class App extends Component<any, any> {
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/template/:type" element={<Template />} />
               <Route path="/Editor/project/:id" element={<Editor />} />
+              <Route path="/editorPopout/:file" element={<EditorPopout />} />
             </Routes>
           </HashRouter>
         </div>

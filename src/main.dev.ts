@@ -16,6 +16,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import fs from 'fs';
+import { Z_NO_FLUSH } from 'zlib';
 
 const Handlebars = require("handlebars");
 
@@ -75,6 +76,73 @@ ipc.on('CreateProject', (event, args) => {
     var file = fs.readFileSync(args.file, 'utf8');
     event.sender.send('getFileReply', {content: file, fileName: args.file});
  })
+
+ var popoutWindiows = [];
+
+ var openWindowSender = null;
+
+ ipc.on('editorPopOut', (event, args) => {
+  popoutWindiows.push({
+    window: new BrowserWindow({
+              show: false,
+              width: 1024,
+              height: 728,
+              minWidth: 1024,
+              minHeight: 728,
+              frame: false,
+              webPreferences: {
+                nodeIntegration: true,
+                enableRemoteModule: true,
+              }
+            }),
+    index: args.index,
+  });
+
+  openWindowSender = event.sender;
+
+  let newWinIndex = popoutWindiows.length - 1;
+
+  let newWin = popoutWindiows[newWinIndex].window;
+
+  newWin.loadURL(`file://${__dirname}/index.html#/editorPopout/` + args.file);
+
+  newWin.webContents.on('did-finish-load', () => {
+    if (!newWin) {
+      throw new Error('"newWin" is not defined');
+    }
+    newWin.show();
+    newWin.focus();
+
+    event.sender.send('editorPopoutReply', {index: args.index, window: newWinIndex});
+  });
+
+ });
+
+ ipc.on('editorFocusWindow', (event, args) => {
+   popoutWindiows[args].window.focus();
+ });
+
+ ipc.on('windowClosedRenderer', (event, args) => {
+    //convert the href in args to the window open
+    //first, get the part of the string after the #
+    var href = args.split("#")[1];
+    if(href.startsWith("/editorPopout/")) {
+      for(var i = 0; i < popoutWindiows.length; i++) {
+        var url = popoutWindiows[i].window.webContents.getURL();
+        url = url.substring(0, url.lastIndexOf('\\'));
+
+        //Probably a better way to figure this out
+        if(url === args.substring(0, args.lastIndexOf('\\'))) {
+              
+          if(openWindowSender !== null) {
+            openWindowSender.send('popoutClose', popoutWindiows[i].index);
+            popoutWindiows.splice(args, 1);
+          }
+          return;
+        }
+      }
+    }
+ });
 
  const getFilesFromDirectory = function(dirPath, arrayOfFiles = []) {
   var files = fs.readdirSync(dirPath)

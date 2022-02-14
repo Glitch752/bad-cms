@@ -6,6 +6,8 @@ console.log("renderer.js loaded");
 
 const remote = require('electron').remote;
 
+const ipc = require('electron').ipcRenderer;
+
 const win = remote.getCurrentWindow(); /* Note this is different to the
 html global `window` variable */
 
@@ -39,6 +41,7 @@ function handleWindowControls() {
 
     document.getElementById('close-button').addEventListener("click", event => {
         win.close();
+        ipc.send('windowClosedRenderer', window.location.href);
     });
 
     // Toggle maximise/restore buttons when maximisation/unmaximisation occurs

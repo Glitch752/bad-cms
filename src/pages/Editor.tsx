@@ -22,6 +22,8 @@ export default function Editor() {
     let [editorCode, setEditorCode] = React.useState("");
     let [editorLanguage, setEditorLanguage] = React.useState("");
     let [selectedTab, setSelectedTab] = React.useState(0);
+    //This works, but the entries are added many times. A ton of this code runs many times over.
+    let [poppedOutSeletions, setPoppedOutSeletions] = React.useState([]);
 
     const projects = store.get('projects', false);
 
@@ -46,7 +48,6 @@ export default function Editor() {
 
     ipc.once('getFilesReply', (event, args) => {
       var loadingSelections = [];
-      console.log(__dirname);
       for(let i = 0; i < args.files.length; i++) {
         loadingSelections.push(args.files[i]);
       }
@@ -74,18 +75,57 @@ export default function Editor() {
     });
 
     let popOut = () => {
-      console.log("not implemented");
-      // ipc.send('popOut', {path: "/editorPopout/" + id});
+      ipc.send('editorPopOut', {file: path.join(projects[id].directory, selections[selectedTab]), index: selectedTab});
     }
 
-    var selectMenus = [
+    var poppedOutSelectionsIndexes = [];
+    var poppedOutSelectionsWindows = [];
 
-    ];
+    let updatePoppedOut = () => {
+      poppedOutSelectionsIndexes = poppedOutSeletions.map((selection) => {return selection.index;});
+      poppedOutSelectionsWindows = poppedOutSeletions.map((selection) => {return selection.window;});
+    };
+
+    updatePoppedOut();
+
+    ipc.once('editorPopoutReply', (event, args) => {
+      var poppedOutSelectionsTemp = poppedOutSeletions;
+      poppedOutSelectionsTemp.push(args);
+      setPoppedOutSeletions(poppedOutSelectionsTemp);
+      updatePoppedOut();
+      for(let i = 0; i < selections.length; i++) {
+        if(poppedOutSelectionsIndexes.includes(i)) {
+          continue;
+        } else {
+          selectTab(i);
+          return;
+        }
+      }
+    });
+
+    ipc.once('popoutClose', (event, args) => {
+      setPoppedOutSeletions(poppedOutSeletions.filter(x => x.index !== args));
+      console.log(poppedOutSeletions);
+    });
+
+    let focusWindow = (window) => {
+      ipc.send('editorFocusWindow', window);
+    }
+
+    var selectMenus = [];
+
     for(let i = 0; i < selections.length; i++) {
       let isSelected = (selectedTab === i ? styles.selectedSelection : "");
-      selectMenus.push(
-        <div key={i} className={styles.editorSelection + " " + isSelected} onClick={() => selectTab(i)}><i className={"fas fa-angle-right " + styles.editorSelectionIcon}></i>{selections[i]}</div>
-      );
+      if(poppedOutSelectionsIndexes.includes(i)) {
+        //Add different popped out selection and make it so you can't select it
+        selectMenus.push(
+          <div key={i} className={styles.editorSelection + " " + isSelected} onClick={() => focusWindow(poppedOutSelectionsWindows[poppedOutSelectionsIndexes.indexOf(i)])}><i className={"fas fa-arrow-up-right-from-square " + styles.editorSelectionIcon}></i>{selections[i]}</div>
+        );
+      } else {
+        selectMenus.push(
+          <div key={i} className={styles.editorSelection + " " + isSelected} onClick={() => selectTab(i)}><i className={"fas fa-angle-right " + styles.editorSelectionIcon}></i>{selections[i]}</div>
+        );
+      }
     }
 
     return (

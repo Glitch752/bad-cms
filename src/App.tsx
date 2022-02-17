@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Template from './pages/Template';
 import Editor from './pages/Editor';
 import EditorPopout from './pages/EditorPopout';
+import Error from './pages/Error';
 
 
 export class App extends Component<any, any> {
@@ -40,6 +41,7 @@ export class App extends Component<any, any> {
               <Route path="/template/:type" element={<Template />} />
               <Route path="/Editor/project/:id" element={<Editor />} />
               <Route path="/editorPopout/:file" element={<EditorPopout />} />
+              <Route path="/Error" element={<Error />} />
             </Routes>
           </HashRouter>
         </div>

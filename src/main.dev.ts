@@ -144,6 +144,16 @@ ipc.on('CreateProject', (event, args) => {
     }
  });
 
+ ipc.on('deleteProject', (event, args) => {
+  var projectPath = args.directory;
+  if (fs.existsSync(projectPath)) {
+    fs.rmdirSync(projectPath, { recursive: true });
+    event.sender.send('deleteProjectReply', true);
+  } else {
+    event.sender.send('deleteProjectReply', "Folder does not exist. This is likely due to an error in the project creation process.");
+  }
+ });
+
  const getFilesFromDirectory = function(dirPath, arrayOfFiles = []) {
   var files = fs.readdirSync(dirPath)
 

@@ -22,11 +22,10 @@ export default function Editor() {
     let [editorCode, setEditorCode] = React.useState("");
     let [editorLanguage, setEditorLanguage] = React.useState("");
     let [selectedTab, setSelectedTab] = React.useState(0);
+    let [deleteConfirm, setDeleteConfirm] = React.useState(false);
     //This works, but the entries are added many times. A ton of this code runs many times over.
     let [poppedOutSeletions, setPoppedOutSeletions] = React.useState([]);
-
-    const projects = store.get('projects', false);
-
+    
     var editorPane = [
       <CodeEditor
         key="editor"
@@ -39,12 +38,12 @@ export default function Editor() {
         className={styles.editor}
       />
     ];
+
+    const projects = store.get('projects', false);
     
     if(selectionLoaded === false) {
       ipc.send('getFiles', {directory: projects[id].directory});
     }
-
-    var editorName = "Code editor";
 
     ipc.once('getFilesReply', (event, args) => {
       var loadingSelections = [];
@@ -58,7 +57,9 @@ export default function Editor() {
 
     let selectTab = (tab) => {
       setSelectedTab(tab);
-      ipc.send('getFile', {file: path.join(projects[id].directory, selections[tab])});
+      if(tab >= 0) {
+        ipc.send('getFile', {file: path.join(projects[id].directory, selections[tab])});
+      }
     }
 
     ipc.once('getFileReply', (event, args) => {
@@ -128,20 +129,117 @@ export default function Editor() {
       }
     }
 
+    let deleteProjectConfirm = () => {
+      var currentProjects = store.get('projects', []);
+      ipc.send('deleteProject', {directory: currentProjects[id].directory});
+      currentProjects.splice(id, 1);
+      store.set('projects', currentProjects);
+    }
+
+    ipc.once('deleteProjectReply', (event, args) => {
+      if(args === true) {
+        navigate('/');
+      } else {
+        navigate('/Error', {state: {error: "Error deleting project!", errorMessage: args}});
+      }
+    });
+
+    let deleteProject = () => {
+      setDeleteConfirm(true);
+    }
+
+    let deleteProjectElement = null;
+
+    if(deleteConfirm) {
+      deleteProjectElement =
+        <div className={styles.confirmDelete}>
+          <div className={styles.confirmDeleteContainer}>
+            <div className={styles.confirmDeleteText}>Are you sure you want to delete this project? This action is irreversible.</div>
+            <div className={styles.confirmDeleteButtons}>
+              <button className={`${styles.confirmDeleteButton} ${styles.confirmDeleteButtonCancel}`} onClick={() => setDeleteConfirm(false)}>Cancel</button>
+              <button className={styles.confirmDeleteButton} onClick={() => deleteProjectConfirm()}>Delete</button>
+            </div>
+          </div>
+        </div>
+    } else {
+      deleteProjectElement = <></>;
+    }
+
+    const settignsSelected = (selectedTab === -1 ? styles.selectedSelection : "");
+    const layoutEditorSelected = (selectedTab === -2 ? styles.selectedSelection : "");
+    const defaultSelections = [
+      {
+        element: [
+          <div key="settings" className={styles.editorSelection + " " + settignsSelected} onClick={() => selectTab(-1)}>
+            <i className={"fas fa-gear " + styles.editorSelectionIcon}></i>
+            Settings
+          </div>
+        ],
+        menu: [
+          <div key="settings" className={styles.settingsMenu}>
+            <div className={styles.settingsMenuSeparator}>Misc</div>
+            <div className={styles.settingsMenuSection}>
+              Some sort of settings menu idk
+            </div>
+            <div className={`${styles.settingsMenuSeparator} ${styles.settingMenuDanger}`}>DANGER ZONE</div>
+            <div className={styles.settingsMenuSection}>
+              <button className={styles.deleteProjectButton} onClick={() => deleteProject()}>Delete Project</button>
+            </div>
+          </div>
+        ],
+        id: -1,
+        name: "Settings",
+      },
+      {
+        element: [
+          <div key="settings" className={styles.editorSelection + " " + layoutEditorSelected} onClick={() => selectTab(-2)}>
+            <i className={"fas fa-table " + styles.editorSelectionIcon}></i>
+            Layout editor
+          </div>
+        ],
+        menu: [
+          // Add layout editor: render the files in the project directory.
+          <div key="layout" className={styles.settingsMenu}> 
+            <div className={styles.settingsMenuSeparator}>Misc</div>
+          </div>
+        ],
+        id: -2,
+        name: "Layout editor",
+      }
+    ];
+
+    const defaultSelectionsElements = defaultSelections.map((selection) => {return selection.element;});
+    const finalSelections = defaultSelectionsElements.concat(selectMenus);
+
+    let editingMenu = [<div key="loading">Loading</div>];
+    let editorName = "Loading";
+
+    if(selectedTab >= 0) {
+      editingMenu = editorPane;
+      editorName = "Code editor - " + selections[selectedTab];
+    } else {
+      //Find the element in defaultSelections with the id of selectedTab
+      let selectionElement = defaultSelections.filter(x => x.id === selectedTab)[0];
+      editingMenu = selectionElement.menu;
+      editorName = selectionElement.name;
+    }
+
     return (
         // Actual JSX of the dsahboard
         <div>
             <i className={"fa-solid fa-arrow-left " + styles.leaveIcon} onClick={() => navigate("/Dashboard")}></i>
+            <span className={styles.projectName}>Editing "{projects[id].name}"</span>
             <div className={styles.editorContainer}>
               <div className={styles.editorOptions}>
                 <span className={styles.editorOptionsName}>{editorName}</span>
                 <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => {popOut()}}></i>
               </div>
-              {editorPane}
+              {editingMenu}
             </div>
             <div className={styles.paneSelector}>
-              {selectMenus}
+              {finalSelections}
             </div>
+            {deleteProjectElement}
         </div>
     );
 }

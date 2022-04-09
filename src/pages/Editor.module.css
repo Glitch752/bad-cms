@@ -10,6 +10,7 @@
   .editorContainer {
       position: absolute;
       top: 100px;
+      overflow: hidden;
   }
   .editorOptions {
       height: 25px;
@@ -84,12 +85,13 @@
     box-shadow: 2px 2px #912d2d;
     transform: translate(1px, 1px);
   }
+
   .confirmDelete {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    height: calc(100vh - 100px);
     background-color: #00000080;
     z-index: 100;
   }

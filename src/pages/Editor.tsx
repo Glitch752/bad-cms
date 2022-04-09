@@ -114,7 +114,8 @@ export default function Editor() {
             settings: {
               initial: "deleteClosed",
               on: {
-                openDelete: ".deleteOpen"
+                openDelete: ".deleteOpen",
+                closeDelete: ".deleteClosed",
               },
               states: {
                 deleteClosed: {
@@ -217,7 +218,9 @@ export default function Editor() {
       while(editor === null) {
         // Wait for the editor to be loaded
         await sleep(50);
+        console.log("Waiting for editor to be loaded...");
       }
+      let language = null;
       if(args.fileName !== undefined) {
         var extToLang = { // List of compatible files with Monaco language support
           ".html": "html",
@@ -225,8 +228,11 @@ export default function Editor() {
           ".js": "javascript",
           ".svg": "html",
         };
-        monaco.editor.setModelLanguage(editor.getModel(), extToLang[path.extname(args.fileName)]);
 
+        language = extToLang[path.extname(args.fileName)];
+        language = language === undefined ? "plaintext" : language;
+
+        monaco.editor.setModelLanguage(editor.getModel(), language);
       }
       editor.setValue(args.content);
     });
@@ -407,19 +413,102 @@ export default function Editor() {
     //   editorName = selectionElement.name;
     // }
 
-    const selectTab = (tab) => {
-      send('switchTab', {tab: tab});
-      ipc.send('getFile', {file: path.join(projects[id].directory, state.context.editorTabs[tab])});
+    const InjectJS = () => {
+      ipc.send('getAppPath');
     }
 
-    let editingMenu = editorPane;
+    ipc.once('getAppPathReply', (event, args) => {
+        var iFrameHead = window.frames["editorFrame"].document.getElementsByTagName("head")[0];
+        var myscript = document.createElement('script');
+        myscript.type = 'text/javascript';
+        myscript.src = path.join(args, '/pages/editorLayoutInjectScript.js');
+        iFrameHead.appendChild(myscript);
+    });
+
+    const deleteProjectConfirm = () => {
+      var currentProjects = store.get('projects', []);
+      ipc.send('deleteProject', {directory: currentProjects[id].directory});
+      currentProjects.splice(id, 1);
+      store.set('projects', currentProjects);
+    }
+
+    ipc.once('deleteProjectReply', (event, args) => {
+      if(args === true) {
+        navigate('/');
+      } else {
+        navigate('/Error', {state: {error: "Error deleting project!", errorMessage: args}});
+      }
+    });
+
+    const selectTab = (tab) => {
+      send('switchTab', {tab: tab});
+      if(tab >= 0) {
+        ipc.send('getFile', {file: path.join(projects[id].directory, state.context.editorTabs[tab])});
+      }
+    }
 
     let editorTabs = state.context.editorTabs;
     let editorTab = state.context.tab;
 
-    let editorName = "Code editor - " + editorTabs[editorTab];
+    let editorName = "Loading";
 
-    let selectionPane = [];
+    let editingMenu = [];
+
+    if (editorTab === -1) {
+      const isDeleting = state.matches("editor.settings.deleteOpen");
+
+      const deleteMenu = isDeleting ? 
+        <div className={styles.confirmDelete}>
+          <div className={styles.confirmDeleteContainer}>
+            <div className={styles.confirmDeleteText}>Are you sure you want to delete this project? This action is irreversible.</div>
+            <div className={styles.confirmDeleteButtons}>
+              <button className={`${styles.confirmDeleteButton} ${styles.confirmDeleteButtonCancel}`} onClick={() => send("closeDelete")}>Cancel</button>
+              <button className={styles.confirmDeleteButton} onClick={() => deleteProjectConfirm()}>Delete</button>
+            </div>
+          </div>
+        </div> : <></>;
+
+      editingMenu = [
+        <div key="settings" className={styles.settingsMenu}>
+          <div className={styles.settingsMenuSeparator}>Misc</div>
+          <div className={styles.settingsMenuSection}>
+            Some sort of settings menu idk
+          </div>
+          <div className={`${styles.settingsMenuSeparator} ${styles.settingMenuDanger}`}>DANGER ZONE</div>
+          <div className={styles.settingsMenuSection}>
+            <button className={styles.deleteProjectButton} onClick={() => { send("openDelete") }}>Delete Project</button>
+          </div>
+          {deleteMenu}
+        </div>
+      ];
+      editorName = "Settings";
+    } else if (editorTab === -2) {
+      editingMenu = [
+        <div key="layout" className={styles.layoutEditor}> 
+          <div className={styles.layoutEditorPage}>
+            <iframe src={`file://${projects[id].directory}/index.html`} className={styles.projectIFrame} name="editorFrame" id="editorFrame" onLoad={() => InjectJS()}></iframe>
+          </div>
+        </div>
+      ];
+      editorName = "Layout editor";
+    } else {
+      editingMenu = [];
+      editorName = "Code editor - " + editorTabs[editorTab];
+    }
+
+    const settingsSelected = (editorTab === -1 ? styles.selectedSelection : "");
+    const layoutEditorSelected = (editorTab === -2 ? styles.selectedSelection : "");
+
+    let selectionPane = [
+      <div key="settings" className={styles.editorSelection + " " + settingsSelected} onClick={() => selectTab(-1)}>
+        <i className={"fas fa-gear " + styles.editorSelectionIcon}></i>
+        Settings
+      </div>,
+      <div key="layout" className={styles.editorSelection + " " + layoutEditorSelected} onClick={() => selectTab(-2)}>
+        <i className={"fas fa-table " + styles.editorSelectionIcon}></i>
+        Layout editor
+      </div>
+    ];
 
     for(let i = 0; i < editorTabs.length; i++) {
       let selected = (i === editorTab ? styles.selectedSelection : "");
@@ -443,7 +532,8 @@ export default function Editor() {
                 {/* <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => {popOut()}}></i> */}
                 <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => {console.log("not implemented")}}></i>
               </div>
-              {editingMenu}
+              { editingMenu }
+              { editorPane /* Although this seems like a wierd way to do this, I can't find another way to fix some wierd monaco bugs */}
             </div>
             <div className={styles.paneSelector}>
               {/* {finalSelections} */}
@@ -476,4 +566,26 @@ loader.config({
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function deepClone(obj, hash = new WeakMap()) {
+  // Do not try to clone primitives or functions
+  if (Object(obj) !== obj || obj instanceof Function) return obj;
+  if (hash.has(obj)) return hash.get(obj); // Cyclic reference
+  try { // Try to run constructor (without arguments, as we don't know them)
+      var result = new obj.constructor();
+  } catch(e) { // Constructor failed, create object without running the constructor
+      result = Object.create(Object.getPrototypeOf(obj));
+  }
+  // Optional: support for some standard constructors (extend as desired)
+  if (obj instanceof Map)
+      Array.from(obj, ([key, val]) => result.set(deepClone(key, hash), 
+                                                 deepClone(val, hash)) );
+  else if (obj instanceof Set)
+      Array.from(obj, (key) => result.add(deepClone(key, hash)) );
+  // Register in hash    
+  hash.set(obj, result);
+  // Clone and assign enumerable own properties recursively
+  return Object.assign(result, ...Object.keys(obj).map (
+      key => ({ [key]: deepClone(obj[key], hash) }) ));
 }

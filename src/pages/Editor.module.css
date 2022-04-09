@@ -10,6 +10,7 @@
   .editorContainer {
       position: absolute;
       top: 100px;
+      overflow: hidden;
   }
   .editorOptions {
       height: 25px;
@@ -84,12 +85,13 @@
     box-shadow: 2px 2px #912d2d;
     transform: translate(1px, 1px);
   }
+
   .confirmDelete {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    height: calc(100vh - 100px);
     background-color: #00000080;
     z-index: 100;
   }
@@ -156,6 +158,20 @@
     color: #fff;
   }
 
+  .layoutEditor {
+    width: calc(100vw - 200px);
+    height: calc(100vh - 125px);
+    background-color: #142129;
+  }
+  .projectIFrame {
+    width: calc(100vw - 200px);
+    height: calc(100vh - 125px);
+    display: inline-block;
+    border: none;
+    outline: none;
+    background-color: white;
+  }
+
   /* .editorSelection {
     background-color: #2a3d50;
   } */
@@ -165,4 +181,12 @@
   }
   .selectedSelection {
     background-color: #223141;
+  }
+  .editorSelectionSave {
+    margin-left: 10px;
+    color: white;
+    font-size: 7px;
+    display: inline-block;
+    position: relative;
+    top: -0.25em;
   }

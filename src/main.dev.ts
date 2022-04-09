@@ -16,7 +16,6 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import fs from 'fs';
-import { Z_NO_FLUSH } from 'zlib';
 
 const Handlebars = require("handlebars");
 
@@ -26,7 +25,7 @@ Store.initRenderer();
 
 const ipc = require('electron').ipcMain;
 ipc.on('CreateProject', (event, args) => {
-  var projectPath = path.join(app.getPath('userData'), "/projects", args.name);
+  var projectPath = path.join(app.getPath('userData'), "/projects", args.name); //find the projects path
   if (fs.existsSync(projectPath)) {
     event.sender.send('CreateProjectReply', false);
   } else {
@@ -35,7 +34,6 @@ ipc.on('CreateProject', (event, args) => {
     var templatePath = path.join(app.getAppPath(), "/templates", args.template);
 
     var ncp = require('ncp').ncp;
-
     fs.mkdirSync(projectPath, { recursive: true })
 
     ncp(templatePath, projectPath, 
@@ -64,18 +62,22 @@ ipc.on('CreateProject', (event, args) => {
   }
  });
 
- ipc.on('getFiles', (event, args) => {
-    var dirFiles = getFilesFromDirectory(args.directory);
+ ipc.on('getFiles', (event, args) => { //When project folder is given with ipc
+    var dirFiles = getFilesFromDirectory(args.directory); // Returns an array of file paths in a directory, including subdirectories
     for(var i = 0; i < dirFiles.length; i++) {
-      dirFiles[i] = dirFiles[i].replace(args.directory, "");
+      dirFiles[i] = dirFiles[i].replace(args.directory, ""); //Replace the whole path with just the relative path from the project folder
     }
     event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
  });
 
+ipc.on('getAppPath', (event, args) => {
+  event.sender.send('getAppPathReply', app.getAppPath());
+});
+
  ipc.on('getFile', (event, args) => {
     var file = fs.readFileSync(args.file, 'utf8');
     event.sender.send('getFileReply', {content: file, fileName: args.file});
- })
+ });
 
  var popoutWindiows = [];
 
@@ -153,6 +155,13 @@ ipc.on('CreateProject', (event, args) => {
     event.sender.send('deleteProjectReply', "Folder does not exist. This is likely due to an error in the project creation process.");
   }
  });
+
+//  ipc.on('getLayoutEditorHTML', (event, args) => {
+//    var projectPath = args.directory;
+//    var index = args.index;
+//    var file = path.join(projectPath, index);
+//    event.sender.send('getLayoutEditorHTMLReply', {code: fs.readFileSync(file, 'utf8')});
+//  });
 
  const getFilesFromDirectory = function(dirPath, arrayOfFiles = []) {
   var files = fs.readdirSync(dirPath)

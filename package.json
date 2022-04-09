@@ -115,6 +115,7 @@
     "@dr.pogodin/babel-plugin-react-css-modules": "^6.5.4",
     "@monaco-editor/react": "^4.3.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
+    "@xstate/react": "^2.0.1",
     "acorn": "^8.7.0",
     "css-url-relative-plugin": "^1.1.0",
     "electron-builder": "^22.10.5",
@@ -134,6 +135,7 @@
     "react-router-dom": "^6.2.1",
     "regenerator-runtime": "^0.13.5",
     "source-map-support": "^0.5.19",
+    "xstate": "^4.30.6",
     "yarn": "^1.22.11"
   },
   "devEngines": {

@@ -1,8 +1,9 @@
 // imports
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './Editor.module.css';
-import { createMachine, assign } from 'xstate';
+import { createMachine, assign, interpret } from 'xstate';
+import { useMachine } from '@xstate/react';
 
 import CodeEditor, { loader } from "@monaco-editor/react";
 
@@ -15,6 +16,7 @@ const ipc = require('electron').ipcRenderer;
 // Editor code (js)
 export default function Editor() {
     const navigate = useNavigate();
+    const projects = store.get('projects', false);
     let { id } = useParams();
 
     //Probably a way to optimize this, but it works for now
@@ -30,20 +32,45 @@ export default function Editor() {
     // let [editorChanges, setEditorChanges] = React.useState([]);
     // let [programaticChangeMade, setProgramaticChangeMade] = React.useState(false);
     // All of this, but a state machine now.
-    const machine = createMachine({
+
+    const stateMachine = createMachine({
       id: "editor",
       initial: "loading",
       context: {
         tab: 0,
+        editorTabs: [],
+        monaco: null,
+        editor: null,
       },
       states: {
         loading: {
           on: {
-            finishLoad: "editor",
-          },
+            editorLoaded: {
+              target: "editor",
+              actions: [
+                () => {
+                  ipc.send('getFiles', {directory: projects[id].directory});
+                },
+                assign((context, event: { monaco: any, editor: any }) => {
+                  return {
+                    monaco: event.monaco,
+                    editor: event.editor,
+                  }
+                })
+              ],
+            }
+          }
         },
         editor: {
+          initial: "loading",
           on: {
+            setTabs: {
+              actions: assign((context, event: { tabs: any }) => {
+                return {
+                  editorTabs: event.tabs,
+                }
+              })
+            },
             switchTab: [
               {
                 target: ".code",
@@ -77,11 +104,17 @@ export default function Editor() {
             ],
           },
           states: {
+            loading: {
+              on: {
+                finishedLoading: "code"
+              }
+            },
             code: {},
             layout: {},
             settings: {
+              initial: "deleteClosed",
               on: {
-                openDelete: ".deleteClosed"
+                openDelete: ".deleteOpen"
               },
               states: {
                 deleteClosed: {
@@ -101,25 +134,30 @@ export default function Editor() {
       },
     });
 
-    
+    const [state, send, service] = useMachine(stateMachine);
+
+    let editor = state.context.editor;
+    let monaco = state.context.monaco;
     
     var editorPane = [
       <CodeEditor
         key="editor"
         defaultLanguage="html"
         // language={editorLanguage}
-        language="html"
         width="calc(100vw - 200px)"
-        defaultValue={"Loading editor..."}
+        defaultValue="Loading editor..."
         // value={editorCode}
-        value="Todo"
         theme="vs-dark"
         className={styles.editor}
         // onChange={updateEditorChanges}
+        onMount={(editorElem, monacoElem) => {
+          send("editorLoaded", { monaco: monacoElem, editor: editorElem });
+        }}
       />
     ];
 
-    const projects = store.get('projects', false);
+    // Remove all IPC listeners when the component is mounted again.
+    ipc.removeAllListeners();
     
     // if(selectionLoaded === false) {
     //   ipc.send('getFiles', {directory: projects[id].directory}); // Send a message getFiles with the directpry of the project
@@ -137,6 +175,21 @@ export default function Editor() {
     //   setEditorChanges(editorChangesTemp);
     //   ipc.send('getFile', {file: path.join(args.directory, args.files[0])});
     // });
+    
+    ipc.once('getFilesReply', async (event, args) => {
+      var loadingSelections = [];
+      for(let i = 0; i < args.files.length; i++) {
+        loadingSelections.push(args.files[i]);
+      }
+      // Set text in the editor to Loading file...
+      while(editor === null) {
+        // Wait for the editor to be loaded
+        await sleep(50);
+      }
+      send("setTabs", {tabs: loadingSelections});
+      if(state.can('finishedLoading')) send("finishedLoading");
+      ipc.send('getFile', {file: path.join(args.directory, args.files[0])});
+    });
 
     // let selectTab = (tab) => {
     //   setSelectedTab(tab);
@@ -159,6 +212,24 @@ export default function Editor() {
     //   setProgramaticChangeMade(true);
     //   setEditorCode(args.content);
     // });
+
+    ipc.once('getFileReply', async (event, args) => {
+      while(editor === null) {
+        // Wait for the editor to be loaded
+        await sleep(50);
+      }
+      if(args.fileName !== undefined) {
+        var extToLang = { // List of compatible files with Monaco language support
+          ".html": "html",
+          ".css": "css",
+          ".js": "javascript",
+          ".svg": "html",
+        };
+        monaco.editor.setModelLanguage(editor.getModel(), extToLang[path.extname(args.fileName)]);
+
+      }
+      editor.setValue(args.content);
+    });
 
     // let popOut = () => {
     //   ipc.send('editorPopOut', {file: path.join(projects[id].directory, selections[selectedTab]), index: selectedTab});
@@ -336,7 +407,29 @@ export default function Editor() {
     //   editorName = selectionElement.name;
     // }
 
+    const selectTab = (tab) => {
+      send('switchTab', {tab: tab});
+      ipc.send('getFile', {file: path.join(projects[id].directory, state.context.editorTabs[tab])});
+    }
+
     let editingMenu = editorPane;
+
+    let editorTabs = state.context.editorTabs;
+    let editorTab = state.context.tab;
+
+    let editorName = "Code editor - " + editorTabs[editorTab];
+
+    let selectionPane = [];
+
+    for(let i = 0; i < editorTabs.length; i++) {
+      let selected = (i === editorTab ? styles.selectedSelection : "");
+      selectionPane.push(
+        <div key={i} className={styles.editorSelection + " " + selected} onClick={() => selectTab(i)}>
+          <i className={"fas fa-angle-right " + styles.editorSelectionIcon}></i>
+          {editorTabs[i]}
+        </div>
+      );
+    }
 
     return (
         // Actual JSX of the dsahboard
@@ -346,7 +439,7 @@ export default function Editor() {
             <div className={styles.editorContainer}>
               <div className={styles.editorOptions}>
                 {/* <span className={styles.editorOptionsName}>{editorName}</span> */}
-                <span className={styles.editorOptionsName}>name here</span>
+                <span className={styles.editorOptionsName}>{editorName}</span>
                 {/* <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => {popOut()}}></i> */}
                 <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => {console.log("not implemented")}}></i>
               </div>
@@ -354,6 +447,7 @@ export default function Editor() {
             </div>
             <div className={styles.paneSelector}>
               {/* {finalSelections} */}
+              { selectionPane }
             </div>
             {/* {deleteProjectElement} */}
         </div>
@@ -379,3 +473,7 @@ loader.config({
     )
   }
 });
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

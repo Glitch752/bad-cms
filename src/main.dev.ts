@@ -16,7 +16,6 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import fs from 'fs';
-import { Z_NO_FLUSH } from 'zlib';
 
 const Handlebars = require("handlebars");
 

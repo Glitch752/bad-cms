@@ -180,7 +180,10 @@ export default function Editor() {
     ipc.once('getFilesReply', async (event, args) => {
       var loadingSelections = [];
       for(let i = 0; i < args.files.length; i++) {
-        loadingSelections.push(args.files[i]);
+        loadingSelections.push({
+          name: args.files[i],
+          window: false
+        });
       }
       // Set text in the editor to Loading file...
       while(editor === null) {
@@ -412,6 +415,40 @@ export default function Editor() {
     //   editingMenu = selectionElement.menu;
     //   editorName = selectionElement.name;
     // }
+    
+    let editorTabs = state.context.editorTabs;
+    let editorTab = state.context.tab;
+
+    let editorName = "Loading";
+
+    let editingMenu = [];
+
+    ipc.once('popoutClose', (event, args) => {
+        editorTabs[args].window = false;
+        send('setTabs', { tabs: editorTabs });
+    });
+
+    const focusWindow = (window) => {
+      ipc.send('editorFocusWindow', window);
+    }
+
+    const popOut = () => {
+      ipc.send('editorPopOut', {file: path.join(projects[id].directory, editorTabs[editorTab].name), index: editorTab});
+    }
+    
+    ipc.once('editorPopoutReply', (event, args) => {
+      // Select the first tab that isn't popped out.
+      editorTabs[args.index].window = args.window;
+      for(let i = 0; i < editorTabs.length; i++) {
+        if(editorTabs[i].window === null) {
+          continue;
+        } else {
+          selectTab(i);
+          return;
+        }
+      }
+      send("setTabs", editorTabs);
+    });
 
     const InjectJS = () => {
       ipc.send('getAppPath');
@@ -443,16 +480,9 @@ export default function Editor() {
     const selectTab = (tab) => {
       send('switchTab', {tab: tab});
       if(tab >= 0) {
-        ipc.send('getFile', {file: path.join(projects[id].directory, state.context.editorTabs[tab])});
+        ipc.send('getFile', {file: path.join(projects[id].directory, editorTabs[tab].name)});
       }
     }
-
-    let editorTabs = state.context.editorTabs;
-    let editorTab = state.context.tab;
-
-    let editorName = "Loading";
-
-    let editingMenu = [];
 
     if (editorTab === -1) {
       const isDeleting = state.matches("editor.settings.deleteOpen");
@@ -493,7 +523,9 @@ export default function Editor() {
       editorName = "Layout editor";
     } else {
       editingMenu = [];
-      editorName = "Code editor - " + editorTabs[editorTab];
+      if(editorTabs[editorTab] !== undefined) {
+        editorName = "Code editor - " + editorTabs[editorTab].name;
+      }
     }
 
     const settingsSelected = (editorTab === -1 ? styles.selectedSelection : "");
@@ -512,10 +544,26 @@ export default function Editor() {
 
     for(let i = 0; i < editorTabs.length; i++) {
       let selected = (i === editorTab ? styles.selectedSelection : "");
+      
+      let icon = null;
+      let clickFunction = null;
+
+      if(editorTabs[i].window !== false) {
+        icon = <i className={"fas fa-arrow-up-right-from-square " + styles.editorSelectionIcon}></i>;
+        clickFunction = () => {
+          focusWindow(editorTabs[i].window);
+        }
+      } else {
+        icon = <i className={"fas fa-angle-right " + styles.editorSelectionIcon}></i>;
+        clickFunction = () => {
+          selectTab(i);
+        };
+      }
+
       selectionPane.push(
-        <div key={i} className={styles.editorSelection + " " + selected} onClick={() => selectTab(i)}>
-          <i className={"fas fa-angle-right " + styles.editorSelectionIcon}></i>
-          {editorTabs[i]}
+        <div key={i} className={styles.editorSelection + " " + selected} onClick={() => clickFunction()}>
+          {icon}
+          {editorTabs[i].name}
         </div>
       );
     }
@@ -530,7 +578,7 @@ export default function Editor() {
                 {/* <span className={styles.editorOptionsName}>{editorName}</span> */}
                 <span className={styles.editorOptionsName}>{editorName}</span>
                 {/* <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => {popOut()}}></i> */}
-                <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => {console.log("not implemented")}}></i>
+                <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => { popOut() }}></i>
               </div>
               { editingMenu }
               { editorPane /* Although this seems like a wierd way to do this, I can't find another way to fix some wierd monaco bugs */}
@@ -566,26 +614,4 @@ loader.config({
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function deepClone(obj, hash = new WeakMap()) {
-  // Do not try to clone primitives or functions
-  if (Object(obj) !== obj || obj instanceof Function) return obj;
-  if (hash.has(obj)) return hash.get(obj); // Cyclic reference
-  try { // Try to run constructor (without arguments, as we don't know them)
-      var result = new obj.constructor();
-  } catch(e) { // Constructor failed, create object without running the constructor
-      result = Object.create(Object.getPrototypeOf(obj));
-  }
-  // Optional: support for some standard constructors (extend as desired)
-  if (obj instanceof Map)
-      Array.from(obj, ([key, val]) => result.set(deepClone(key, hash), 
-                                                 deepClone(val, hash)) );
-  else if (obj instanceof Set)
-      Array.from(obj, (key) => result.add(deepClone(key, hash)) );
-  // Register in hash    
-  hash.set(obj, result);
-  // Clone and assign enumerable own properties recursively
-  return Object.assign(result, ...Object.keys(obj).map (
-      key => ({ [key]: deepClone(obj[key], hash) }) ));
 }

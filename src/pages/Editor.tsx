@@ -194,6 +194,13 @@ export default function Editor() {
 
     let editingMenu = [];
 
+    const selectTab = (tab) => {
+      send('switchTab', {tab: tab});
+      if(tab >= 0) {
+        ipc.send('getFile', {file: path.join(projects[id].directory, editorTabs[tab].name)});
+      }
+    }
+
     ipc.once('popoutClose', (event, args) => {
         editorTabs[args].window = false;
         send('setTabs', { tabs: editorTabs });
@@ -210,15 +217,15 @@ export default function Editor() {
     ipc.once('editorPopoutReply', (event, args) => {
       // Select the first tab that isn't popped out.
       editorTabs[args.index].window = args.window;
+      send("setTabs", { tabs: editorTabs });
       for(let i = 0; i < editorTabs.length; i++) {
-        if(editorTabs[i].window === null) {
+        if(editorTabs[i].window !== false) {
           continue;
         } else {
           selectTab(i);
-          return;
+          break;
         }
       }
-      send("setTabs", editorTabs);
     });
 
     const InjectJS = () => {
@@ -234,7 +241,7 @@ export default function Editor() {
     });
 
     const deleteProjectConfirm = () => {
-      var currentProjects = store.get('projects', []);
+      var currentProjects: any = store.get('projects', []);
       ipc.send('deleteProject', {directory: currentProjects[id].directory});
       currentProjects.splice(id, 1);
       store.set('projects', currentProjects);
@@ -247,13 +254,6 @@ export default function Editor() {
         navigate('/Error', {state: {error: "Error deleting project!", errorMessage: args}});
       }
     });
-
-    const selectTab = (tab) => {
-      send('switchTab', {tab: tab});
-      if(tab >= 0) {
-        ipc.send('getFile', {file: path.join(projects[id].directory, editorTabs[tab].name)});
-      }
-    }
 
     if (editorTab === -1) {
       const isDeleting = state.matches("editor.settings.deleteOpen");

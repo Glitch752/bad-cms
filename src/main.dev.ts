@@ -131,14 +131,14 @@ ipc.on('getAppPath', (event, args) => {
     if(href.startsWith("/editorPopout/")) {
       for(var i = 0; i < popoutWindiows.length; i++) {
         var url = popoutWindiows[i].window.webContents.getURL();
-        url = url.substring(0, url.lastIndexOf('\\'));
+        url = url.substring(url.lastIndexOf('\\'));
 
         //Probably a better way to figure this out
-        if(url === args.substring(0, args.lastIndexOf('\\'))) {
-              
+        if(url === args.substring(args.lastIndexOf('\\'))) {
           if(openWindowSender !== null) {
+            console.log(url);
             openWindowSender.send('popoutClose', popoutWindiows[i].index);
-            popoutWindiows.splice(args, 1);
+            popoutWindiows.splice(i, 1);
           }
           return;
         }

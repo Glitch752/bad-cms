@@ -112,7 +112,6 @@
     "yarn-deduplicate": "^3.1.0"
   },
   "dependencies": {
-    "@dr.pogodin/babel-plugin-react-css-modules": "^6.5.4",
     "@monaco-editor/react": "^4.3.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
     "@xstate/react": "^2.0.1",

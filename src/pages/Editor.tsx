@@ -131,7 +131,7 @@ export default function Editor(props) {
         key="editor"
         defaultLanguage="html"
         // language={editorLanguage}
-        width="calc(100vw - 200px)"
+        width="calc(100vw - var(--menu-width))"
         defaultValue="Loading editor..."
         // value={editorCode}
         theme="vs-dark"
@@ -348,12 +348,10 @@ export default function Editor(props) {
     return (
         // Actual JSX of the dsahboard
         <div>
-            <i className={"fa-solid fa-arrow-left " + styles.leaveIcon} onClick={() => navigate("/Dashboard")}></i>
-            <span className={styles.projectName}>Editing "{projects[id].name}"</span>
             <div className={styles.editorContainer}>
               <div className={styles.editorOptions}>
+                <i className={"fa-solid fa-arrow-left " + styles.leaveIcon} onClick={() => navigate("/Dashboard")}></i>
                 {/* <span className={styles.editorOptionsName}>{editorName}</span> */}
-                <span className={styles.editorOptionsName}>{editorName}</span>
                 {/* <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => {popOut()}}></i> */}
                 <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => { popOut() }}></i>
               </div>

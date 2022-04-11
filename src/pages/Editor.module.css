@@ -1,192 +1,174 @@
-
-  .leaveIcon {
+:root {
+  --menu-width: 15rem;
+  --titlebar-height: 24px;
+}
+.leaveIcon {
+  font-size: 18px;
+  margin-top: 3px;
+  margin-left: 5px;
+}
+.editorContainer {
     position: absolute;
-    left: 0;
-    top: 24px;
-    margin: 10px;
-    font-size: 30px;
-    z-index: 100;
-  }
-  .editorContainer {
-      position: absolute;
-      top: 100px;
-      overflow: hidden;
-  }
-  .editorOptions {
-      height: 25px;
-      background-color: #20333f;
-  }
-  .editorOptionsIcon {
-      float: right;
-      font-size: 18px;
-      margin-right: 10px;
-      margin-top: 3px;
-  }
-  .editorOptionsName {
-      font-size: 18px;
-      margin-left: 10px;
-      margin-top: 3px;
-  }
-  .paneSelector {
-      display: inline-block;
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      width: 200px;
-      height: calc(100vh - 100px);
-      background-color: #121e25;
-  }
-  .editor {
-    z-index: 1;
-    height: calc(100vh - 125px);
-  }
-
-  .settingsMenu {
-    width: calc(100vw - 200px);
-    height: calc(100vh - 125px);
-    background-color: #142129;
-  }
-  .settingsMenuSeparator {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    left: 0;
-    right: 0;
-    background-color: #0c151b;
-    padding-left: 30px;
-    padding-top: 10px;
-    padding-bottom: 5px;
-
-  }
-  .settingsMenuSection {
-    padding-left: 20px;
-  }
-  .settingMenuDanger {
-    color: #ff0000;
-    font-weight: 700;
-  }
-  .deleteProjectButton {
-    font-size: 20px;
-    outline: none;
-    border: none;
-    padding: 10px;
-    background-color: #e05252;
-    color: #fff;
-    border-radius: 5px;
-    margin-top: 10px;
-    box-shadow: 3px 3px #af4141;
-  }
-  .deleteProjectButton:hover {
-    background-color: #d34343;
-    box-shadow: 4px 4px #9f3232;
-    transform: translate(-1px, -1px);
-  }
-  .deleteProjectButton:active {
-    background-color: #b13c3c;
-    box-shadow: 2px 2px #912d2d;
-    transform: translate(1px, 1px);
-  }
-
-  .confirmDelete {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: calc(100vh - 100px);
-    background-color: #00000080;
-    z-index: 100;
-  }
-  .confirmDeleteContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    background-color: #2b4453;
-    border-radius: 5px;
-    box-shadow: 3px 3px #20333f;
-    text-align: center;
-  }
-  .confirmDeleteText {
-    color: #fff;
-    font-size: 20px;
-    margin-top: 10px;
-    margin-left: 10px;
-  }
-  .confirmDeleteButton {
-    font-size: 20px;
-    outline: none;
-    border: none;
-    padding: 10px;
-    background-color: #e05252;
-    color: #fff;
-    border-radius: 5px;
-    margin: 10px;
-    box-shadow: 3px 3px #af4141;
-  }
-  .confirmDeleteButton:hover {
-    background-color: #d34343;
-    box-shadow: 4px 4px #9f3232;
-    transform: translate(-1px, -1px);
-  }
-  .confirmDeleteButton:active {
-    background-color: #b13c3c;
-    box-shadow: 2px 2px #912d2d;
-    transform: translate(1px, 1px);
-  }
-  .confirmDeleteButtonCancel {
-    background-color: #787878;
-    box-shadow: 3px 3px #565656;
-  }
-  .confirmDeleteButtonCancel:hover {
-    background-color: #878787;
-    box-shadow: 4px 4px #636363;
-    transform: translate(-1px, -1px);
-  }
-  .confirmDeleteButtonCancel:active {
-    background-color: #6f6f6f;
-    box-shadow: 2px 2px #5c5c5c;
-    transform: translate(1px, 1px);
-  }
-
-  .projectName {
-    font-size: 20px;
+    top: var(--titlebar-height);
+    overflow: hidden;
+}
+.editorOptions {
+    height: 25px;
+    background-color: #20333f;
+}
+.editorOptionsIcon {
+    float: right;
+    font-size: 18px;
     margin-right: 10px;
-    margin-top: 10px;
+    margin-top: 3px;
+}
+.paneSelector {
+    display: inline-block;
     position: absolute;
     right: 0;
-    top: 24px;
-    color: #fff;
-  }
+    bottom: 0;
+    width: var(--menu-width);
+    height: calc(100vh - var(--titlebar-height));
+    background-color: #121e25;
+}
+.editor {
+  z-index: 1;
+  height: calc(100vh - var(--titlebar-height) - 25px);
+}
 
-  .layoutEditor {
-    width: calc(100vw - 200px);
-    height: calc(100vh - 125px);
-    background-color: #142129;
-  }
-  .projectIFrame {
-    width: calc(100vw - 200px);
-    height: calc(100vh - 125px);
-    display: inline-block;
-    border: none;
-    outline: none;
-    background-color: white;
-  }
+.settingsMenu {
+  width: calc(100vw - var(--menu-width));
+  height: calc(100vh - var(--titlebar-height));
+  background-color: #142129;
+}
+.settingsMenuSeparator {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  left: 0;
+  right: 0;
+  background-color: #0c151b;
+  padding-left: 30px;
+  padding-top: 10px;
+  padding-bottom: 5px;
 
-  /* .editorSelection {
-    background-color: #2a3d50;
-  } */
-  .editorSelectionIcon {
-    margin-right: 10px;
-    margin-left: 5px;
-  }
-  .selectedSelection {
-    background-color: #223141;
-  }
-  .editorSelectionSave {
-    margin-left: 10px;
-    color: white;
-    font-size: 7px;
-    display: inline-block;
-    position: relative;
-    top: -0.25em;
-  }
+}
+.settingsMenuSection {
+  padding-left: 20px;
+}
+.settingMenuDanger {
+  color: #ff0000;
+  font-weight: 700;
+}
+.deleteProjectButton {
+  font-size: 20px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  background-color: #e05252;
+  color: #fff;
+  border-radius: 5px;
+  margin-top: 10px;
+  box-shadow: 3px 3px #af4141;
+}
+.deleteProjectButton:hover {
+  background-color: #d34343;
+  box-shadow: 4px 4px #9f3232;
+  transform: translate(-1px, -1px);
+}
+.deleteProjectButton:active {
+  background-color: #b13c3c;
+  box-shadow: 2px 2px #912d2d;
+  transform: translate(1px, 1px);
+}
+
+.confirmDelete {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100vh - var(--titlebar-height));
+  background-color: #00000080;
+  z-index: 100;
+}
+.confirmDeleteContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: #2b4453;
+  border-radius: 5px;
+  box-shadow: 3px 3px #20333f;
+  text-align: center;
+}
+.confirmDeleteText {
+  color: #fff;
+  font-size: 20px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.confirmDeleteButton {
+  font-size: 20px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  background-color: #e05252;
+  color: #fff;
+  border-radius: 5px;
+  margin: 10px;
+  box-shadow: 3px 3px #af4141;
+}
+.confirmDeleteButton:hover {
+  background-color: #d34343;
+  box-shadow: 4px 4px #9f3232;
+  transform: translate(-1px, -1px);
+}
+.confirmDeleteButton:active {
+  background-color: #b13c3c;
+  box-shadow: 2px 2px #912d2d;
+  transform: translate(1px, 1px);
+}
+.confirmDeleteButtonCancel {
+  background-color: #787878;
+  box-shadow: 3px 3px #565656;
+}
+.confirmDeleteButtonCancel:hover {
+  background-color: #878787;
+  box-shadow: 4px 4px #636363;
+  transform: translate(-1px, -1px);
+}
+.confirmDeleteButtonCancel:active {
+  background-color: #6f6f6f;
+  box-shadow: 2px 2px #5c5c5c;
+  transform: translate(1px, 1px);
+}
+
+.layoutEditor {
+  width: calc(100vw - var(--menu-width));
+  height: calc(100vh - var(--titlebar-height));
+  background-color: #142129;
+}
+.projectIFrame {
+  width: calc(100vw - var(--menu-width));
+  height: calc(100vh - var(--titlebar-height));
+  display: inline-block;
+  border: none;
+  outline: none;
+  background-color: white;
+}
+
+.editorSelectionIcon {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+.selectedSelection {
+  background-color: #223141;
+}
+.editorSelectionSave {
+  margin-left: 10px;
+  color: white;
+  font-size: 7px;
+  display: inline-block;
+  position: relative;
+  top: -0.25em;
+}

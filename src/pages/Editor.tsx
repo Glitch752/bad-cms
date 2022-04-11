@@ -27,6 +27,7 @@ export default function Editor(props) {
         editorTabs: [],
         monaco: null,
         editor: null,
+        image: null,
       },
       states: {
         loading: {
@@ -54,6 +55,14 @@ export default function Editor(props) {
               actions: assign((context, event: { tabs: any }) => {
                 return {
                   editorTabs: event.tabs,
+                }
+              })
+            },
+            setImage: {
+              target: ".image",
+              actions: assign((context, event: { image: any }) => {
+                return {
+                  image: event.image,
                 }
               })
             },
@@ -97,6 +106,7 @@ export default function Editor(props) {
             },
             code: {},
             layout: {},
+            image: {},
             settings: {
               initial: "deleteClosed",
               on: {
@@ -163,29 +173,6 @@ export default function Editor(props) {
       if(state.can('finishedLoading')) send("finishedLoading");
       ipc.send('getFile', {file: path.join(args.directory, args.files[0])});
     });
-
-    ipc.once('getFileReply', async (event, args) => {
-      while(editor === null) {
-        // Wait for the editor to be loaded
-        await sleep(50);
-        console.log("Waiting for editor to be loaded...");
-      }
-      let language = null;
-      if(args.fileName !== undefined) {
-        var extToLang = { // List of compatible files with Monaco language support
-          ".html": "html",
-          ".css": "css",
-          ".js": "javascript",
-          ".svg": "html",
-        };
-
-        language = extToLang[path.extname(args.fileName)];
-        language = language === undefined ? "plaintext" : language;
-
-        monaco.editor.setModelLanguage(editor.getModel(), language);
-      }
-      editor.setValue(args.content);
-    });
     
     let editorTabs = state.context.editorTabs;
     let editorTab = state.context.tab;
@@ -193,6 +180,33 @@ export default function Editor(props) {
     let editorName = "Loading";
 
     let editingMenu = [];
+
+    ipc.once('getFileReply', async (event, args) => {
+      if(args.isImage) {
+        send("setImage", { image: args.file });
+      } else {
+        while(editor === null) {
+          // Wait for the editor to be loaded
+          await sleep(50);
+          console.log("Waiting for editor to be loaded...");
+        }
+        let language = null;
+        if(args.fileName !== undefined) {
+          var extToLang = { // List of compatible files with Monaco language support
+            ".html": "html",
+            ".css": "css",
+            ".js": "javascript",
+            ".svg": "html",
+          };
+  
+          language = extToLang[path.extname(args.fileName)];
+          language = language === undefined ? "plaintext" : language;
+  
+          monaco.editor.setModelLanguage(editor.getModel(), language);
+        }
+        editor.setValue(args.content);
+      }
+    });
 
     const selectTab = (tab) => {
       send('switchTab', {tab: tab});
@@ -255,7 +269,7 @@ export default function Editor(props) {
       }
     });
 
-    if (editorTab === -1) {
+    if (state.matches("editor.settings")) {
       const isDeleting = state.matches("editor.settings.deleteOpen");
 
       const deleteMenu = isDeleting ? 
@@ -283,7 +297,7 @@ export default function Editor(props) {
         </div>
       ];
       editorName = "Settings";
-    } else if (editorTab === -2) {
+    } else if (state.matches("editor.layout")) {
       editingMenu = [
         <div key="layout" className={styles.layoutEditor}> 
           <div className={styles.layoutEditorPage}>
@@ -292,6 +306,12 @@ export default function Editor(props) {
         </div>
       ];
       editorName = "Layout editor";
+    } else if (state.matches("editor.image")) {
+      editingMenu = [
+        <div key="image" className={styles.imageEditor}>
+          <img src={state.context.image} className={styles.imageEditorImage} />
+        </div>
+      ];
     } else {
       editingMenu = [];
       if(editorTabs[editorTab] !== undefined) {
@@ -340,9 +360,9 @@ export default function Editor(props) {
     }
     
     props.settitle([
-      <span className="leftText">Bad CMS for Devs</span>,
-      <span className="centerText">{editorName}</span>,
-      <span className="rightText">Editing "{projects[id].name}"</span>
+      <span key="left" className="leftText">Bad CMS for Devs</span>,
+      <span key="center" className="centerText">{editorName}</span>,
+      <span key="right" className="rightText">Editing "{projects[id].name}"</span>
     ]);
 
     return (

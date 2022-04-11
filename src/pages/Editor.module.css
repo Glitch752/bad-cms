@@ -12,6 +12,15 @@
     top: var(--titlebar-height);
     overflow: hidden;
 }
+.imageEditor {
+  width: calc(100vw - var(--menu-width));
+  height: calc(100vh - var(--titlebar-height) - 25px);
+}
+.imageEditorImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .editorOptions {
     height: 25px;
     background-color: #20333f;
@@ -38,7 +47,7 @@
 
 .settingsMenu {
   width: calc(100vw - var(--menu-width));
-  height: calc(100vh - var(--titlebar-height));
+  height: calc(100vh - var(--titlebar-height) - 25px);
   background-color: #142129;
 }
 .settingsMenuSeparator {
@@ -145,12 +154,12 @@
 
 .layoutEditor {
   width: calc(100vw - var(--menu-width));
-  height: calc(100vh - var(--titlebar-height));
+  height: calc(100vh - var(--titlebar-height) - 25px);
   background-color: #142129;
 }
 .projectIFrame {
   width: calc(100vw - var(--menu-width));
-  height: calc(100vh - var(--titlebar-height));
+  height: calc(100vh - var(--titlebar-height) - 25px);
   display: inline-block;
   border: none;
   outline: none;

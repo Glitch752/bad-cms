@@ -76,8 +76,14 @@ ipc.on('getAppPath', (event, args) => {
 });
 
  ipc.on('getFile', (event, args) => {
-    var file = fs.readFileSync(args.file, 'utf8');
-    event.sender.send('getFileReply', {content: file, fileName: args.file});
+    let imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".ico"];
+    let fileExtension = path.extname(args.file);
+    if(imageExtensions.includes(fileExtension)) {
+      event.sender.send('getFileReply', {isImage: true, file: args.file});
+    } else {
+      let file = fs.readFileSync(args.file, 'utf8');
+      event.sender.send('getFileReply', {isImage: false, content: file, fileName: args.file});
+    }
  });
 
  var popoutWindiows = [];
@@ -155,13 +161,6 @@ ipc.on('getAppPath', (event, args) => {
     event.sender.send('deleteProjectReply', "Folder does not exist. This is likely due to an error in the project creation process.");
   }
  });
-
-//  ipc.on('getLayoutEditorHTML', (event, args) => {
-//    var projectPath = args.directory;
-//    var index = args.index;
-//    var file = path.join(projectPath, index);
-//    event.sender.send('getLayoutEditorHTMLReply', {code: fs.readFileSync(file, 'utf8')});
-//  });
 
  const getFilesFromDirectory = function(dirPath, arrayOfFiles = []) {
   var files = fs.readdirSync(dirPath)

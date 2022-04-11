@@ -11,16 +11,13 @@ import Editor from './pages/Editor';
 import EditorPopout from './pages/EditorPopout';
 import Error from './pages/Error';
 
-
 export class App extends Component<any, any> {
   render() {
     return (
       <div className="mainContent">
         <header id="titlebar">
           <div id="drag-region">
-            <div id="window-title">
-              <span>Bad CMS for devs.</span>
-            </div>
+            <Title />
             <div id="window-controls">
               <div className="button" id="min-button"><img className="icon" srcSet="../assets/min-w-10.png 1x, ../assets/min-w-12.png 1.25x, ../assets/min-w-15.png 1.5x, ../assets/min-w-15.png 1.75x, ../assets/min-w-20.png 2x, ../assets/min-w-20.png 2.25x, ../assets/min-w-24.png 2.5x, ../assets/min-w-30.png 3x, ../assets/min-w-30.png 3.5x" draggable="false" /></div>
               <div className="button" id="max-button"><img className="icon" srcSet="../assets/max-w-10.png 1x, ../assets/max-w-12.png 1.25x, ../assets/max-w-15.png 1.5x, ../assets/max-w-15.png 1.75x, ../assets/max-w-20.png 2x, ../assets/max-w-20.png 2.25x, ../assets/max-w-24.png 2.5x, ../assets/max-w-30.png 3x, ../assets/max-w-30.png 3.5x" draggable="false" /></div>
@@ -37,9 +34,9 @@ export class App extends Component<any, any> {
               <Route path="/" element={<Redirect />} />
               <Route path="/Welcome" element={<Welcome />} />
               <Route path="/GetStarted" element={<GetStarted />} />
-              <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/Dashboard" element={<Dashboard settitle={setTitleTo} />} />
               <Route path="/template/:type" element={<Template />} />
-              <Route path="/Editor/project/:id" element={<Editor />} />
+              <Route path="/Editor/project/:id" element={<Editor settitle={setTitleTo} />} />
               <Route path="/editorPopout/:file" element={<EditorPopout />} />
               <Route path="/Error" element={<Error />} />
             </Routes>
@@ -50,21 +47,28 @@ export class App extends Component<any, any> {
   }
 }
 
-// export const Welcome = (props) => {
-//   const navigate = useNavigate();
-//   const NavigateTo = e => {
-//       e.preventDefault();
-//       // navigate(-1);
-//       navigate('/GetStarted');
-//   }
-//   return (
-//     <main>
-//       <h1>Welcome</h1>
-//       <p>Welcome to Bad CMS for devs! We hope this CMS isn't actually <i>that</i> bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?</p>
-//       <button className="start" onClick={NavigateTo}>Get started!</button>
-//     </main>
-//   );
-// }
+let setTitleTo = (title) => {
+  setTitleNew(title);
+}
+
+let setTitleNew;
+
+function Title(props) {
+  let [title, setTitle] = React.useState("Bad CMS for devs.");
+
+  // This might not work on slower machines, so there's probably a better way to do this.
+  setTitleNew = (title) => {
+    setTimeout(() => {
+      setTitle(title);
+    }, 1);
+  }
+
+  return (
+    <div id="window-title">
+      <span>{ title }</span>
+    </div>
+  )
+}
 
 // react-helmet don't guarantee the scripts execution order
 export default function Script(props) {

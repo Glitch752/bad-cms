@@ -24,6 +24,7 @@ const Store = require('electron-store');
 Store.initRenderer();
 
 const ipc = require('electron').ipcMain;
+
 ipc.on('CreateProject', (event, args) => {
   var projectPath = path.join(app.getPath('userData'), "/projects", args.name); //find the projects path
   if (fs.existsSync(projectPath)) {
@@ -136,7 +137,6 @@ ipc.on('getAppPath', (event, args) => {
         //Probably a better way to figure this out
         if(url === args.substring(args.lastIndexOf('\\'))) {
           if(openWindowSender !== null) {
-            console.log(url);
             openWindowSender.send('popoutClose', popoutWindiows[i].index);
             popoutWindiows.splice(i, 1);
           }

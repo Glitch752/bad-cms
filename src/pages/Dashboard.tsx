@@ -7,9 +7,11 @@ import { icons } from '../icons.js';
 import { store } from '../store';
 
 // Dashboard code (js)
-export default function Dashboard() {
+export default function Dashboard(props) {
+    props.settitle("Bad CMS for Devs");
+
     const navigate = useNavigate();
-    var projects = store.get('projects', []);
+    var projects: any = store.get('projects', []);
     var sites = [
         <div key="a" className={styles.menunew} onClick={() => navigate("/GetStarted")}>
             <i key="a" className={"fas fa-plus " + styles.newProjectIcon}></i>

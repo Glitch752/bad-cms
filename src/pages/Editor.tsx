@@ -1,5 +1,5 @@
 // imports
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './Editor.module.css';
 import { createMachine, assign, interpret } from 'xstate';
@@ -14,7 +14,7 @@ import { store } from '../store';
 const ipc = require('electron').ipcRenderer;
 
 // Editor code (js)
-export default function Editor() {
+export default function Editor(props) {
     const navigate = useNavigate();
     const projects = store.get('projects', false);
     let { id } = useParams();
@@ -295,7 +295,7 @@ export default function Editor() {
     } else {
       editingMenu = [];
       if(editorTabs[editorTab] !== undefined) {
-        editorName = "Code editor - " + editorTabs[editorTab].name;
+        editorName = "Code editor: " + editorTabs[editorTab].name;
       }
     }
 
@@ -338,6 +338,12 @@ export default function Editor() {
         </div>
       );
     }
+    
+    props.settitle([
+      <span className="leftText">Bad CMS for Devs</span>,
+      <span className="centerText">{editorName}</span>,
+      <span className="rightText">Editing "{projects[id].name}"</span>
+    ]);
 
     return (
         // Actual JSX of the dsahboard

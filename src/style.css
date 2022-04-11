@@ -80,6 +80,20 @@ main {
   white-space: nowrap;
   line-height: 1.5;
 }
+#window-title .leftText {
+  font-size: 12px;
+}
+#window-title .centerText {
+  position: absolute;
+  left: calc(50% - 60px);
+  transform: translateX(-50%);
+}
+#window-title .rightText {
+  margin-right: 120px;
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+}
 #window-controls {
   display: grid;
   grid-template-columns: repeat(3, 36px);

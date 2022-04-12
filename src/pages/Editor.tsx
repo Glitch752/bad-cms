@@ -105,7 +105,21 @@ export default function Editor(props) {
               }
             },
             code: {},
-            layout: {},
+            layout: {
+              initial: "selectionTab",
+              on: {
+                selectionTab: {
+                  target: ".selectionTab",
+                },
+                creatorTab: {
+                  target: ".creatorTab",
+                }
+              },
+              states: {
+                selectionTab: {},
+                creatorTab: {}
+              }
+            },
             image: {},
             settings: {
               initial: "deleteClosed",
@@ -180,6 +194,8 @@ export default function Editor(props) {
     let editorName = "Loading";
 
     let editingMenu = [];
+
+    let wideVersion = false;
 
     ipc.once('getFileReply', async (event, args) => {
       if(args.isImage) {
@@ -281,7 +297,7 @@ export default function Editor(props) {
               <button className={styles.confirmDeleteButton} onClick={() => deleteProjectConfirm()}>Delete</button>
             </div>
           </div>
-        </div> : <></>;
+      </div> : <></>;
 
       editingMenu = [
         <div key="settings" className={styles.settingsMenu}>
@@ -306,12 +322,14 @@ export default function Editor(props) {
         </div>
       ];
       editorName = "Layout editor";
+      wideVersion = true;
     } else if (state.matches("editor.image")) {
       editingMenu = [
         <div key="image" className={styles.imageEditor}>
           <img src={state.context.image} className={styles.imageEditorImage} />
         </div>
       ];
+      editorName = "Image viewer: " + editorTabs[editorTab].name;
     } else {
       editingMenu = [];
       if(editorTabs[editorTab] !== undefined) {
@@ -322,7 +340,18 @@ export default function Editor(props) {
     const settingsSelected = (editorTab === -1 ? styles.selectedSelection : "");
     const layoutEditorSelected = (editorTab === -2 ? styles.selectedSelection : "");
 
+    const tabsTabSelected = state.matches("editor.layout.selectionTab") ? styles.selectedTabSelectorItem : "";
+    const siteTabSelected = state.matches("editor.layout.creatorTab") ? styles.selectedTabSelectorItem : "";
+
+    let tabSelector = editorTab === -2 ? 
+      <div key="tabs" className={styles.tabSelector}>
+        <div className={styles.tabSelectorItem + " " + tabsTabSelected} onClick={() => send("selectionTab")}>Tabs</div>
+        <div className={styles.tabSelectorItem + " " + siteTabSelected} onClick={() => send("creatorTab")}>Site creator</div>
+      </div>
+    : null;
+
     let selectionPane = [
+      tabSelector,
       <div key="settings" className={styles.editorSelection + " " + settingsSelected} onClick={() => selectTab(-1)}>
         <i className={"fas fa-gear " + styles.editorSelectionIcon}></i>
         Settings
@@ -332,6 +361,8 @@ export default function Editor(props) {
         Layout editor
       </div>
     ];
+
+    // Make selection pane expand and have tabs for pane and layout
 
     for(let i = 0; i < editorTabs.length; i++) {
       let selected = (i === editorTab ? styles.selectedSelection : "");
@@ -358,6 +389,11 @@ export default function Editor(props) {
         </div>
       );
     }
+
+    selectionPane = !state.matches("editor.layout.creatorTab") ? selectionPane : [
+      tabSelector,
+      <span key="creator">Test</span>
+    ];
     
     props.settitle([
       <span key="left" className="leftText">Bad CMS for Devs</span>,
@@ -367,7 +403,7 @@ export default function Editor(props) {
 
     return (
         // Actual JSX of the dsahboard
-        <div>
+        <div className={wideVersion ? styles.widePane : ''}>
             <div className={styles.editorContainer}>
               <div className={styles.editorOptions}>
                 <i className={"fa-solid fa-arrow-left " + styles.leaveIcon} onClick={() => navigate("/Dashboard")}></i>

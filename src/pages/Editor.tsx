@@ -263,12 +263,33 @@ export default function Editor(props) {
       ipc.send('getAppPath');
     }
 
+    const iFrameMessage = (event) => {
+      let parsedData;
+      try {
+        parsedData = JSON.parse(event.data);
+      } catch(e) {
+        return;
+      }
+      console.log(parsedData);
+      if(parsedData.type === "clickedElement") {
+        console.log("Clicked element with classList " + parsedData.classList);
+      }
+    }
+
+    React.useEffect(() => {
+      window.addEventListener('message', iFrameMessage);
+
+      return () => {
+        window.removeEventListener('message', iFrameMessage);
+      }
+    }, []);
+
     ipc.once('getAppPathReply', (event, args) => {
-        var iFrameHead = window.frames["editorFrame"].document.getElementsByTagName("head")[0];
-        var myscript = document.createElement('script');
-        myscript.type = 'text/javascript';
-        myscript.src = path.join(args, '/pages/editorLayoutInjectScript.js');
-        iFrameHead.appendChild(myscript);
+      var iFrameHead = window.frames["editorFrame"].document.getElementsByTagName("head")[0];
+      var myscript = document.createElement('script');
+      myscript.type = 'text/javascript';
+      myscript.src = path.join(args, '/pages/editorLayoutInjectScript.js');
+      iFrameHead.appendChild(myscript);
     });
 
     const deleteProjectConfirm = () => {

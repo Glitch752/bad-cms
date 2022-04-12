@@ -241,6 +241,7 @@ export default function Editor(props) {
     }
 
     const popOut = () => {
+      if(editorTab < 0) return;
       ipc.send('editorPopOut', {file: path.join(projects[id].directory, editorTabs[editorTab].name), index: editorTab});
     }
     

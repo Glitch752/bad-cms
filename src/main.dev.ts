@@ -75,6 +75,10 @@ ipc.on('getAppPath', (event, args) => {
   event.sender.send('getAppPathReply', app.getAppPath());
 });
 
+ipc.on('writeFile', (event, args) => {
+  fs.writeFileSync(args.file, args.content);
+});
+
  ipc.on('getFile', (event, args) => {
     let imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".ico"];
     let fileExtension = path.extname(args.file);

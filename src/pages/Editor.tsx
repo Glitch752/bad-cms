@@ -470,6 +470,16 @@ function Creator(props) {
           }
         ]
       });
+    } else if(parsedData.type === "siteHTML") {
+      let url = parsedData.currentPage;
+      if(url.startsWith("file:///")) {
+        url = url.substring(8);
+      }
+
+      ipc.send("writeFile", {
+        file: url,
+        content: parsedData.html
+      });
     }
   }
 

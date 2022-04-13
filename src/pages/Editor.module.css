@@ -53,6 +53,12 @@
   height: calc(100vh - var(--titlebar-height) - 25px);
 }
 
+.unsavedIcon {
+  font-size: 10px;
+  float: right;
+  margin: 5px;
+}
+
 .settingsMenu {
   width: calc(100vw - var(--menu-width));
   height: calc(100vh - var(--titlebar-height) - 25px);

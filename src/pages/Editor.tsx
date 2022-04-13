@@ -149,6 +149,20 @@ export default function Editor(props) {
 
     let editor = state.context.editor;
     let monaco = state.context.monaco;
+
+    let programaticChangesMade = false;
+
+    const setEditorUnsaved = () => {
+      if(programaticChangesMade) {
+        programaticChangesMade = false;
+        return;
+      }
+      
+      if(editorTabs[editorTab].unsaved === false) {
+        editorTabs[editorTab].unsaved = true;
+        send("setTabs", {tabs: editorTabs});
+      }
+    }
     
     var editorPane = [
       <CodeEditor
@@ -161,6 +175,7 @@ export default function Editor(props) {
         theme="vs-dark"
         className={styles.editor}
         // onChange={updateEditorChanges}
+        onChange={setEditorUnsaved}
         onMount={(editorElem, monacoElem) => {
           send("editorLoaded", { monaco: monacoElem, editor: editorElem });
         }}
@@ -175,7 +190,8 @@ export default function Editor(props) {
       for(let i = 0; i < args.files.length; i++) {
         loadingSelections.push({
           name: args.files[i],
-          window: false
+          window: false,
+          unsaved: false
         });
       }
       // Set text in the editor to Loading file...
@@ -206,7 +222,10 @@ export default function Editor(props) {
         ipc.send('writeFile', {
           file: path.join(projects[id].directory, editorTabs[editorTab].name),
           content: editor.getValue()
-        })
+        });
+
+        editorTabs[editorTab].unsaved = false;
+        send("setTabs", {tabs: editorTabs});
       }
     };
 
@@ -243,6 +262,7 @@ export default function Editor(props) {
   
           monaco.editor.setModelLanguage(editor.getModel(), language);
         }
+        programaticChangesMade = true;
         editor.setValue(args.content);
       }
     });
@@ -405,11 +425,18 @@ export default function Editor(props) {
           selectTab(i);
         };
       }
+      
+      let unsavedIcon = null;
+
+      if(editorTabs[i].unsaved) {
+        unsavedIcon = <i className={"fas fa-circle " + styles.unsavedIcon}></i>;
+      }
 
       selectionPane.push(
         <div key={i} className={styles.editorSelection + " " + selected} onClick={() => clickFunction()}>
           {icon}
           {editorTabs[i].name}
+          {unsavedIcon}
         </div>
       );
     }

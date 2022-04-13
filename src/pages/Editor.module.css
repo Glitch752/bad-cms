@@ -209,3 +209,55 @@
   position: relative;
   top: -0.25em;
 }
+
+.creatorElementSection {
+  margin: 10px;
+  background-color: #0c151b;
+  padding: 10px;
+  position: relative;
+}
+.creatorElementSectionName {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.creatorElementSectionIcon {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-weight: 700;
+  color: #fff;
+  font-size: 20px;
+}
+.creatorElementSectionIcon:hover {
+  color: #ccc;
+}
+.creatorElementSectionList {
+  padding-left: 10px;
+}
+.creatorElementSectionListItem {
+  margin-bottom: 5px;
+  padding: 5px;
+  position: relative;
+}
+.creatorElementSectionListItem:hover {
+  background-color: #1c2b3f;
+}
+.creatorElementSectionListItemName {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: #fff;
+}
+.creatorElementSectionListItemRemove {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  color: #ff0000;
+  font-size: 20px;
+  cursor: pointer;
+}
+.creatorElementSectionListItemRemove:hover {
+  color: #d34343;
+}

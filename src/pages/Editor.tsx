@@ -516,7 +516,8 @@ function Creator(props) {
         editorContent: [
           {
             type: "classList",
-            classList: parsedData.classList
+            classList: parsedData.classList,
+            addingNewClass: false
           }
         ]
       });
@@ -548,6 +549,40 @@ function Creator(props) {
     }), "*");
   };
 
+  const addNewClass = () => {
+    if(state.context.editorContent.addingNewClass) return;
+    console.log(state.context.editorContent);
+    send("click", {
+      editorContent: [
+        {
+          type: "classList",
+          classList: state.context.editorContent.find(e => e.type === "classList").classList,
+          addingNewClass: true
+        }
+      ]
+    });
+  };
+
+  const addedClass = (className) => {
+    className = className.trim();
+    className = className.replace(/\s/g, "-");
+    let classList = state.context.editorContent.find(e => e.type === "classList").classList;
+    classList.push(className);
+    send("click", {
+      editorContent: [
+        {
+          type: "classList",
+          classList: classList,
+          addingNewClass: false
+        }
+      ]
+    });
+    window.frames["editorFrame"].postMessage(JSON.stringify({
+      type: "addClass",
+      className: className
+    }), "*");
+  }
+
   let creatorElement = [<span key="clickElement" className={styles.nothingSelected}>Click on an element to change it.</span>];
 
   if(state.matches("editing")) {
@@ -558,6 +593,7 @@ function Creator(props) {
         creatorElement.push(
           <div key={i} className={styles.creatorElementSection}>
             <div className={styles.creatorElementSectionName}>Class list</div>
+            <i className={"fas fa-plus " + styles.creatorElementSectionIcon} onClick={() => {addNewClass();}}></i>
             <div className={styles.creatorElementSectionList}>
               {element.classList.map((className, index) => {
                 return (
@@ -573,6 +609,11 @@ function Creator(props) {
                   </div>
                 );
               })}
+              {element.addingNewClass ? (
+                <div key="add" className={styles.creatorElementSectionListItem}>
+                  <input className={styles.creatorElementSectionListItemName} type="text" placeholder="Class name" onBlur={(event) => {addedClass(event.target.value)}}></input>
+                </div>
+              ) : null}
             </div>
           </div>
         );

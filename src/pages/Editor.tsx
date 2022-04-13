@@ -1,5 +1,5 @@
 // imports
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './Editor.module.css';
 import { createMachine, assign, interpret } from 'xstate';
@@ -196,6 +196,29 @@ export default function Editor(props) {
     let editingMenu = [];
 
     let wideVersion = false;
+
+    const keyPressed = (e: any) => {
+      // Check if CTRL + S is pressed
+      if (e.ctrlKey && e.key === 's') {
+        // Prevent default behavior
+        e.preventDefault();
+        // Send the save event to IPC
+        ipc.send('writeFile', {
+          file: path.join(projects[id].directory, editorTabs[editorTab].name),
+          content: editor.getValue()
+        })
+      }
+    };
+
+    useEffect(() => {
+      // Add event listener for keys pressed
+      document.addEventListener('keydown', keyPressed);
+
+      // Remove event listener when the component is unmounted
+      return () => {
+        document.removeEventListener('keydown', keyPressed);
+      };
+    });
 
     ipc.once('getFileReply', async (event, args) => {
       if(args.isImage) {

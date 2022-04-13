@@ -263,27 +263,6 @@ export default function Editor(props) {
       ipc.send('getAppPath');
     }
 
-    const iFrameMessage = (event) => {
-      let parsedData;
-      try {
-        parsedData = JSON.parse(event.data);
-      } catch(e) {
-        return;
-      }
-      console.log(parsedData);
-      if(parsedData.type === "clickedElement") {
-        console.log("Clicked element with classList " + parsedData.classList);
-      }
-    }
-
-    React.useEffect(() => {
-      window.addEventListener('message', iFrameMessage);
-
-      return () => {
-        window.removeEventListener('message', iFrameMessage);
-      }
-    }, []);
-
     ipc.once('getAppPathReply', (event, args) => {
       var iFrameHead = window.frames["editorFrame"].document.getElementsByTagName("head")[0];
       var myscript = document.createElement('script');
@@ -414,7 +393,7 @@ export default function Editor(props) {
 
     selectionPane = !state.matches("editor.layout.creatorTab") ? selectionPane : [
       tabSelector,
-      <span key="creator">Test</span>
+      <Creator key="creator" />
     ];
     
     props.settitle([
@@ -443,6 +422,109 @@ export default function Editor(props) {
             {/* {deleteProjectElement} */}
         </div>
     );
+}
+
+function Creator(props) {
+  let creatorMachine = createMachine({
+    id: "creator",
+    initial: "idle",
+    context: {
+      editorContent: null,
+    },
+    on: {
+      "click": {
+        target: ".editing",
+        actions: assign((context, event: { editorContent: any }) => {
+          return {
+            editorContent: event.editorContent
+          };
+        })
+      }
+    },
+    states: {
+      idle: {},
+      editing: {}
+    }
+  });
+
+  const [state, send, service] = useMachine(creatorMachine);
+
+  console.log(state.context);
+
+  const iFrameMessage = (event) => {
+    let parsedData;
+    try {
+      parsedData = JSON.parse(event.data);
+    } catch(e) {
+      return;
+    }
+
+    console.log(parsedData);
+    if(parsedData.type === "clickedElement") {
+      console.log("Clicked element with classList " + parsedData.classList.join(", "));
+      send("click", {
+        editorContent: [
+          {
+            type: "classList",
+            classList: parsedData.classList
+          }
+        ]
+      });
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('message', iFrameMessage);
+
+    return () => {
+      window.removeEventListener('message', iFrameMessage);
+    }
+  }, []);
+
+  const removeClass = (className) => {
+    window.frames["editorFrame"].postMessage(JSON.stringify({
+      type: "removeClass",
+      className: className
+    }), "*");
+  };
+
+  let creatorElement = [<span key="clickElement" className={styles.nothingSelected}>Click on an element to change it.</span>];
+
+  if(state.matches("editing")) {
+    creatorElement = [];
+    for(let i = 0; i < state.context.editorContent.length; i++) {
+      let element = state.context.editorContent[i];
+      if(element.type === "classList") {
+        creatorElement.push(
+          <div key={i} className={styles.creatorElementSection}>
+            <div className={styles.creatorElementSectionName}>Class list</div>
+            <div className={styles.creatorElementSectionList}>
+              {element.classList.map((className, index) => {
+                return (
+                  <div key={index} className={styles.creatorElementSectionListItem}>
+                    <span className={styles.creatorElementSectionListItemName}>{className}</span>
+                    <i className={"fas fa-times " + styles.creatorElementSectionListItemRemove} onClick={() => {
+                      removeClass(className);
+                      element.classList.splice(index, 1);
+                      send("click", {
+                        editorContent: state.context.editorContent
+                      });
+                    }}></i>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
+    }
+  }
+
+  return (
+    <div className={styles.creatorContainer}>
+      {creatorElement}
+    </div>
+  );
 }
 
 //load monaco editor from node_modules

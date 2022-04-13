@@ -44,6 +44,12 @@ export default class MenuBuilder {
             this.mainWindow.webContents.reload();
           },
         },
+        {
+          label: 'Reset zoom',
+          click: () => {
+            this.mainWindow.webContents.zoomLevel = 0;
+          },
+        }
       ]).popup({ window: this.mainWindow });
     });
   }

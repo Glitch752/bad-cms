@@ -42,7 +42,6 @@
     width: var(--menu-width);
     height: calc(100vh - var(--titlebar-height));
     background-color: #121e25;
-    transition: all 300ms ease-in-out;
 }
 .widePane .paneSelector {
     padding-top: 24px;
@@ -170,7 +169,6 @@
   width: calc(100vw - var(--menu-width));
   height: calc(100vh - var(--titlebar-height) - 25px);
   background-color: #142129;
-  transition: all 300ms ease-in-out;
 }
 .projectIFrame {
   width: calc(100vw - var(--menu-width));
@@ -179,7 +177,6 @@
   border: none;
   outline: none;
   background-color: white;
-  transition: all 300ms ease-in-out;
 }
 .tabSelector {
   margin-top: -24px;

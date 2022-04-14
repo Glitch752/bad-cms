@@ -122,6 +122,11 @@ ipc.on('writeFile', (event, args) => {
   fs.writeFileSync(args.file, args.content);
 });
 
+ipc.on("addFile", (event, args) => {
+  var filePath = path.join(args.directory, args.file);
+  fs.writeFileSync(filePath, "");
+});
+
  ipc.on('getFile', (event, args) => {
     let imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".ico"];
     let fileExtension = path.extname(args.file);

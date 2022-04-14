@@ -21,7 +21,6 @@ export default function Editor(props) {
 
     const stateMachine = createMachine({
       id: "editor",
-      initial: "loading",
       context: {
         tab: 0,
         editorTabs: [],
@@ -29,119 +28,154 @@ export default function Editor(props) {
         editor: null,
         image: null,
       },
+      type: 'parallel',
       states: {
-        loading: {
+        editor: {
+          initial: "loading",
           on: {
-            editorLoaded: {
-              target: "editor",
+            addTabData: {
+              target: "addingTab.false",
               actions: [
-                () => {
-                  ipc.send('getFiles', {directory: projects[id].directory});
+                (context: any, event: any) => {
+                  ipc.send("addFile", {
+                    directory: projects[id].directory,
+                    file: event.tab.name
+                  });
                 },
-                assign((context, event: { monaco: any, editor: any }) => {
+                assign((context: any, event: any) => {
                   return {
-                    monaco: event.monaco,
-                    editor: event.editor,
+                    editorTabs: [...context.editorTabs, event.tab],
                   }
                 })
               ],
             }
-          }
-        },
-        editor: {
-          initial: "loading",
-          on: {
-            setTabs: {
-              actions: assign((context, event: { tabs: any }) => {
-                return {
-                  editorTabs: event.tabs,
-                }
-              })
-            },
-            setImage: {
-              target: ".image",
-              actions: assign((context, event: { image: any }) => {
-                return {
-                  image: event.image,
-                }
-              })
-            },
-            switchTab: [
-              {
-                target: ".code",
-                cond: (context, event) => event.tab >= 0,
-    
-                actions: assign((context, event: { tab: any }) => {
-                  return {
-                    tab: event.tab,
-                  };
-                }),
-              },
-              {
-                target: ".layout",
-                cond: (context, event) => event.tab === -2,
-    
-                actions: assign((context, event: { tab: any }) => {
-                  return {
-                    tab: event.tab,
-                  };
-                }),
-              },
-              {
-                target: ".settings",
-    
-                actions: assign((context, event: { tab: any }) => {
-                  return {
-                    tab: event.tab,
-                  };
-                }),
-              },
-            ],
           },
           states: {
             loading: {
               on: {
-                finishedLoading: "code"
-              }
-            },
-            code: {},
-            layout: {
-              initial: "selectionTab",
-              on: {
-                selectionTab: {
-                  target: ".selectionTab",
-                },
-                creatorTab: {
-                  target: ".creatorTab",
-                }
-              },
-              states: {
-                selectionTab: {},
-                creatorTab: {}
-              }
-            },
-            image: {},
-            settings: {
-              initial: "deleteClosed",
-              on: {
-                openDelete: ".deleteOpen",
-                closeDelete: ".deleteClosed",
-              },
-              states: {
-                deleteClosed: {
-                  on: {
-                    openDelete: "deleteOpen"
-                  }
-                },
-                deleteOpen: {
-                  on: {
-                    closeDelete: "deleteClosed"
-                  }
+                editorLoaded: {
+                  target: "editor",
+                  actions: [
+                    () => {
+                      ipc.send('getFiles', {directory: projects[id].directory});
+                    },
+                    assign((context, event: { monaco: any, editor: any }) => {
+                      return {
+                        monaco: event.monaco,
+                        editor: event.editor,
+                      }
+                    })
+                  ],
                 }
               }
+            },
+            editor: {
+              initial: "loading",
+              on: {
+                setTabs: {
+                  actions: assign((context, event: { tabs: any }) => {
+                    return {
+                      editorTabs: event.tabs,
+                    }
+                  })
+                },
+                setImage: {
+                  target: ".image",
+                  actions: assign((context, event: { image: any }) => {
+                    return {
+                      image: event.image,
+                    }
+                  })
+                },
+                switchTab: [
+                  {
+                    target: ".code",
+                    cond: (context, event) => event.tab >= 0,
+        
+                    actions: assign((context, event: { tab: any }) => {
+                      return {
+                        tab: event.tab,
+                      };
+                    }),
+                  },
+                  {
+                    target: ".layout",
+                    cond: (context, event) => event.tab === -2,
+        
+                    actions: assign((context, event: { tab: any }) => {
+                      return {
+                        tab: event.tab,
+                      };
+                    }),
+                  },
+                  {
+                    target: ".settings",
+        
+                    actions: assign((context, event: { tab: any }) => {
+                      return {
+                        tab: event.tab,
+                      };
+                    }),
+                  },
+                ]
+              },
+              states: {
+                loading: {
+                  on: {
+                    finishedLoading: "code"
+                  }
+                },
+                code: {},
+                layout: {
+                  initial: "selectionTab",
+                  on: {
+                    selectionTab: {
+                      target: ".selectionTab",
+                    },
+                    creatorTab: {
+                      target: ".creatorTab",
+                    }
+                  },
+                  states: {
+                    selectionTab: {},
+                    creatorTab: {}
+                  }
+                },
+                image: {},
+                settings: {
+                  initial: "deleteClosed",
+                  on: {
+                    openDelete: ".deleteOpen",
+                    closeDelete: ".deleteClosed",
+                  },
+                  states: {
+                    deleteClosed: {
+                      on: {
+                        openDelete: "deleteOpen"
+                      }
+                    },
+                    deleteOpen: {
+                      on: {
+                        closeDelete: "deleteClosed"
+                      }
+                    }
+                  }
+                },
+              },
             },
           },
         },
+        addingTab: {
+          initial: "false",
+          on: {
+            addTab: ".true",
+            cancel: ".false"
+          },
+          states: {
+            false: {},
+            true: {}
+          }
+        }
       },
     });
 
@@ -185,7 +219,7 @@ export default function Editor(props) {
     // Remove all IPC listeners when the component is mounted again.
     ipc.removeAllListeners();
     
-    ipc.once('getFilesReply', async (event, args) => {
+    ipc.once('getFilesReply', async (_event, args) => {
       var loadingSelections = [];
       for(let i = 0; i < args.files.length; i++) {
         loadingSelections.push({
@@ -241,7 +275,7 @@ export default function Editor(props) {
       };
     });
 
-    ipc.once('getFileReply', async (event, args) => {
+    ipc.once('getFileReply', async (_event, args) => {
       if(args.isImage) {
         send("setImage", { image: args.file });
       } else {
@@ -275,7 +309,7 @@ export default function Editor(props) {
       }
     }
 
-    ipc.once('popoutClose', (event, args) => {
+    ipc.once('popoutClose', (_event, args) => {
         editorTabs[args].window = false;
         send('setTabs', { tabs: editorTabs });
     });
@@ -289,7 +323,7 @@ export default function Editor(props) {
       ipc.send('editorPopOut', {file: path.join(projects[id].directory, editorTabs[editorTab].name), index: editorTab});
     }
     
-    ipc.once('editorPopoutReply', (event, args) => {
+    ipc.once('editorPopoutReply', (_event, args) => {
       // Select the first tab that isn't popped out.
       editorTabs[args.index].window = args.window;
       send("setTabs", { tabs: editorTabs });
@@ -307,7 +341,7 @@ export default function Editor(props) {
       ipc.send('getAppPath');
     }
 
-    ipc.once('getAppPathReply', (event, args) => {
+    ipc.once('getAppPathReply', (_event, args) => {
       var iFrameHead = window.frames["editorFrame"].document.getElementsByTagName("head")[0];
       var myscript = document.createElement('script');
       myscript.type = 'text/javascript';
@@ -322,7 +356,7 @@ export default function Editor(props) {
       store.set('projects', currentProjects);
     }
 
-    ipc.once('deleteProjectReply', (event, args) => {
+    ipc.once('deleteProjectReply', (_event, args) => {
       if(args === true) {
         navigate('/');
       } else {
@@ -330,8 +364,8 @@ export default function Editor(props) {
       }
     });
 
-    if (state.matches("editor.settings")) {
-      const isDeleting = state.matches("editor.settings.deleteOpen");
+    if (state.matches({ editor: { editor: "settings" } })) {
+      const isDeleting = state.matches({ editor: { editor: { settings: "deleteOpen" } } });
 
       const deleteMenu = isDeleting ? 
         <div className={styles.confirmDelete}>
@@ -358,7 +392,7 @@ export default function Editor(props) {
         </div>
       ];
       editorName = "Settings";
-    } else if (state.matches("editor.layout")) {
+    } else if (state.matches({ editor: { editor: "layout" } })) {
       editingMenu = [
         <div key="layout" className={styles.layoutEditor}> 
           <div className={styles.layoutEditorPage}>
@@ -368,7 +402,7 @@ export default function Editor(props) {
       ];
       editorName = "Layout editor";
       wideVersion = true;
-    } else if (state.matches("editor.image")) {
+    } else if (state.matches({ editor: { editor: "image" } })) {
       editingMenu = [
         <div key="image" className={styles.imageEditor}>
           <img src={state.context.image} className={styles.imageEditorImage} />
@@ -385,8 +419,8 @@ export default function Editor(props) {
     const settingsSelected = (editorTab === -1 ? styles.selectedSelection : "");
     const layoutEditorSelected = (editorTab === -2 ? styles.selectedSelection : "");
 
-    const tabsTabSelected = state.matches("editor.layout.selectionTab") ? styles.selectedTabSelectorItem : "";
-    const siteTabSelected = state.matches("editor.layout.creatorTab") ? styles.selectedTabSelectorItem : "";
+    const tabsTabSelected = state.matches({ editor: { editor: { layout: "selectionTab" } } }) ? styles.selectedTabSelectorItem : "";
+    const siteTabSelected = state.matches({ editor: { editor: { layout: "creatorTab" } } }) ? styles.selectedTabSelectorItem : "";
 
     let tabSelector = editorTab === -2 ? 
       <div key="tabs" className={styles.tabSelector}>
@@ -394,6 +428,10 @@ export default function Editor(props) {
         <div className={styles.tabSelectorItem + " " + siteTabSelected} onClick={() => send("creatorTab")}>Site creator</div>
       </div>
     : null;
+
+    const addFile = () => {
+      send("addTab");
+    }
 
     let selectionPane = [
       tabSelector,
@@ -404,6 +442,17 @@ export default function Editor(props) {
       <div key="layout" className={styles.editorSelection + " " + layoutEditorSelected} onClick={() => selectTab(-2)}>
         <i className={"fas fa-table " + styles.editorSelectionIcon}></i>
         Layout editor
+      </div>,
+      <div key="buttons" className={styles.editorSelectionTitle}>
+        <div className={styles.editorSelectionTitleText}>Files</div>
+        <div className={styles.editorSelectionTitleButtons}>
+          <i className={styles.editorSelectionTitleButton + " fa-solid fa-file-circle-plus"} onClick={() => {
+            addFile();
+          }}></i>
+          <i className={styles.editorSelectionTitleButton + " fa-solid fa-folder-plus"} onClick={() => {
+            console.log("Not implemented");
+          }}></i>
+        </div>
       </div>
     ];
 
@@ -442,7 +491,63 @@ export default function Editor(props) {
       );
     }
 
-    selectionPane = !state.matches("editor.layout.creatorTab") ? selectionPane : [
+    if(state.matches({ addingTab: "true" })) {
+      selectionPane.push(
+        <div key="adding" className={styles.editorSelection}>
+          <i className={"fas fa-plus " + styles.editorSelectionIcon}></i>
+          <input type="text" placeholder="file name..." className={styles.editorSelectionInput} onBlur={(event) => {
+            // Make sure the file name is valid
+            let name = event.target.value;
+            if(name.length === 0) {
+              name = "new file";
+            }
+
+            if(name.indexOf(".") === -1) {
+              name += ".txt";
+            }
+
+            if(!name.startsWith("\\")) {
+              name = "\\" + name;
+            }
+
+            // Make sure the file doesn't already exist
+            let fileExists = true;
+            while(fileExists) {
+              let tabNumber = 1;
+              let hasNumber = false;
+              fileExists = false;
+              for(let i = 0; i < editorTabs.length; i++) {
+                if(editorTabs[i].name === name) {
+                  fileExists = true;
+                  if(editorTabs[i].name.split("(")[1] !== undefined) {
+                    tabNumber = parseInt(editorTabs[i].name.split("(")[1].split(")")[0]) + 1;
+                    hasNumber = true;
+                  }
+                }
+              }
+
+              if(fileExists) {
+                if(hasNumber) {
+                  name = name.split("(")[0] + name.split(")")[1];
+                }
+                name = name.split(".")[0] + `(${tabNumber}).` + name.split(".")[1];
+              }
+            }
+
+            // Create the file
+            let newTab = {
+              name: name,
+              window: false,
+              unsaved: false
+            };
+
+            send("addTabData", { tab: newTab });
+          }}></input>
+        </div>
+      );
+    }
+
+    selectionPane = !state.matches({ editor: { editor: { layout: "creatorTab" } } }) ? selectionPane : [
       tabSelector,
       <Creator key="creator" project={projects[id]} />
     ];
@@ -464,7 +569,7 @@ export default function Editor(props) {
                 <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => { popOut() }}></i>
               </div>
               { editingMenu }
-              { editorPane /* Although this seems like a wierd way to do this, I can't find another way to fix some wierd monaco bugs */}
+              { editorPane /* Although this seems like a weird way to do this, I can't find another way to fix some wierd monaco bugs */}
             </div>
             <div className={styles.paneSelector}>
               {/* {finalSelections} */}
@@ -485,7 +590,7 @@ function Creator(props) {
     on: {
       "click": {
         target: ".editing",
-        actions: assign((context, event: { editorContent: any }) => {
+        actions: assign((_context, event: { editorContent: any }) => {
           return {
             editorContent: event.editorContent
           };
@@ -553,7 +658,7 @@ function Creator(props) {
 
   ipc.removeAllListeners();
 
-  ipc.on("getCssContentReply", (event, arg) => {
+  ipc.on("getCssContentReply", (_event, arg) => {
     let oldStyles = state.context.editorContent[1].styles;
     let newStyles = arg;
 
@@ -730,7 +835,7 @@ function Creator(props) {
     ipc.send('getAppPath2');
   }
 
-  ipc.once('getAppPathReply2', (event, args) => {
+  ipc.once('getAppPathReply2', (_event, args) => {
     var iFrameHead = window.frames["editorFrame"].document.getElementsByTagName("head")[0];
     var myscript = document.createElement('script');
     myscript.type = 'text/javascript';
@@ -745,7 +850,7 @@ function Creator(props) {
     InjectJS();
   }
 
-  ipc.on("modifyCssReply", (event, arg) => {
+  ipc.on("modifyCssReply", (_event, arg) => {
     if(arg) {
       debounce(sendRefreshPage, 200);
     } else {
@@ -818,7 +923,7 @@ function Creator(props) {
                           editorContent
                         });
                       }}
-                      onMount={(editor, monaco) => {
+                      onMount={(editor, _monaco) => {
                         const editorDefaultWidth = editor.getDomNode().parentElement.offsetWidth;
 
                         const updateHeight = () => {

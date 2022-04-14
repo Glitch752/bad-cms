@@ -201,6 +201,28 @@
 .selectedSelection {
   background-color: #223141;
 }
+.editorSelectionTitle {
+  background-color: #182431;
+  position: relative;
+  padding: 3px;
+}
+.editorSelectionTitleButtons {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+.editorSelectionTitleButton {
+  cursor: pointer;
+  font-size: 15px;
+  margin-right: 5px;
+}
+.editorSelectionInput {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: #fff;
+  font-size: 16px;
+}
 .editorSelectionSave {
   margin-left: 10px;
   color: white;

@@ -67,7 +67,7 @@ function getCssRules(element) {
 
     const cssFileContent = cssFiles.map((cssFile, index) => {
         return {
-            "cssFile": cssFile,
+            "cssFile": cssFile.replace(/%20/g, " "),
             "cssFileContent": styleSheetContent[index]
         }
     });

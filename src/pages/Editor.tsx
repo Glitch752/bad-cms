@@ -444,7 +444,7 @@ export default function Editor(props) {
 
     selectionPane = !state.matches("editor.layout.creatorTab") ? selectionPane : [
       tabSelector,
-      <Creator key="creator" />
+      <Creator key="creator" project={projects[id]} />
     ];
     
     props.settitle([
@@ -596,6 +596,7 @@ function Creator(props) {
       style.endIndex = endIndex;
       style.unsaved = false;
       style.unsavedText = "";
+      style.shortCssFile = style.cssFile.substring(props.project.directory.length);
       return style;
     });
 
@@ -748,14 +749,17 @@ function Creator(props) {
           </div>
         );
       } else if (element.type === "styles") {
+        let oldCssFile = "";
         creatorElement.push(
           <div key={i} className={styles.creatorElementSection}>
             <div className={styles.creatorElementSectionName}>Styles</div>
             {
               element.styles.map((style, index) => {
+                let oldOldCssFile = oldCssFile;
+                oldCssFile = style.shortCssFile;
                 return (
                   <div key={index} className={styles.creatorElementSectionArea}>
-                    <div className={styles.creatorElementSectionSubtitle}>{style.selectorText}:</div>
+                    <div className={styles.creatorElementSectionSubtitle}>{oldOldCssFile === style.shortCssFile ? null : style.shortCssFile + ":"}</div>
                     { style.unsaved ? (
                       <i className={"fas fa-save " + styles.creatorElementSectionIcon} onClick={() => {
                         saveEditors();

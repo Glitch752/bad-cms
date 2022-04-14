@@ -554,6 +554,9 @@ function Creator(props) {
 
     let newStyleText = [];
 
+    let foundIndex = null;
+    let endIndex = null;
+
     // Loop through all of the old styles, and find the line they are on in the new styles.
     for(let i = 0; i < oldStyles.length; i++) {
       let oldStyle = oldStyles[i];
@@ -566,7 +569,6 @@ function Creator(props) {
       const newStyleLinesTrimmed = newStyle.content.split("\n").map(line => line.trim());
       const newStyleLines = newStyle.content.split("\n");
 
-      let foundIndex = null;
       for(let j = 0; j < oldStyleText.length; j++) {
         let newFoundIndex = newStyleLinesTrimmed.indexOf(oldStyleText.substring(0, j));
         if(newFoundIndex !== -1) {
@@ -575,7 +577,6 @@ function Creator(props) {
       }
 
       // Find the end of the CSS rule starting at the found index.
-      let endIndex = null;
       for(let j = foundIndex; j < newStyleLines.length; j++) {
         addLines.push(newStyleLines[j]);
         if(newStyleLines[j].trim() === "}") {
@@ -591,6 +592,8 @@ function Creator(props) {
 
     let newStyleAttr = oldStyles.map(style => {
       style.cssText = newStyleText.shift();
+      style.startIndex = foundIndex;
+      style.endIndex = endIndex;
       return style;
     });
 
@@ -709,7 +712,7 @@ function Creator(props) {
                         console.log("Changed to " + value);
                       }}
                       onMount={(editor, monaco) => {
-                        const editorDefaultWidth = editor.getDomNode().clientWidth;
+                        const editorDefaultWidth = editor.getDomNode().parentElement.offsetWidth;
 
                         const updateHeight = () => {
                           const contentHeight = Math.min(1000, editor.getContentHeight());

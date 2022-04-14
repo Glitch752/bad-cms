@@ -88,6 +88,8 @@ ipc.on('CreateProject', (event, args) => {
     var newContent = splitFileContent.slice(0, startIndex).join("\n") + "\n" + content + "\n" + splitFileContent.slice(endIndex + 1).join("\n");
 
     fs.writeFileSync(file, newContent);
+
+    event.sender.send('modifyCssReply', true);
  });
 
  ipc.on('getFiles', (event, args) => { //When project folder is given with ipc

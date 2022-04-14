@@ -214,18 +214,20 @@ export default function Editor(props) {
     let wideVersion = false;
 
     const keyPressed = (e: any) => {
-      // Check if CTRL + S is pressed
-      if (e.ctrlKey && e.key === 's') {
-        // Prevent default behavior
-        e.preventDefault();
-        // Send the save event to IPC
-        ipc.send('writeFile', {
-          file: path.join(projects[id].directory, editorTabs[editorTab].name),
-          content: editor.getValue()
-        });
-
-        editorTabs[editorTab].unsaved = false;
-        send("setTabs", {tabs: editorTabs});
+      if(editorTab >= 0) {
+        // Check if CTRL + S is pressed
+        if (e.ctrlKey && e.key === 's') {
+          // Prevent default behavior
+          e.preventDefault();
+          // Send the save event to IPC
+          ipc.send('writeFile', {
+            file: path.join(projects[id].directory, editorTabs[editorTab].name),
+            content: editor.getValue()
+          });
+  
+          editorTabs[editorTab].unsaved = false;
+          send("setTabs", {tabs: editorTabs});
+        }
       }
     };
 
@@ -653,6 +655,23 @@ function Creator(props) {
     }), "*");
   }
 
+  useEffect(() => {
+    // Add event listener for keys pressed
+    document.addEventListener('keydown', keyPressed);
+
+    // Remove event listener when the component is unmounted
+    return () => {
+      document.removeEventListener('keydown', keyPressed);
+    };
+  });
+
+  const keyPressed = (event) => {
+    if(event.ctrlKey && event.key === "s") {
+      saveEditors();
+      event.preventDefault();
+    }
+  }
+
   const saveEditors = () => {
     const editors = state.context.editorContent[1].styles;
 
@@ -677,6 +696,22 @@ function Creator(props) {
       editorContent
     });
   }
+
+  let timerId;
+  const debounce = function (func, delay) {
+    clearTimeout(timerId);
+    timerId  =  setTimeout(func, delay);
+  }
+
+  const sendRefreshCss = () => {
+    window.frames["editorFrame"].postMessage(JSON.stringify({
+      type: "reloadCss"
+    }), "*");
+  }
+
+  ipc.on("modifyCssReply", (event, arg) => {
+    debounce(sendRefreshCss, 200);
+  });
 
   let creatorElement = [<div key="clickElement" className={styles.creatorElementSection}>Click on an element to change it.</div>];
 

@@ -31,6 +31,8 @@ window.addEventListener("message", function (event) {
             element.classList.add(parsedData.className);
             sendSiteHTML();
         });
+    } else if(parsedData.type === "reloadCss") {
+        reloadCss();
     }
 });
 
@@ -106,4 +108,14 @@ function sendSiteHTML() {
         "html": siteHTML,
         "currentPage": window.location.href
     }), "*");
+}
+
+function reloadCss() {
+    console.log("reloading css");
+    var links = document.getElementsByTagName("link");
+    for (var cl in links) {
+        var link = links[cl];
+        if (link.rel === "stylesheet")
+            link.href += "";
+    }
 }

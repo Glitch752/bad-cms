@@ -1,15 +1,17 @@
+const clickedClassRandom = "clicked__" + Math.random().toString(36).substring(2);
+
 let didClick = false;
 document.querySelectorAll("*").forEach(function (element) {
     element.addEventListener("click", () => {
         if (!didClick) {
             didClick = true;
-            document.querySelectorAll(".clicked__2zZxPmy5ml").forEach(function (element) { element.classList.remove("clicked__2zZxPmy5ml"); });
+            document.querySelectorAll(`.${clickedClassRandom}`).forEach(function (element) { element.classList.remove(clickedClassRandom); });
             parent.postMessage(JSON.stringify({
                 "type": "clickedElement", 
                 "classList": [...element.classList],
                 "styles": getCssRules(element)
             }), "*");
-            element.classList.add("clicked__2zZxPmy5ml");
+            element.classList.add(clickedClassRandom);
             setTimeout(() => {
                 didClick = false;
             }, 10);
@@ -20,12 +22,12 @@ document.querySelectorAll("*").forEach(function (element) {
 window.addEventListener("message", function (event) {
     const parsedData = JSON.parse(event.data);
     if(parsedData.type === "removeClass") {
-        document.querySelectorAll(".clicked__2zZxPmy5ml").forEach(function (element) {
+        document.querySelectorAll(`.${clickedClassRandom}`).forEach(function (element) {
             element.classList.remove(parsedData.className);
             sendSiteHTML();
         });
     } else if(parsedData.type === "addClass") {
-        document.querySelectorAll(".clicked__2zZxPmy5ml").forEach(function (element) {
+        document.querySelectorAll(`.${clickedClassRandom}`).forEach(function (element) {
             element.classList.add(parsedData.className);
             sendSiteHTML();
         });

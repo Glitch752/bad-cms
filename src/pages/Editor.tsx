@@ -585,8 +585,6 @@ function Creator(props) {
         }
       }
 
-      console.log(newStyleLines[foundIndex]);
-
       newStyleText.push(addLines.join("\n"));
     }
 
@@ -594,6 +592,8 @@ function Creator(props) {
       style.cssText = newStyleText.shift();
       style.startIndex = foundIndex;
       style.endIndex = endIndex;
+      style.unsaved = false;
+      style.unsavedText = "";
       return style;
     });
 
@@ -629,14 +629,10 @@ function Creator(props) {
 
   const addNewClass = () => {
     if(state.context.editorContent.addingNewClass) return;
+    let editorContent = state.context.editorContent;
+    editorContent[0].addingNewClass = true;
     send("click", {
-      editorContent: [
-        {
-          type: "classList",
-          classList: state.context.editorContent.find(e => e.type === "classList").classList,
-          addingNewClass: true
-        }
-      ]
+      editorContent
     });
   };
 
@@ -645,19 +641,41 @@ function Creator(props) {
     className = className.replace(/\s/g, "-");
     let classList = state.context.editorContent.find(e => e.type === "classList").classList;
     classList.push(className);
+    let editorContent = state.context.editorContent;
+    editorContent[0].addingNewClass = false;
+    editorContent[0].classList = classList;
     send("click", {
-      editorContent: [
-        {
-          type: "classList",
-          classList: classList,
-          addingNewClass: false
-        }
-      ]
+      editorContent
     });
     window.frames["editorFrame"].postMessage(JSON.stringify({
       type: "addClass",
       className: className
     }), "*");
+  }
+
+  const saveEditors = () => {
+    const editors = state.context.editorContent[1].styles;
+
+    let editorContent = state.context.editorContent;
+
+    for(let i = 0; i < editors.length; i++) {
+      if(editors[i].unsaved) {
+        editorContent[1].styles[i].unsaved = false;
+        let file = editors[i].cssFile;
+        if(file.startsWith("file:///")) {
+          file = file.substring(8);
+        }
+        ipc.send("modifyCss", {
+          file: file,
+          startIndex: editors[i].startIndex,
+          endIndex: editors[i].endIndex,
+          content: editors[i].unsavedText
+        })
+      }
+    }
+    send("click", {
+      editorContent
+    });
   }
 
   let creatorElement = [<div key="clickElement" className={styles.creatorElementSection}>Click on an element to change it.</div>];
@@ -703,13 +721,24 @@ function Creator(props) {
                 return (
                   <div key={index} className={styles.creatorElementSectionArea}>
                     <div className={styles.creatorElementSectionSubtitle}>{style.selectorText}:</div>
+                    { style.unsaved ? (
+                      <i className={"fas fa-save " + styles.creatorElementSectionIcon} onClick={() => {
+                        saveEditors();
+                      }}></i>
+                    ) : null }
                     <CodeEditor 
                       language="css" 
                       value={style.cssText} 
                       className={styles.creatorElementCode} 
                       theme="vs-dark" 
                       onChange={(value) => {
-                        console.log("Changed to " + value);
+                        let editorContent = state.context.editorContent;
+                        editorContent[1].styles[index].unsaved = true;
+                        editorContent[1].styles[index].unsavedText = value;
+
+                        send("click", {
+                          editorContent
+                        });
                       }}
                       onMount={(editor, monaco) => {
                         const editorDefaultWidth = editor.getDomNode().parentElement.offsetWidth;

@@ -246,7 +246,6 @@ export default function Editor(props) {
         while(editor === null) {
           // Wait for the editor to be loaded
           await sleep(50);
-          console.log("Waiting for editor to be loaded...");
         }
         let language = null;
         if(args.fileName !== undefined) {
@@ -499,8 +498,6 @@ function Creator(props) {
 
   const [state, send, service] = useMachine(creatorMachine);
 
-  console.log(state.context);
-
   const iFrameMessage = (event) => {
     let parsedData;
     try {
@@ -509,15 +506,30 @@ function Creator(props) {
       return;
     }
 
-    console.log(parsedData);
     if(parsedData.type === "clickedElement") {
-      console.log("Clicked element with classList " + parsedData.classList.join(", "));
+      // Find all the unique files that the css rules come from.
+      // The file is on the cssFile property.
+      let cssFiles = new Set();
+      for(let i = 0; i < parsedData.styles.length; i++) {
+        let style = parsedData.styles[i];
+        if(style.cssFile !== undefined) {
+          if(style.cssFile.startsWith("file:///")) {
+            style.cssFile = style.cssFile.substring(8);
+          }
+          cssFiles.add(style.cssFile);
+        }
+      }
+      ipc.send("getCssContent", Array.from(cssFiles));
       send("click", {
         editorContent: [
           {
             type: "classList",
             classList: parsedData.classList,
             addingNewClass: false
+          },
+          {
+            type: "stylesPlaceholder",
+            styles: parsedData.styles
           }
         ]
       });
@@ -533,6 +545,69 @@ function Creator(props) {
       });
     }
   }
+
+  ipc.removeAllListeners();
+
+  ipc.on("getCssContentReply", (event, arg) => {
+    let oldStyles = state.context.editorContent[1].styles;
+    let newStyles = arg;
+
+    let newStyleText = [];
+
+    // Loop through all of the old styles, and find the line they are on in the new styles.
+    for(let i = 0; i < oldStyles.length; i++) {
+      let oldStyle = oldStyles[i];
+      let newStyle = newStyles.find(style => style.file === oldStyle.cssFile);
+
+      let oldStyleText = oldStyle.cssText;
+
+      let addLines = [];
+
+      const newStyleLinesTrimmed = newStyle.content.split("\n").map(line => line.trim());
+      const newStyleLines = newStyle.content.split("\n");
+
+      let foundIndex = null;
+      for(let j = 0; j < oldStyleText.length; j++) {
+        let newFoundIndex = newStyleLinesTrimmed.indexOf(oldStyleText.substring(0, j));
+        if(newFoundIndex !== -1) {
+          foundIndex = newFoundIndex;
+        }
+      }
+
+      // Find the end of the CSS rule starting at the found index.
+      let endIndex = null;
+      for(let j = foundIndex; j < newStyleLines.length; j++) {
+        addLines.push(newStyleLines[j]);
+        if(newStyleLines[j].trim() === "}") {
+          endIndex = j;
+          break;
+        }
+      }
+
+      console.log(newStyleLines[foundIndex]);
+
+      newStyleText.push(addLines.join("\n"));
+    }
+
+    let newStyleAttr = oldStyles.map(style => {
+      style.cssText = newStyleText.shift();
+      return style;
+    });
+
+    send("click", {
+      editorContent: [
+        {
+          type: "classList",
+          classList: state.context.editorContent[0].classList,
+          addingNewClass: false
+        },
+        {
+          type: "styles",
+          styles: newStyleAttr
+        }
+      ]
+    })
+  });
 
   React.useEffect(() => {
     window.addEventListener('message', iFrameMessage);
@@ -551,7 +626,6 @@ function Creator(props) {
 
   const addNewClass = () => {
     if(state.context.editorContent.addingNewClass) return;
-    console.log(state.context.editorContent);
     send("click", {
       editorContent: [
         {
@@ -583,7 +657,7 @@ function Creator(props) {
     }), "*");
   }
 
-  let creatorElement = [<span key="clickElement" className={styles.nothingSelected}>Click on an element to change it.</span>];
+  let creatorElement = [<div key="clickElement" className={styles.creatorElementSection}>Click on an element to change it.</div>];
 
   if(state.matches("editing")) {
     creatorElement = [];
@@ -615,6 +689,52 @@ function Creator(props) {
                 </div>
               ) : null}
             </div>
+          </div>
+        );
+      } else if (element.type === "styles") {
+        creatorElement.push(
+          <div key={i} className={styles.creatorElementSection}>
+            <div className={styles.creatorElementSectionName}>Styles</div>
+            {
+              element.styles.map((style, index) => {
+                return (
+                  <div key={index} className={styles.creatorElementSectionArea}>
+                    <div className={styles.creatorElementSectionSubtitle}>{style.selectorText}:</div>
+                    <CodeEditor 
+                      language="css" 
+                      value={style.cssText} 
+                      className={styles.creatorElementCode} 
+                      theme="vs-dark" 
+                      onChange={(value) => {
+                        console.log("Changed to " + value);
+                      }}
+                      onMount={(editor, monaco) => {
+                        const editorDefaultWidth = editor.getDomNode().clientWidth;
+
+                        const updateHeight = () => {
+                          const contentHeight = Math.min(1000, editor.getContentHeight());
+                          editor.layout({ width: editorDefaultWidth, height: contentHeight });
+
+                          const editorParent = editor.getDomNode().parentElement;
+
+                          editorParent.style.height = contentHeight + "px";
+                        };
+
+                        editor.updateOptions({
+                          scrollBeyondLastLine: false,
+                          minimap: {
+                            enabled: false
+                          }
+                        })
+
+                        editor.onDidContentSizeChange(updateHeight);
+                        updateHeight();
+                      }}
+                    ></CodeEditor>
+                  </div>
+                );
+              })
+            }
           </div>
         );
       }

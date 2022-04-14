@@ -232,6 +232,10 @@
 .creatorElementSectionIcon:hover {
   color: #ccc;
 }
+.creatorElementCode {
+  margin-top: 10px;
+  height: 100px;
+}
 .creatorElementSectionList {
   padding-left: 10px;
 }

@@ -63,6 +63,19 @@ ipc.on('CreateProject', (event, args) => {
   }
  });
 
+ ipc.on('getCssContent', (event, args) => {
+   let cssContents = [];
+    for(var i = 0; i < args.length; i++) {
+      var file = args[i];
+      var content = fs.readFileSync(file, 'utf8');
+      cssContents.push({
+        file: file,
+        content: content
+      });
+    }
+    event.sender.send('getCssContentReply', cssContents);
+ });
+
  ipc.on('getFiles', (event, args) => { //When project folder is given with ipc
     var dirFiles = getFilesFromDirectory(args.directory); // Returns an array of file paths in a directory, including subdirectories
     for(var i = 0; i < dirFiles.length; i++) {

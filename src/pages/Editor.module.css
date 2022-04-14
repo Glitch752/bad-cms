@@ -232,6 +232,11 @@
 .creatorElementSectionIcon:hover {
   color: #ccc;
 }
+.creatorContainer {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - var(--titlebar-height) - 25px);
+}
 .creatorElementCode {
   margin-top: 10px;
   height: 100px;

@@ -521,7 +521,10 @@ function Creator(props) {
           cssFiles.add(style.cssFile);
         }
       }
-      ipc.send("getCssContent", Array.from(cssFiles));
+      ipc.send("getCssContent", {
+        files: Array.from(cssFiles),
+        projectPath: props.project.directory
+      });
       send("click", {
         editorContent: [
           {
@@ -564,6 +567,15 @@ function Creator(props) {
       let oldStyle = oldStyles[i];
       let newStyle = newStyles.find(style => style.file === oldStyle.cssFile);
 
+      if(newStyle.file === "HTML") {
+        newStyle = newStyles.find(style => style.file === "HTML");
+        let newPath = path.join(props.project.directory, "index.html");
+        oldStyles[i].cssFile = newPath;
+      } else if(newStyle.file === "Unknown") {
+        newStyleText.push(oldStyle.cssText);
+        continue;
+      }
+
       let oldStyleText = oldStyle.cssText;
 
       let addLines = [];
@@ -596,7 +608,11 @@ function Creator(props) {
       style.endIndex = endIndex;
       style.unsaved = false;
       style.unsavedText = "";
-      style.shortCssFile = style.cssFile.substring(props.project.directory.length);
+      if(style.cssFile !== "Unknown" && style.cssFile !== "HTML") {
+        style.shortCssFile = style.cssFile.substring(props.project.directory.length);
+      } else {
+        style.shortCssFile = style.cssFile;
+      }
       return style;
     });
 
@@ -710,8 +726,31 @@ function Creator(props) {
     }), "*");
   }
 
+  const InjectJS = () => {
+    ipc.send('getAppPath2');
+  }
+
+  ipc.once('getAppPathReply2', (event, args) => {
+    var iFrameHead = window.frames["editorFrame"].document.getElementsByTagName("head")[0];
+    var myscript = document.createElement('script');
+    myscript.type = 'text/javascript';
+    myscript.src = path.join(args, '/pages/editorLayoutInjectScript.js');
+    iFrameHead.appendChild(myscript);
+  });
+
+  const sendRefreshPage = () => {
+    // Reload the page
+    window.frames["editorFrame"].location.reload();
+    // Inject the script
+    InjectJS();
+  }
+
   ipc.on("modifyCssReply", (event, arg) => {
-    debounce(sendRefreshCss, 200);
+    if(arg) {
+      debounce(sendRefreshPage, 200);
+    } else {
+      debounce(sendRefreshCss, 200);
+    }
   });
 
   let creatorElement = [<div key="clickElement" className={styles.creatorElementSection}>Click on an element to change it.</div>];

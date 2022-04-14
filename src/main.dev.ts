@@ -65,13 +65,23 @@ ipc.on('CreateProject', (event, args) => {
 
  ipc.on('getCssContent', (event, args) => {
    let cssContents = [];
-    for(var i = 0; i < args.length; i++) {
-      var file = args[i];
-      var content = fs.readFileSync(file, 'utf8');
-      cssContents.push({
-        file: file,
-        content: content
-      });
+    for(var i = 0; i < args.files.length; i++) {
+      var file = args.files[i];
+      if(file === "HTML") {
+        cssContents.push({
+          file: "HTML",
+          content: fs.readFileSync(args.projectPath + "/index.html", 'utf8')
+        });
+      } else if(file === "Unknown") {
+        cssContents.push({
+          file: "Unknown"
+        });
+      } else {
+        cssContents.push({
+          file: file,
+          content: fs.readFileSync(file, 'utf8')
+        });
+      }
     }
     event.sender.send('getCssContentReply', cssContents);
  });
@@ -89,7 +99,7 @@ ipc.on('CreateProject', (event, args) => {
 
     fs.writeFileSync(file, newContent);
 
-    event.sender.send('modifyCssReply', true);
+    event.sender.send('modifyCssReply', file.endsWith(".html"));
  });
 
  ipc.on('getFiles', (event, args) => { //When project folder is given with ipc
@@ -102,6 +112,10 @@ ipc.on('CreateProject', (event, args) => {
 
 ipc.on('getAppPath', (event, args) => {
   event.sender.send('getAppPathReply', app.getAppPath());
+});
+
+ipc.on('getAppPath2', (event, args) => {
+  event.sender.send('getAppPathReply2', app.getAppPath());
 });
 
 ipc.on('writeFile', (event, args) => {

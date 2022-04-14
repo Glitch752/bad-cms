@@ -80,7 +80,7 @@ function getCssRules(element) {
                 }
             }
             if(allCSS[i][j].cssFile === undefined) {
-                if(siteHTML.includes(allCSS[i][j].cssText)) {
+                if(siteHTML.replace(/\s+/g, "").includes(allCSS[i][j].cssText.replace(/\s+/g, ""))) {
                     allCSS[i][j].cssFile = "HTML";
                 }
             }

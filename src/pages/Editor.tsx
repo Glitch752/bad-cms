@@ -48,6 +48,22 @@ export default function Editor(props) {
                   }
                 })
               ],
+            },
+            deleteTab: {
+              actions: [
+                (context: any, event: any) => {
+                  ipc.send("deleteFile", {
+                    directory: projects[id].directory,
+                    file: event.tab.name
+                  });
+                },
+                assign((context: any, event: any) => {
+                  return {
+                    editorTabs: context.editorTabs.filter((tab: any) => tab.name !== event.tab.name),
+                    tab: event.tab,
+                  }
+                })
+              ]
             }
           },
           states: {
@@ -487,6 +503,11 @@ export default function Editor(props) {
           {icon}
           {editorTabs[i].name}
           {unsavedIcon}
+          <div className={styles.editorSelectionHoverButtons}>
+            <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
+              send("deleteTab", { tab: editorTabs[i] });
+            }}></i>
+          </div>
         </div>
       );
     }

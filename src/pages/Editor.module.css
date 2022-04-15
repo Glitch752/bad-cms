@@ -193,6 +193,23 @@
 
 .editorSelection {
   cursor: pointer;
+  position: relative;
+}
+.editorSelectionHoverButtons {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  z-index: 100;
+  display: none;
+}
+.editorSelection:hover .editorSelectionHoverButtons {
+  display: block;
+}
+.editorSelectionHoverButton {
+  color: #993232;
+}
+.editorSelectionHoverButton:hover {
+  color: #e05252;
 }
 .editorSelectionIcon {
   margin-right: 10px;

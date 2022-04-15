@@ -1,3 +1,7 @@
 .editor {
     height: calc(100vh - 24px);
 }
+.unsavedIcon {
+    margin-left: 5px;
+    font-size: 8px;
+}

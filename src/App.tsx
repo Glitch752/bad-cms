@@ -37,7 +37,7 @@ export class App extends Component<any, any> {
               <Route path="/Dashboard" element={<Dashboard settitle={setTitleTo} />} />
               <Route path="/template/:type" element={<Template />} />
               <Route path="/Editor/project/:id" element={<Editor settitle={setTitleTo} />} />
-              <Route path="/editorPopout/:file" element={<EditorPopout />} />
+              <Route path="/editorPopout/:id/:file" element={<EditorPopout settitle={setTitleTo} />} />
               <Route path="/Error" element={<Error />} />
             </Routes>
           </HashRouter>

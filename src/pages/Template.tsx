@@ -9,9 +9,7 @@ const ipc = require('electron').ipcRenderer;
 export default function Template() {
     let { type } = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
-
-    console.log(location.state.template);
+    const location: any = useLocation();
 
     var projectName = location.state.name !== undefined ? location.state.name : "Unnamed Project";
     var projectIcon = location.state.icon !== undefined ? location.state.icon : 0;
@@ -20,9 +18,7 @@ export default function Template() {
 
     ipc.once('CreateProjectReply', (event, args) => {
         if(args == false) navigate("/GetStarted");
-        console.log(args);
-        var currentProjects = store.get('projects', []);
-        console.log(currentProjects);
+        var currentProjects: any = store.get('projects', []);
         currentProjects.push({
             name: location.state.name,
             icon: location.state.icon,

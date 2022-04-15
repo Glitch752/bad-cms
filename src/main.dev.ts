@@ -183,7 +183,7 @@ ipc.on("deleteFile", (event, args) => {
 
   let newWin = popoutWindiows[newWinIndex].window;
 
-  newWin.loadURL(`file://${__dirname}/index.html#/editorPopout/` + args.file);
+  newWin.loadURL(`file://${__dirname}/index.html#/editorPopout/${args.id}/${args.file}`);
 
   newWin.webContents.on('did-finish-load', () => {
     if (!newWin) {

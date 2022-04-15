@@ -63,6 +63,10 @@ ipc.on('CreateProject', (event, args) => {
   }
  });
 
+ ipc.on("openInExplorer", (event, args) => {
+  shell.showItemInFolder(args);
+ });
+
  ipc.on('getCssContent', (event, args) => {
    let cssContents = [];
     for(var i = 0; i < args.files.length; i++) {

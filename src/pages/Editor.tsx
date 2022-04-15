@@ -11,6 +11,13 @@ import path from 'path';
 
 import { store } from '../store';
 
+import ContextMenuArea from './contextMenuArea';
+import {
+  MenuItem,
+  MenuDivider,
+  MenuHeader
+} from '@szhsin/react-menu';
+
 const ipc = require('electron').ipcRenderer;
 
 // Editor code (js)
@@ -263,20 +270,25 @@ export default function Editor(props) {
 
     let wideVersion = false;
 
+    const saveTab = (tab) => {
+      // Send the save event to IPC
+      ipc.send('writeFile', {
+        file: path.join(projects[id].directory, editorTabs[tab].name),
+        content: editor.getValue()
+      });
+
+      editorTabs[tab].unsaved = false;
+      send("setTabs", {tabs: editorTabs});
+    }
+
     const keyPressed = (e: any) => {
       if(editorTab >= 0) {
         // Check if CTRL + S is pressed
         if (e.ctrlKey && e.key === 's') {
           // Prevent default behavior
           e.preventDefault();
-          // Send the save event to IPC
-          ipc.send('writeFile', {
-            file: path.join(projects[id].directory, editorTabs[editorTab].name),
-            content: editor.getValue()
-          });
-  
-          editorTabs[editorTab].unsaved = false;
-          send("setTabs", {tabs: editorTabs});
+          
+          saveTab(editorTab);
         }
       }
     };
@@ -339,9 +351,9 @@ export default function Editor(props) {
       ipc.send('editorFocusWindow', window);
     }
 
-    const popOut = () => {
+    const popOut = (tab) => {
       if(editorTab < 0) return;
-      ipc.send('editorPopOut', {file: path.join(projects[id].directory, editorTabs[editorTab].name), index: editorTab});
+      ipc.send('editorPopOut', {file: path.join(projects[id].directory, editorTabs[tab].name), index: tab});
     }
     
     ipc.once('editorPopoutReply', (event, args) => {
@@ -504,16 +516,36 @@ export default function Editor(props) {
       }
 
       selectionPane.push(
-        <div key={i} className={styles.editorSelection + " " + selected} onClick={() => clickFunction()}>
-          {icon}
-          {editorTabs[i].name}
-          {unsavedIcon}
-          <div className={styles.editorSelectionHoverButtons}>
-            <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
+        <ContextMenuArea key={i} menuItems={
+          <>
+            <MenuHeader>{editorTabs[i].name}</MenuHeader>
+            <MenuItem onClick={e => {
               send("deleteTab", { tab: editorTabs[i] });
-            }}></i>
+            }}>Delete file</MenuItem>
+            <MenuItem disabled={true}>Rename file</MenuItem>
+            <MenuItem disabled={!editorTabs[i].unsaved} onClick={e => {
+              saveTab(i);
+            }}>Save file</MenuItem>
+            <MenuItem onClick={e => {
+              ipc.send("openInExplorer", path.join(projects[id].directory, editorTabs[i].name));
+            }}>Open in file explorer</MenuItem>
+            <MenuDivider />
+            <MenuItem disabled={editorTabs[i].window !== false} onClick={e => {
+              popOut(i);
+            }}>Open in popout window</MenuItem>
+          </>
+        }>
+          <div className={styles.editorSelection + " " + selected} onClick={() => clickFunction()}>
+            {icon}
+            {editorTabs[i].name}
+            {unsavedIcon}
+            <div className={styles.editorSelectionHoverButtons}>
+              <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
+                send("deleteTab", { tab: editorTabs[i] });
+              }}></i>
+            </div>
           </div>
-        </div>
+        </ContextMenuArea>
       );
     }
 
@@ -592,7 +624,7 @@ export default function Editor(props) {
                 <i className={"fa-solid fa-arrow-left " + styles.leaveIcon} onClick={() => navigate("/Dashboard")}></i>
                 {/* <span className={styles.editorOptionsName}>{editorName}</span> */}
                 {/* <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => {popOut()}}></i> */}
-                <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => { popOut() }}></i>
+                <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => { popOut(editorTab) }}></i>
               </div>
               { editingMenu }
               { editorPane /* Although this seems like a weird way to do this, I can't find another way to fix some wierd monaco bugs */}

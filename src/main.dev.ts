@@ -138,8 +138,17 @@ ipc.on("deleteFile", (event, args) => {
     if(imageExtensions.includes(fileExtension)) {
       event.sender.send('getFileReply', {isImage: true, file: args.file});
     } else {
-      let file = fs.readFileSync(args.file, 'utf8');
-      event.sender.send('getFileReply', {isImage: false, content: file, fileName: args.file});
+      let file, isError = false;
+      try {
+        file = fs.readFileSync(args.file, 'utf8');
+      } catch(err) {
+        event.sender.send('fixTab');
+        isError = true;
+      }
+
+      if(!isError) {
+        event.sender.send('getFileReply', {isImage: false, content: file, fileName: args.file});
+      }
     }
  });
 

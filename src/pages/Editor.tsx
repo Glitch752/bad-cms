@@ -60,7 +60,7 @@ export default function Editor(props) {
                 assign((context: any, event: any) => {
                   return {
                     editorTabs: context.editorTabs.filter((tab: any) => tab.name !== event.tab.name),
-                    tab: event.tab,
+                    tab: 0,
                   }
                 })
               ]
@@ -108,7 +108,7 @@ export default function Editor(props) {
                     target: ".code",
                     cond: (context, event) => event.tab >= 0,
         
-                    actions: assign((context, event: { tab: any }) => {
+                    actions: assign((context: any, event: { tab: any }) => {
                       return {
                         tab: event.tab,
                       };
@@ -291,7 +291,7 @@ export default function Editor(props) {
       };
     });
 
-    ipc.once('getFileReply', async (_event, args) => {
+    ipc.once('getFileReply', async (event, args) => {
       if(args.isImage) {
         send("setImage", { image: args.file });
       } else {
@@ -313,9 +313,14 @@ export default function Editor(props) {
   
           monaco.editor.setModelLanguage(editor.getModel(), language);
         }
+        
         programaticChangesMade = true;
         editor.setValue(args.content);
       }
+    });
+
+    ipc.once('fixTab', async (event, args) => {
+      selectTab(0);
     });
 
     const selectTab = (tab) => {
@@ -325,7 +330,7 @@ export default function Editor(props) {
       }
     }
 
-    ipc.once('popoutClose', (_event, args) => {
+    ipc.once('popoutClose', (event, args) => {
         editorTabs[args].window = false;
         send('setTabs', { tabs: editorTabs });
     });
@@ -339,7 +344,7 @@ export default function Editor(props) {
       ipc.send('editorPopOut', {file: path.join(projects[id].directory, editorTabs[editorTab].name), index: editorTab});
     }
     
-    ipc.once('editorPopoutReply', (_event, args) => {
+    ipc.once('editorPopoutReply', (event, args) => {
       // Select the first tab that isn't popped out.
       editorTabs[args.index].window = args.window;
       send("setTabs", { tabs: editorTabs });
@@ -357,7 +362,7 @@ export default function Editor(props) {
       ipc.send('getAppPath');
     }
 
-    ipc.once('getAppPathReply', (_event, args) => {
+    ipc.once('getAppPathReply', (event, args) => {
       var iFrameHead = window.frames["editorFrame"].document.getElementsByTagName("head")[0];
       var myscript = document.createElement('script');
       myscript.type = 'text/javascript';
@@ -372,7 +377,7 @@ export default function Editor(props) {
       store.set('projects', currentProjects);
     }
 
-    ipc.once('deleteProjectReply', (_event, args) => {
+    ipc.once('deleteProjectReply', (event, args) => {
       if(args === true) {
         navigate('/');
       } else {

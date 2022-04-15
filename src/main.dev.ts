@@ -134,6 +134,13 @@ ipc.on("addFile", (event, args) => {
 ipc.on("deleteFile", (event, args) => {
   var filePath = path.join(args.directory, args.file);
   fs.unlinkSync(filePath);
+  // Loop through all the windows and if the file is open, close the window.
+  for(var i = 0; i < popoutWindiows.length; i++) {
+    var url = popoutWindiows[i].window.webContents.getURL().replace(/%20/g, " ");
+    if(url.endsWith(args.file)) {
+      popoutWindiows[i].window.close();
+    }
+  }
 });
 
  ipc.on('getFile', (event, args) => {

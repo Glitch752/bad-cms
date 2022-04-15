@@ -15,7 +15,7 @@ export default function Editor(props) {
     let { file, id } = useParams();
 
     //Probably a way to optimize this as well
-    let [editorCode, setEditorCode] = React.useState("");
+    let [editorCode, setEditorCode] = React.useState("Loading editor...");
     let [editorLanguage, setEditorLanguage] = React.useState("");
     let [unsaved, setUnsaved] = React.useState(false);
 
@@ -71,7 +71,6 @@ export default function Editor(props) {
         key="editor"
         language={editorLanguage}
         width="100vw"
-        defaultValue={"Loading editor..."}
         value={editorCode}
         theme="vs-dark"
         className={styles.editor}

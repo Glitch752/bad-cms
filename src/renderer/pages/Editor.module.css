@@ -1,0 +1,311 @@
+:root {
+  --menu-width: 15rem;
+  --titlebar-height: 24px;
+}
+.widePane {
+  --menu-width: 30rem;
+}
+.leaveIcon {
+  font-size: 18px;
+  margin-top: 3px;
+  margin-left: 5px;
+}
+.editorContainer {
+    position: absolute;
+    top: var(--titlebar-height);
+    overflow: hidden;
+}
+.imageEditor {
+  width: calc(100vw - var(--menu-width));
+  height: calc(100vh - var(--titlebar-height) - 25px);
+}
+.imageEditorImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.editorOptions {
+    height: 25px;
+    background-color: #20333f;
+}
+.editorOptionsIcon {
+    float: right;
+    font-size: 18px;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+.paneSelector {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: var(--menu-width);
+    height: calc(100vh - var(--titlebar-height));
+    background-color: #121e25;
+}
+.widePane .paneSelector {
+    padding-top: 24px;
+    height: calc(100vh - var(--titlebar-height) - 24px);
+}
+.editor {
+  z-index: 1;
+  height: calc(100vh - var(--titlebar-height) - 25px);
+}
+
+.unsavedIcon {
+  font-size: 10px;
+  float: right;
+  margin: 5px;
+}
+
+.settingsMenu {
+  width: calc(100vw - var(--menu-width));
+  height: calc(100vh - var(--titlebar-height) - 25px);
+  background-color: #142129;
+}
+.settingsMenuSeparator {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  left: 0;
+  right: 0;
+  background-color: #0c151b;
+  padding-left: 30px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+
+}
+.settingsMenuSection {
+  padding-left: 20px;
+}
+.settingMenuDanger {
+  color: #ff0000;
+  font-weight: 700;
+}
+.deleteProjectButton {
+  font-size: 20px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  background-color: #e05252;
+  color: #fff;
+  border-radius: 5px;
+  margin-top: 10px;
+  box-shadow: 3px 3px #af4141;
+}
+.deleteProjectButton:hover {
+  background-color: #d34343;
+  box-shadow: 4px 4px #9f3232;
+  transform: translate(-1px, -1px);
+}
+.deleteProjectButton:active {
+  background-color: #b13c3c;
+  box-shadow: 2px 2px #912d2d;
+  transform: translate(1px, 1px);
+}
+
+.confirmDelete {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100vh - var(--titlebar-height));
+  background-color: #00000080;
+  z-index: 100;
+}
+.confirmDeleteContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: #2b4453;
+  border-radius: 5px;
+  box-shadow: 3px 3px #20333f;
+  text-align: center;
+}
+.confirmDeleteText {
+  color: #fff;
+  font-size: 20px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.confirmDeleteButton {
+  font-size: 20px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  background-color: #e05252;
+  color: #fff;
+  border-radius: 5px;
+  margin: 10px;
+  box-shadow: 3px 3px #af4141;
+}
+.confirmDeleteButton:hover {
+  background-color: #d34343;
+  box-shadow: 4px 4px #9f3232;
+  transform: translate(-1px, -1px);
+}
+.confirmDeleteButton:active {
+  background-color: #b13c3c;
+  box-shadow: 2px 2px #912d2d;
+  transform: translate(1px, 1px);
+}
+.confirmDeleteButtonCancel {
+  background-color: #787878;
+  box-shadow: 3px 3px #565656;
+}
+.confirmDeleteButtonCancel:hover {
+  background-color: #878787;
+  box-shadow: 4px 4px #636363;
+  transform: translate(-1px, -1px);
+}
+.confirmDeleteButtonCancel:active {
+  background-color: #6f6f6f;
+  box-shadow: 2px 2px #5c5c5c;
+  transform: translate(1px, 1px);
+}
+
+.layoutEditor {
+  width: calc(100vw - var(--menu-width));
+  height: calc(100vh - var(--titlebar-height) - 25px);
+  background-color: #142129;
+}
+.projectIFrame {
+  width: calc(100vw - var(--menu-width));
+  height: calc(100vh - var(--titlebar-height) - 25px);
+  display: inline-block;
+  border: none;
+  outline: none;
+  background-color: white;
+}
+.tabSelector {
+  margin-top: -24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.tabSelectorItem {
+  text-align: center;
+  cursor: pointer;
+}
+.selectedTabSelectorItem {
+  background-color: #20333f;
+}
+
+.editorSelection {
+  cursor: pointer;
+  position: relative;
+}
+.editorSelectionHoverButtons {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  z-index: 100;
+  display: none;
+}
+.editorSelection:hover .editorSelectionHoverButtons {
+  display: block;
+}
+.editorSelectionHoverButton {
+  color: #993232;
+}
+.editorSelectionHoverButton:hover {
+  color: #e05252;
+}
+.editorSelectionIcon {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+.selectedSelection {
+  background-color: #223141;
+}
+.editorSelectionTitle {
+  background-color: #182431;
+  position: relative;
+  padding: 3px;
+}
+.editorSelectionTitleButtons {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+.editorSelectionTitleButton {
+  cursor: pointer;
+  font-size: 15px;
+  margin-right: 5px;
+}
+.editorSelectionInput {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: #fff;
+  font-size: 16px;
+}
+.editorSelectionSave {
+  margin-left: 10px;
+  color: white;
+  font-size: 7px;
+  display: inline-block;
+  position: relative;
+  top: -0.25em;
+}
+
+.creatorElementSection {
+  margin: 10px;
+  background-color: #0c151b;
+  padding: 10px;
+  position: relative;
+}
+.creatorElementSectionName {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.creatorElementSectionIcon {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-weight: 700;
+  color: #fff;
+  font-size: 20px;
+}
+.creatorElementSectionIcon:hover {
+  color: #ccc;
+}
+.creatorContainer {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - var(--titlebar-height) - 25px);
+}
+.creatorElementCode {
+  margin-top: 10px;
+  height: 100px;
+}
+.creatorElementSectionList {
+  padding-left: 10px;
+}
+.creatorElementSectionListItem {
+  margin-bottom: 5px;
+  padding: 5px;
+  position: relative;
+}
+.creatorElementSectionListItem:hover {
+  background-color: #1c2b3f;
+}
+.creatorElementSectionListItemName {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: #fff;
+}
+.creatorElementSectionListItemRemove {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  color: #ff0000;
+  font-size: 20px;
+  cursor: pointer;
+}
+.creatorElementSectionListItemRemove:hover {
+  color: #d34343;
+}

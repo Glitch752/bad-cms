@@ -89,7 +89,7 @@
       "./assets/**"
     ]
   },
-  "license": "MIT",
+  "license": "GPL-3.0",
   "jest": {
     "testURL": "http://localhost/",
     "testEnvironment": "jsdom",
@@ -209,9 +209,6 @@
   "devEngines": {
     "node": ">=14.x",
     "npm": ">=7.x"
-  },
-  "collective": {
-    "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
   "browserslist": [],
   "prettier": {

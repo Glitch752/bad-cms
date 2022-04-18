@@ -85,7 +85,7 @@
       "output": "release/build"
     }
   },
-  "license": "GNU-3.0",
+  "license": "GPL-3.0",
   "jest": {
     "testURL": "http://localhost/",
     "testEnvironment": "jsdom",

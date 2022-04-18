@@ -15,6 +15,8 @@ import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
 import deleteSourceMaps from '../scripts/delete-source-maps';
 
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+
 checkNodeEnv('production');
 deleteSourceMaps();
 
@@ -30,7 +32,7 @@ const configuration: webpack.Configuration = {
 
   mode: 'production',
 
-  target: ['web', 'electron-renderer'],
+  target: 'electron-renderer',
 
   entry: [path.join(webpackPaths.srcRendererPath, 'index.tsx')],
 
@@ -38,9 +40,6 @@ const configuration: webpack.Configuration = {
     path: webpackPaths.distRendererPath,
     publicPath: './',
     filename: 'renderer.js',
-    library: {
-      type: 'umd',
-    },
   },
 
   module: {
@@ -122,6 +121,15 @@ const configuration: webpack.Configuration = {
       },
       isBrowser: false,
       isDevelopment: process.env.NODE_ENV !== 'production',
+    }),
+
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.join(webpackPaths.srcPath, 'public'),
+          to: path.join(webpackPaths.distRendererPath),
+        },
+      ]
     }),
   ],
 };

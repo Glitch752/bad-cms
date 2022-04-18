@@ -1,4 +1,3 @@
-import { stripBasename } from 'history/PathUtils';
 import React, { Component, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './GetStarted.module.css';

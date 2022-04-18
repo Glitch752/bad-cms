@@ -253,8 +253,9 @@ export default function Editor(props) {
       }
     }, []);
 
-    // Remove all IPC listeners when the component is mounted again.
-    ipc.removeAllListeners();
+    ipc.eventNames().forEach((channel: string) => {
+      ipc.removeAllListeners(channel);
+    });
     
     ipc.once('getFilesReply', async (_event, args) => {
       var loadingSelections = [];
@@ -729,7 +730,9 @@ function Creator(props) {
     }
   }
 
-  ipc.removeAllListeners();
+  ipc.eventNames().forEach((channel: string) => {
+    ipc.removeAllListeners(channel);
+  });
 
   ipc.on("getCssContentReply", (_event, arg) => {
     let oldStyles = state.context.editorContent[1].styles;

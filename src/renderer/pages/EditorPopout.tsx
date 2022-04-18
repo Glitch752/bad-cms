@@ -25,7 +25,9 @@ export default function Editor(props) {
       ipc.send('getFile', {file: file});
     }, []);
 
-    ipc.removeAllListeners();
+    ipc.eventNames().forEach((channel: string) => {
+      ipc.removeAllListeners(channel);
+    });
 
     ipc.once('getFileReply', (event, args) => {
       if(args.fileName !== undefined) {

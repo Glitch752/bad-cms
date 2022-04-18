@@ -31,8 +31,8 @@
     ]
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "badCMSForDevs",
+    "appId": "org.erb.badCMSForDevs",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -82,14 +82,10 @@
     },
     "directories": {
       "app": "release/app",
-      "buildResources": "assets",
       "output": "release/build"
-    },
-    "extraResources": [
-      "./assets/**"
-    ]
+    }
   },
-  "license": "MIT",
+  "license": "GNU-3.0",
   "jest": {
     "testURL": "http://localhost/",
     "testEnvironment": "jsdom",
@@ -209,9 +205,6 @@
   "devEngines": {
     "node": ">=14.x",
     "npm": ">=7.x"
-  },
-  "collective": {
-    "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
   "browserslist": [],
   "prettier": {

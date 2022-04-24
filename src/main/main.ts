@@ -210,7 +210,9 @@ ipc.on('editorPopOut', (event, args) => {
 
   let newWin = popoutWindiows[newWinIndex].window;
 
-  newWin.loadURL(`file://${__dirname}/index.html#/editorPopout/${args.id}/${args.file}`);
+  newWin.loadURL(`${resolveHtmlPath("index.html")}#/editorPopout/${args.id}/${args.file}`);
+
+  remoteMain.enable(newWin.webContents)
 
   newWin.webContents.on('did-finish-load', () => {
     if (!newWin) {

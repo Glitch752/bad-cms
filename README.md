@@ -7,7 +7,7 @@ In the future, this app will let you create all kinds of sites, like blogs and p
 ## [ todo ]
 - ~~Change to a state machine for a better codebase, more readable code, and less bugs~~
 - ~~Remake application to fix bugs and clean up files~~
-- Create releases for the app [ in progress]
+- Create releases for the app [ in progress ]
 - Work on the visual layout editor [ in progress ]
 - Let the user organize the workspace
 - Make the app more accessible

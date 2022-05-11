@@ -180,12 +180,12 @@
 }
 .tabSelector {
   margin-top: -24px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
 }
 .tabSelectorItem {
   text-align: center;
   cursor: pointer;
+  flex: 1;
 }
 .selectedTabSelectorItem {
   background-color: #20333f;

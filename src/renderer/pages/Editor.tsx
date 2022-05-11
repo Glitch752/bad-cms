@@ -157,11 +157,15 @@ export default function Editor(props) {
                     },
                     creatorTab: {
                       target: ".creatorTab",
+                    },
+                    elementsTab: {
+                      target: ".elementsTab",
                     }
                   },
                   states: {
                     selectionTab: {},
-                    creatorTab: {}
+                    creatorTab: {},
+                    elementsTab: {}
                   }
                 },
                 image: {},
@@ -470,11 +474,13 @@ export default function Editor(props) {
 
     const tabsTabSelected = state.matches({ editor: { editor: { layout: "selectionTab" } } }) ? styles.selectedTabSelectorItem : "";
     const siteTabSelected = state.matches({ editor: { editor: { layout: "creatorTab" } } }) ? styles.selectedTabSelectorItem : "";
+    const elementsTabSelected = state.matches({ editor: { editor: { layout: "elementsTab" } } }) ? styles.selectedTabSelectorItem : "";
 
     let tabSelector = editorTab === -2 ? 
       <div key="tabs" className={styles.tabSelector}>
         <div className={styles.tabSelectorItem + " " + tabsTabSelected} onClick={() => send("selectionTab")}>Tabs</div>
         <div className={styles.tabSelectorItem + " " + siteTabSelected} onClick={() => send("creatorTab")}>Site creator</div>
+        <div className={styles.tabSelectorItem + " " + elementsTabSelected} onClick={() => send("elementsTab")}>Elements</div>
       </div>
     : null;
 
@@ -621,10 +627,21 @@ export default function Editor(props) {
       );
     }
 
-    selectionPane = !state.matches({ editor: { editor: { layout: "creatorTab" } } }) ? selectionPane : [
-      tabSelector,
-      <Creator key="creator" project={projects[id]} />
-    ];
+    // selectionPane = !state.matches({ editor: { editor: { layout: "creatorTab" } } }) ? selectionPane : [
+    //   tabSelector,
+    //   <Creator key="creator" project={projects[id]} />
+    // ];
+    if(state.matches({ editor: { editor: { layout: "creatorTab" } } })) {
+      selectionPane = [
+        tabSelector,
+        <Creator key="creator" project={projects[id]} />
+      ]
+    } else if(state.matches({ editor: { editor: { layout: "elementsTab" } } })) {
+      selectionPane = [
+        tabSelector,
+        <Elements key="elements" />
+      ]
+    }
     
     props.settitle([
       <span key="left" className="leftText">Bad CMS for Devs</span>,
@@ -643,7 +660,7 @@ export default function Editor(props) {
                 <i className={"fa-solid fa-arrow-up-right-from-square " + styles.editorOptionsIcon} onClick={() => { popOut(editorTab) }}></i>
               </div>
               { editingMenu }
-              { editorPane /* Although this seems like a weird way to do this, I can't find another way to fix some wierd monaco bugs */}
+              { editorPane /* Although this seems like a weird way to do this, I can't find another way to fix some weird monaco bugs */}
             </div>
             <div className={styles.paneSelector}>
               {/* {finalSelections} */}
@@ -1049,4 +1066,10 @@ function ensureFirstBackSlash(str) {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function Elements() {
+  return (
+    <span>Not yet implemented</span>
+  )
 }

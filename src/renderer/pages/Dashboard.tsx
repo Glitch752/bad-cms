@@ -39,14 +39,14 @@ export default function Dashboard(props) {
                         <i className="fas fa-angle-right"></i>
                         <p>Projects</p>
                     </div>
-                    <div className={styles.menuleftoption}>
+                    {/* <div className={styles.menuleftoption}>
                         <i className="fas fa-angle-right"></i>
                         <p>User</p>
                     </div>
                     <div className={styles.menuleftoption}>
                         <i className="fas fa-angle-right"></i>
                         <p>Deafults</p>
-                    </div>
+                    </div> */}
                 </div>
                 <div className={styles.menusites}>{sites}</div>
             </div>

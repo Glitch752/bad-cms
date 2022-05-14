@@ -312,6 +312,7 @@
 
 .element {
   font-size: 0.8rem;
+  position: relative;
 }
 .elementChildren {
   margin-left: 20px;
@@ -330,4 +331,11 @@
 }
 .attributeValue {
   color: #f29766;
+}
+.elementFold {
+  position: absolute;
+  left: -0.6rem;
+  top: 0.3rem;
+  font-size: 0.8rem;
+  color: #9aa0a6;
 }

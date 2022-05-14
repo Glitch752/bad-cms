@@ -1,5 +1,5 @@
 // imports
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './Editor.module.css';
 import { createMachine, assign, interpret } from 'xstate';
@@ -1083,7 +1083,7 @@ function Elements() {
   const getElementTree = () => {
     return (
       <div className={styles.elementsContainer}>
-        <Element element={getElements()} />
+        <Element element={getElements()} depth={0} />
       </div>
     )
   }
@@ -1096,7 +1096,9 @@ function Elements() {
 }
 
 function Element(props) {
-  const { element } = props;
+  const { element, depth } = props;
+
+  const [isFolded, setIsFolded] = useState(true);
 
   const getTagName = (element, openingTag) => {
     return element.tagName === undefined ? (openingTag ? "<!DOCTYPE html>" : "") : (openingTag ? <span>{"<"}{element.tagName.toLowerCase()}{getElementAttributes(element)}{">"}</span> : `</${element.tagName.toLowerCase()}>`);
@@ -1127,17 +1129,28 @@ function Element(props) {
     <>
       <div className={styles.element}>
         {
-          element.children.length > 0 ? (
+          // TODO: refactor since this is hard to follow
+          element.children.length > 0 ? depth > 1 && isFolded ? (
+            <>
+              <span className={styles.elementName}>{getTagName(element.element, true)}</span>
+              <span className={styles.elementText}>...</span>
+              <span className={styles.elementClosingTag}>{getTagName(element.element, false)}</span>
+              <i className={`fa-solid fa-caret-right ${styles.elementFold}`} onClick={() => setIsFolded(false)}></i>
+            </>
+          ) : (
             <>
               <span className={styles.elementName}>{getTagName(element.element, true)}</span>
               <div className={(element.element.tagName === undefined ? "" : styles.elementChildren)}>
                 {element.children.map((child, index) => {
                   return (
-                    <Element key={index} element={child} />
+                    <Element key={index} element={child} depth={depth+1} />
                   )
                 })}
               </div>
               <span className={styles.elementClosingTag}>{getTagName(element.element, false)}</span>
+              {depth > 1 ? (
+                <i className={`fa-solid fa-caret-down ${styles.elementFold}`} onClick={() => setIsFolded(true)}></i>
+              ) : null}
             </>
           ) : (
             <>

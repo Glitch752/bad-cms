@@ -325,3 +325,9 @@
   padding: 10px;
   box-sizing: border-box;
 }
+.attributeKey {
+  color: #7b95b1;
+}
+.attributeValue {
+  color: #f29766;
+}

@@ -1099,7 +1099,28 @@ function Element(props) {
   const { element } = props;
 
   const getTagName = (element, openingTag) => {
-    return element.tagName === undefined ? (openingTag ? "<!DOCTYPE html>" : "") : (openingTag ? `<${element.tagName.toLowerCase()}>` : `</${element.tagName.toLowerCase()}>`);
+    return element.tagName === undefined ? (openingTag ? "<!DOCTYPE html>" : "") : (openingTag ? <span>{"<"}{element.tagName.toLowerCase()}{getElementAttributes(element)}{">"}</span> : `</${element.tagName.toLowerCase()}>`);
+  }
+  const getElementAttributes = (element) => {
+    // Get the attributes as an array of objects with the name and value
+    let attributes = [...element.attributes].map(attribute => {
+      return {
+        name: attribute.name,
+        value: attribute.value
+      }
+    });
+
+    const result = attributes.map(attribute => {
+      return (
+        <span key={attribute.name} className={styles.elementAttribute}>
+          <span> </span>
+          <span className={styles.attributeKey}>{attribute.name}</span>
+          <span>="<span className={styles.attributeValue}>{attribute.value}</span>"</span>
+        </span>
+      )
+    });
+
+    return result.length > 0 ? <span className={styles.elementAttributes}>{result}</span> : null;
   }
 
   return (

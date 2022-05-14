@@ -1069,7 +1069,64 @@ function sleep(ms) {
 }
 
 function Elements() {
+  // This function gets all the elements from the iframe in the format of the element data and it's children
+  const getElements = (element = window.frames["editorFrame"].document) => {
+    // Get all children of the element
+    let children = element.children;
+    // Recursively call this function on all children
+    return {
+      element: element,
+      children: [...children].map(child => getElements(child))
+    }
+  }
+
+  const getElementTree = () => {
+    return (
+      <div className={styles.elementsContainer}>
+        <Element element={getElements()} />
+      </div>
+    )
+  }
+
   return (
-    <span>Not yet implemented</span>
+    <>
+      {getElementTree()}
+    </>
+  )
+}
+
+function Element(props) {
+  const { element } = props;
+
+  const getTagName = (element, openingTag) => {
+    return element.tagName === undefined ? (openingTag ? "<!DOCTYPE html>" : "") : (openingTag ? `<${element.tagName.toLowerCase()}>` : `</${element.tagName.toLowerCase()}>`);
+  }
+
+  return (
+    <>
+      <div className={styles.element}>
+        {
+          element.children.length > 0 ? (
+            <>
+              <span className={styles.elementName}>{getTagName(element.element, true)}</span>
+              <div className={styles.elementChildren}>
+                {element.children.map((child, index) => {
+                  return (
+                    <Element key={index} element={child} />
+                  )
+                })}
+              </div>
+              <span className={styles.elementClosingTag}>{getTagName(element.element, false)}</span>
+            </>
+          ) : (
+            <>
+              <span className={styles.elementName}>{getTagName(element.element, true)}</span>
+              <span className={styles.elementText}>{element.element.textContent}</span>
+              <span className={styles.elementClosingTag}>{getTagName(element.element, false)}</span>
+            </>
+          )
+        }
+      </div>
+    </>
   )
 }

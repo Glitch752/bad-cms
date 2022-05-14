@@ -309,3 +309,19 @@
 .creatorElementSectionListItemRemove:hover {
   color: #d34343;
 }
+
+.element {
+  font-size: 0.8rem;
+}
+.elementChildren {
+  margin-left: 20px;
+}
+.elementName, .elementClosingTag {
+  color: #5da8cc;
+}
+.elementsContainer {
+  max-height: calc(100vh - var(--titlebar-height) - 25px);
+  overflow-y: auto;
+  padding: 10px;
+  box-sizing: border-box;
+}

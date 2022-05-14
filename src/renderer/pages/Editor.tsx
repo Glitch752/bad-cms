@@ -1109,7 +1109,7 @@ function Element(props) {
           element.children.length > 0 ? (
             <>
               <span className={styles.elementName}>{getTagName(element.element, true)}</span>
-              <div className={styles.elementChildren}>
+              <div className={(element.element.tagName === undefined ? "" : styles.elementChildren)}>
                 {element.children.map((child, index) => {
                   return (
                     <Element key={index} element={child} />

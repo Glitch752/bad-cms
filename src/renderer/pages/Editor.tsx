@@ -1070,17 +1070,41 @@ function sleep(ms) {
 
 function Elements() {
   // This function gets all the elements from the iframe in the format of the element data and it's children
-  const getElements = (element = window.frames["editorFrame"].document) => {
-    // Get all children of the element
-    let children = element.children;
+  const getElements = (element = window.frames["editorFrame"].document.children[0]) => {
+    let children: Element[] = Array.from(element.childNodes);
+
+    // If the children is exactly one text node, then remove it
+    if(children.length === 1 && children[0].nodeType === 3) {
+      children = [];
+    }
+
+    // If there are any text nodes that are just whitespace, remove them.
+    children = children.filter((child) => {
+      if(child.nodeType === 3) {
+        if(child.textContent.trim() === "") {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    // Allow text nodes, element nodes, and comment nodes
+    const allowedNodeTypes = [3, 1, 8];
+    // If any of the children are not one of the allowed node types, then remove it
+    children = children.filter((child) => {
+      return allowedNodeTypes.includes(child.nodeType);
+    });
+
     // Recursively call this function on all children
     return {
       element: element,
-      children: [...children].map(child => getElements(child))
+      children: [...children].map(child => getElements(child)),
+      siblings: element.parentNode.children.length - 1
     }
   }
 
   const getElementTree = () => {
+    console.log(getElements());
     return (
       <div className={styles.elementsContainer}>
         <Element element={getElements()} depth={0} />
@@ -1100,8 +1124,23 @@ function Element(props) {
 
   const [isFolded, setIsFolded] = useState(true);
 
-  const getTagName = (element, openingTag) => {
-    return element.tagName === undefined ? (openingTag ? "<!DOCTYPE html>" : "") : (openingTag ? <span>{"<"}{element.tagName.toLowerCase()}{getElementAttributes(element)}{">"}</span> : `</${element.tagName.toLowerCase()}>`);
+  const getTagName = (element, content) => {
+    switch(element.nodeType) {
+      case Node.TEXT_NODE:
+        return <>
+          <span className={styles.elementText}>"{content}"</span>
+        </>
+      case Node.COMMENT_NODE:
+        return <>
+          <span className={styles.elementComment}>&lt;!--{content}--&gt;</span>
+        </>
+      default:
+        return <>
+          <span className={styles.elementName}>&lt;{element.tagName.toLowerCase()}{getElementAttributes(element)}&gt;</span>
+          <span className={styles.elementText}>{content}</span>
+          <span className={styles.elementClosingTag}>&lt;/{element.tagName.toLowerCase()}&gt;</span>
+        </>
+    }
   }
   const getElementAttributes = (element) => {
     // Get the attributes as an array of objects with the name and value
@@ -1129,34 +1168,33 @@ function Element(props) {
     <>
       <div className={styles.element}>
         {
-          // TODO: refactor since this is hard to follow
-          element.children.length > 0 ? depth > 1 && isFolded ? (
+          element.type === "text" ? (
             <>
-              <span className={styles.elementName}>{getTagName(element.element, true)}</span>
-              <span className={styles.elementText}>...</span>
-              <span className={styles.elementClosingTag}>{getTagName(element.element, false)}</span>
+              <span className={styles.elementText}>"{element.element.textContent}"</span>
+            </>
+          ) : element.children.length > 0 ? depth > 0 && isFolded ? (
+            <>
+              {getTagName(element.element, "...")}
               <i className={`fa-solid fa-caret-right ${styles.elementFold}`} onClick={() => setIsFolded(false)}></i>
             </>
           ) : (
             <>
-              <span className={styles.elementName}>{getTagName(element.element, true)}</span>
-              <div className={(element.element.tagName === undefined ? "" : styles.elementChildren)}>
-                {element.children.map((child, index) => {
-                  return (
-                    <Element key={index} element={child} depth={depth+1} />
-                  )
-                })}
-              </div>
-              <span className={styles.elementClosingTag}>{getTagName(element.element, false)}</span>
-              {depth > 1 ? (
+              {getTagName(element.element, (
+                <div className={(element.element.tagName === undefined ? "" : styles.elementChildren)}>
+                  {element.children.map((child, index) => {
+                    return (
+                      <Element key={index} element={child} depth={depth+1} />
+                    )
+                  })}
+                </div>
+              ))}
+              {depth > 0 ? (
                 <i className={`fa-solid fa-caret-down ${styles.elementFold}`} onClick={() => setIsFolded(true)}></i>
               ) : null}
             </>
           ) : (
             <>
-              <span className={styles.elementName}>{getTagName(element.element, true)}</span>
-              <span className={styles.elementText}>{element.element.textContent}</span>
-              <span className={styles.elementClosingTag}>{getTagName(element.element, false)}</span>
+              {getTagName(element.element, element.element.textContent)}
             </>
           )
         }

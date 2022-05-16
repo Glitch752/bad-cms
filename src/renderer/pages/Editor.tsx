@@ -1125,38 +1125,39 @@ function Element(props) {
   const [isFolded, setIsFolded] = useState(true);
 
   const getTagName = (element, content) => {
+    // TODO: fix styling styling on hovering the elements
     switch(element.nodeType) {
       case Node.TEXT_NODE:
         return <>
-          <span className={styles.elementText}>"{content}"</span>
+          {/* @ts-ignore */}
+          <span className={`${styles.elementText} ${styles.elementLine}`} style={{"--depth": depth}}>"{content}"</span>
         </>
       case Node.COMMENT_NODE:
         return <>
-          <span className={styles.elementComment}>&lt;!--{content}--&gt;</span>
+          {/* @ts-ignore */}
+          <span className={`${styles.elementComment} ${styles.elementLine}`} style={{"--depth": depth}}>&lt;!--{content}--&gt;</span>
         </>
       default:
         return <>
-          <span className={styles.elementName}>&lt;{element.tagName.toLowerCase()}{getElementAttributes(element)}&gt;</span>
-          <span className={styles.elementText}>{content}</span>
-          <span className={styles.elementClosingTag}>&lt;/{element.tagName.toLowerCase()}&gt;</span>
+        {/* @ts-ignore */}
+          <span className={`${styles.elementName} ${styles.elementLine}`} style={{"--depth": depth}}>&lt;{element.tagName.toLowerCase()}{getElementAttributes(element)}&gt;</span>
+          <span className={`${styles.elementText}`}>{content}</span>
+          {/* @ts-ignore */}
+          <span className={`${styles.elementClosingTag} ${styles.elementLine}`} style={{"--depth": depth}}>&lt;/{element.tagName.toLowerCase()}&gt;</span>
         </>
     }
   }
   const getElementAttributes = (element) => {
-    // Get the attributes as an array of objects with the name and value
-    let attributes = [...element.attributes].map(attribute => {
-      return {
-        name: attribute.name,
-        value: attribute.value
-      }
-    });
-
+    let attributes = [...element.attributes];
     const result = attributes.map(attribute => {
+      const attributeCode = ["href", "src"].includes(attribute.name) ? 
+      <span>="<span className={styles.attributeValuePath}>{attribute.value}</span>"</span> : 
+      <span>="<span className={styles.attributeValue}>{attribute.value}</span>"</span>
       return (
         <span key={attribute.name} className={styles.elementAttribute}>
           <span> </span>
           <span className={styles.attributeKey}>{attribute.name}</span>
-          <span>="<span className={styles.attributeValue}>{attribute.value}</span>"</span>
+          {attributeCode}
         </span>
       )
     });

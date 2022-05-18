@@ -14,9 +14,10 @@ export default function ContextMenuArea({ children, ...props }) {
             e.preventDefault();
             setAnchorPoint({ x: e.clientX, y: e.clientY });
             toggleMenu(true);
-        }}>
+        }} className={props.containerClassName} style={{"display": "inline-block"}}>
             { children }
-            <ControlledMenu {...menuProps} anchorPoint={anchorPoint}
+            <ControlledMenu {...menuProps} 
+                anchorPoint={anchorPoint}
                 onClose={() => toggleMenu(false)}>
                 { props.menuItems }
             </ControlledMenu>

@@ -1122,9 +1122,25 @@ function Elements() {
 function Element(props) {
   const { element, depth } = props;
 
-  const [isFolded, setIsFolded] = useState(true);
+  const [isFolded, setIsFolded]: any = useState(true);
 
-  const getTagName = (element, content) => {
+  const contextMenu = <>
+    <MenuHeader>Attributes</MenuHeader>
+    <MenuItem disabled>Add attribute</MenuItem>
+    <MenuItem disabled>Edit attribute</MenuItem>
+    <MenuDivider />
+    <MenuHeader>Element</MenuHeader>
+    <MenuItem disabled>Delete element</MenuItem>
+    <MenuItem disabled>Duplicate element</MenuItem>
+    <MenuItem disabled>Edit as HTML</MenuItem>
+    <MenuDivider />
+    <MenuItem disabled>Expand recursively</MenuItem>
+    <MenuItem onClick={e => {
+      setIsFolded(isFolded === false || isFolded === true ? 2 : isFolded + 1);
+    }}>Collapse children</MenuItem>
+  </>;
+
+  const getTagName = (element, content, hasContextMenu = true) => {
     // TODO: fix styling styling on hovering the elements
     switch(element.nodeType) {
       case Node.TEXT_NODE:
@@ -1139,11 +1155,20 @@ function Element(props) {
         </>
       default:
         return <>
-        {/* @ts-ignore */}
-          <span className={`${styles.elementName} ${styles.elementLine}`} style={{"--depth": depth}}>&lt;{element.tagName.toLowerCase()}{getElementAttributes(element)}&gt;</span>
-          <span className={`${styles.elementText}`}>{content}</span>
-          {/* @ts-ignore */}
-          <span className={`${styles.elementClosingTag} ${styles.elementLine}`} style={{"--depth": depth}}>&lt;/{element.tagName.toLowerCase()}&gt;</span>
+          <ContextMenuArea menuItems={contextMenu}>
+            {/* @ts-ignore */}
+            <span className={`${styles.elementName} ${styles.elementLine}`} style={{"--depth": depth}}>&lt;{element.tagName.toLowerCase()}{getElementAttributes(element)}&gt;</span>
+          </ContextMenuArea>
+          {
+            hasContextMenu ? <ContextMenuArea menuItems={contextMenu}>
+              <span className={`${styles.elementText}`}>{content}</span>
+            </ContextMenuArea> :
+              <span className={`${styles.elementText}`}>{content}</span>
+          }
+          <ContextMenuArea menuItems={contextMenu}>
+            {/* @ts-ignore */}
+            <span className={`${styles.elementClosingTag} ${styles.elementLine}`} style={{"--depth": depth}}>&lt;/{element.tagName.toLowerCase()}&gt;</span>
+          </ContextMenuArea>
         </>
     }
   }
@@ -1188,7 +1213,7 @@ function Element(props) {
                     )
                   })}
                 </div>
-              ))}
+              ), false)}
               {depth > 0 ? (
                 <i className={`fa-solid fa-caret-down ${styles.elementFold}`} onClick={() => setIsFolded(true)}></i>
               ) : null}

@@ -1069,6 +1069,8 @@ function sleep(ms) {
 }
 
 function Elements() {
+  const elementHighlight = React.useRef(null);
+
   // This function gets all the elements from the iframe in the format of the element data and it's children
   const getElements = (element = window.frames["editorFrame"].document.children[0]) => {
     let children: Element[] = Array.from(element.childNodes);
@@ -1107,13 +1109,35 @@ function Elements() {
     console.log(getElements());
     return (
       <div className={styles.elementsContainer}>
-        <Element element={getElements()} depth={0} />
+        <Element element={getElements()} setElementHightlight={setElementHightlight} depth={0} />
       </div>
     )
   }
 
+  const setElementHightlight = (element) => {
+    if(!element.getBoundingClientRect) {
+      elementHighlight.current.style.display = "none";
+      return;
+    }
+    const boundingRect = element.getBoundingClientRect();
+    // Get the bounding rect of the editorFrame
+    const iframePosition = document.getElementById("editorFrame").getBoundingClientRect();
+
+    const top = iframePosition.top + boundingRect.top;
+    const left = iframePosition.left + boundingRect.left;
+    const width = boundingRect.width;
+    const height = boundingRect.height;
+
+    elementHighlight.current.style.top = top + "px";
+    elementHighlight.current.style.left = left + "px";
+    elementHighlight.current.style.width = width + "px";
+    elementHighlight.current.style.height = height + "px";
+    elementHighlight.current.style.display = "inline-block";
+  }
+
   return (
     <>
+      <div className={styles.elementHighlight} ref={elementHighlight}></div>
       {getElementTree()}
     </>
   )
@@ -1190,26 +1214,30 @@ function Element(props) {
     return result.length > 0 ? <span className={styles.elementAttributes}>{result}</span> : null;
   }
 
+  const highlightElement = (e, element) => {
+    props.setElementHightlight(element);
+  }
+
   return (
     <>
       <div className={styles.element}>
         {
           element.type === "text" ? (
-            <>
+            <div onClick={(e) => highlightElement(e, element.element)}>
               <span className={styles.elementText}>"{element.element.textContent}"</span>
-            </>
+            </div>
           ) : element.children.length > 0 ? depth > 0 && isFolded ? (
-            <>
+            <div onClick={(e) => highlightElement(e, element.element)}>
               {getTagName(element.element, "...")}
               <i className={`fa-solid fa-caret-right ${styles.elementFold}`} onClick={() => setIsFolded(false)}></i>
-            </>
+            </div>
           ) : (
             <>
               {getTagName(element.element, (
                 <div className={(element.element.tagName === undefined ? "" : styles.elementChildren)}>
                   {element.children.map((child, index) => {
                     return (
-                      <Element key={index} element={child} depth={depth+1} />
+                      <Element key={index} element={child} depth={depth+1} setElementHightlight={props.setElementHightlight} />
                     )
                   })}
                 </div>
@@ -1219,9 +1247,9 @@ function Element(props) {
               ) : null}
             </>
           ) : (
-            <>
+            <div onClick={(e) => highlightElement(e, element.element)}>
               {getTagName(element.element, element.element.textContent)}
-            </>
+            </div>
           )
         }
       </div>

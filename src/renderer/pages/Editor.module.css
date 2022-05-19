@@ -321,6 +321,8 @@
 }
 .elementName, .elementClosingTag {
   color: #5da8cc;
+  z-index: -10;
+  position: relative;
 }
 .elementsContainer {
   height: calc(100vh - var(--titlebar-height) - 25px);
@@ -365,4 +367,13 @@
 
 .contextMenuInline {
   color: red;
+}
+
+.elementHighlight {
+  position: fixed;
+  display: none;
+  background-color: #ff000066;
+  border: 0.1rem solid #ff0000;
+  z-index: 10000;
+  pointer-events: none;
 }

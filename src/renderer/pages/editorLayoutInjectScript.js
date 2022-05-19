@@ -36,6 +36,13 @@ window.addEventListener("message", function (event) {
     }
 });
 
+window.addEventListener("scroll", function (event) {
+    parent.postMessage(JSON.stringify({
+        "type": "scroll",
+        "scroll": window.scrollY
+    }), "*");
+});
+
 function getCssRules(element) {
     const allCSS = [...document.styleSheets].map(styleSheet => {
         try {

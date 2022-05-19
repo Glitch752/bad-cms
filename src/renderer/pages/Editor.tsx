@@ -1114,11 +1114,37 @@ function Elements() {
     )
   }
 
+  const iFrameMessage = (event) => {
+    let eventData;
+    try {
+      eventData = JSON.parse(event.data);
+    } catch(e) {
+      return;
+    }
+    
+    if(eventData.type === "scroll") {
+      if(highlightedElement !== null) {
+        setElementHightlight(highlightedElement);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('message', iFrameMessage);
+
+    return () => {
+      window.removeEventListener('message', iFrameMessage);
+    }
+  }, []);
+
+  let highlightedElement = null;
+
   const setElementHightlight = (element) => {
     if(!element.getBoundingClientRect) {
       elementHighlight.current.style.display = "none";
       return;
     }
+    highlightedElement = element;
     const boundingRect = element.getBoundingClientRect();
     // Get the bounding rect of the editorFrame
     const iframePosition = document.getElementById("editorFrame").getBoundingClientRect();

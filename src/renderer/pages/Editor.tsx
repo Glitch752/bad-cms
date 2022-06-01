@@ -259,12 +259,15 @@ export default function Editor(props) {
     ipc.once('getFilesReply', async (_event, args) => {
       var loadingSelections = [];
       for(let i = 0; i < args.files.length; i++) {
-        loadingSelections.push({
-          name: args.files[i],
-          window: false,
-          unsaved: false
-        });
+        if(args.files[i].isFile) {
+          loadingSelections.push({
+            name: args.files[i].relativePath,
+            window: false,
+            unsaved: false
+          });
+        }
       }
+
       // Set text in the editor to Loading file...
       while(editor === null) {
         // Wait for the editor to be loaded
@@ -272,7 +275,7 @@ export default function Editor(props) {
       }
       send("setTabs", {tabs: loadingSelections});
       if(state.can('finishedLoading')) send("finishedLoading");
-      ipc.send('getFile', {file: path.join(args.directory, args.files[0])});
+      ipc.send('getFile', {file: args.files[0].path});
     });
     
     let editorTabs = state.context.editorTabs;

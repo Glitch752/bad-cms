@@ -120,12 +120,31 @@ ipc.on('modifyCss', (event, args) => {
 });
 
 ipc.on('getFiles', (event, args) => { //When project folder is given with ipc
-  var dirFiles = getFilesFromDirectory(args.directory); // Returns an array of file paths in a directory, including subdirectories
-  for(var i = 0; i < dirFiles.length; i++) {
-    dirFiles[i] = dirFiles[i].replace(args.directory, ""); //Replace the whole path with just the relative path from the project folder
-  }
+  var dirFiles = getFilesAndFolders(args.directory); // Returns an array of file paths in a directory, including subdirectories
   event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
 });
+
+function getFilesAndFolders(dirPath: string): any[] {
+  var files = fs.readdirSync(dirPath)
+
+  var arrayOfFiles = [];
+  files.forEach(function(file) {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles.push({
+        isFile: false,
+        children: getFilesAndFolders(dirPath + "/" + file)
+      });
+    } else {
+      arrayOfFiles.push({
+        isFile: true,
+        path: path.join(dirPath, "/", file),
+        relativePath: path.relative(dirPath, path.join(dirPath, "/", file))
+      });
+    }
+  })
+
+  return arrayOfFiles
+}
 
 ipc.on('getAppPath', (event, args) => {
   event.sender.send('getAppPathReply', app.getAppPath());

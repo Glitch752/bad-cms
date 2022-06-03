@@ -56,8 +56,7 @@ export default function Editor(props) {
             actions: [
               (context: any, event: any) => {
                 ipc.send('deleteFile', {
-                  directory: projects[id].directory,
-                  file: event.tab.name,
+                  file: event.tab.path,
                 });
               },
               assign((context: any, event: any) => {

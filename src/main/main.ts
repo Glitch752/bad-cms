@@ -168,7 +168,7 @@ ipc.on("addFile", (event, args) => {
 });
 
 ipc.on("deleteFile", (event, args) => {
-  var filePath = path.join(args.directory, args.file);
+  var filePath = args.file;
   fs.unlinkSync(filePath);
   // Loop through all the windows and if the file is open, close the window.
   for(var i = 0; i < popoutWindiows.length; i++) {

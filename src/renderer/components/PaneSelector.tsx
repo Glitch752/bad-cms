@@ -28,6 +28,8 @@ function PaneSelector(props) {
     let { id } = useParams();
 
     let editorTabs = state.context.editorTabs;
+    let editorFolders = state.context.editorFolders;
+
     let editorTab = state.context.tab;
 
     const settingsSelected = (editorTab === -1 ? styles.selectedSelection : "");
@@ -110,7 +112,7 @@ function PaneSelector(props) {
               saveTab(i);
             }}>Save file</MenuItem>
             <MenuItem onClick={e => {
-              ipc.send("openInExplorer", path.join(projects[id].directory, editorTabs[i].name));
+              ipc.send("openInExplorer", editorTabs[i].path);
             }}>Open in file explorer</MenuItem>
             <MenuDivider />
             <MenuItem disabled={editorTabs[i].window !== false} onClick={e => {
@@ -125,6 +127,36 @@ function PaneSelector(props) {
             <div className={styles.editorSelectionHoverButtons}>
               <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
                 send("deleteTab", { tab: editorTabs[i] });
+              }}></i>
+            </div>
+          </div>
+        </ContextMenuArea>
+      );
+    }
+
+    for(let i = 0; i < editorFolders.length; i++) {
+      selectionPane.push(
+        <ContextMenuArea key={i + editorTabs.length} menuItems={
+          <>
+            <MenuHeader>{editorFolders[i].name}</MenuHeader>
+            <MenuItem disabled={true} onClick={e => {
+              // send("deleteFolder", { folder: editorFolders[i] });
+            }}>Delete folder</MenuItem>
+            <MenuItem disabled={true}>Rename folder</MenuItem>
+            <MenuDivider />
+            <MenuItem onClick={e => {
+              ipc.send("openInExplorer", editorFolders[i].path);
+            }}>Open in file explorer</MenuItem>
+          </>
+        }>
+          <div className={styles.editorSelection + " " + styles.folderSelection} onClick={() => {
+            // TODO: collapse / expand folder
+          }}>
+            <i className={"fas fa-folder " + styles.editorSelectionIcon}></i>
+            {editorFolders[i].name}
+            <div className={styles.editorSelectionHoverButtons}>
+              <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
+                // send("deleteFolder", { folder: editorFolders[i] });
               }}></i>
             </div>
           </div>

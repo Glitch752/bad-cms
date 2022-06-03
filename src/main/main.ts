@@ -132,13 +132,17 @@ function getFilesAndFolders(dirPath: string): any[] {
     if (fs.statSync(dirPath + "/" + file).isDirectory()) {
       arrayOfFiles.push({
         isFile: false,
+        name: file,
+        path: path.join(dirPath, "/", file),
+        relativePath: path.relative(dirPath, path.join(dirPath, "/", file)),
         children: getFilesAndFolders(dirPath + "/" + file)
       });
     } else {
       arrayOfFiles.push({
         isFile: true,
         path: path.join(dirPath, "/", file),
-        relativePath: path.relative(dirPath, path.join(dirPath, "/", file))
+        relativePath: path.relative(dirPath, path.join(dirPath, "/", file)),
+        name: file
       });
     }
   })

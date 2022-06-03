@@ -260,7 +260,8 @@ export default function Editor(props) {
     ipc.removeAllListeners(channel);
   });
 
-  const getFileStructure = (files) => {
+  // TODO: redo this system to be more efficient and readable
+  const getFileStructure = (files, depth = 0) => {
     var loadingSelections = [];
     let loadingFolders = [];
     for (let i = 0; i < files.length; i++) {
@@ -270,14 +271,16 @@ export default function Editor(props) {
           window: false,
           unsaved: false,
           path: files[i].path,
+          indent: depth,
         });
       } else {
         loadingFolders.push({
           name: files[i].name,
           path: files[i].path,
-          index: i,
+          index: i + depth,
+          indent: depth,
         });
-        let newLoading = getFileStructure(files[i].children);
+        let newLoading = getFileStructure(files[i].children, depth + 1);
 
         let newLoadingSelections = newLoading.loadingSelections;
         let newLoadingFolders = newLoading.loadingFolders;

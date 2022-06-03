@@ -122,7 +122,8 @@ function PaneSelector(props) {
             }}>Open in popout window</MenuItem>
           </>
         }>
-          <div className={styles.editorSelection + " " + selected} onClick={() => clickFunction()}>
+          {/* @ts-ignore */}
+          <div className={styles.editorSelection + " " + selected} style={{"--indent": editorTabs[i].indent}} onClick={() => clickFunction()}>
             {icon}
             {editorTabs[i].name}
             {unsavedIcon}
@@ -151,7 +152,8 @@ function PaneSelector(props) {
             }}>Open in file explorer</MenuItem>
           </>
         }>
-          <div className={styles.editorSelection + " " + styles.folderSelection} onClick={() => {
+          {/* @ts-ignore */}
+          <div className={styles.editorSelection + " " + styles.folderSelection} style={{"--indent": editorFolders[i].indent}} onClick={() => {
             // TODO: collapse / expand folder
           }}>
             <i className={"fas fa-folder " + styles.editorSelectionIcon}></i>

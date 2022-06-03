@@ -194,7 +194,9 @@
 .editorSelection {
   cursor: pointer;
   position: relative;
-  width: var(--menu-width);
+  --indentPixels: calc(var(--indent, 0) * 10px);
+  width: calc(var(--menu-width) - var(--indentPixels));
+  margin-left: var(--indentPixels);
 }
 .editorSelectionHoverButtons {
   position: absolute;

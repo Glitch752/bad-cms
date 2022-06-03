@@ -260,24 +260,38 @@ export default function Editor(props) {
     ipc.removeAllListeners(channel);
   });
 
-  ipc.once('getFilesReply', async (_event, args) => {
+  const getFileStructure = (files) => {
     var loadingSelections = [];
     let loadingFolders = [];
-    for (let i = 0; i < args.files.length; i++) {
-      if (args.files[i].isFile) {
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].isFile) {
         loadingSelections.push({
-          name: args.files[i].name,
+          name: files[i].name,
           window: false,
           unsaved: false,
-          path: args.files[i].path,
+          path: files[i].path,
         });
       } else {
         loadingFolders.push({
-          name: args.files[i].name,
-          path: args.files[i].path,
+          name: files[i].name,
+          path: files[i].path,
+          index: i,
         });
+        let newLoading = getFileStructure(files[i].children);
+
+        let newLoadingSelections = newLoading.loadingSelections;
+        let newLoadingFolders = newLoading.loadingFolders;
+
+        loadingSelections = loadingSelections.concat(newLoadingSelections);
+        loadingFolders = loadingFolders.concat(newLoadingFolders);
       }
     }
+
+    return { loadingSelections, loadingFolders };
+  }
+
+  ipc.once('getFilesReply', async (_event, args) => {
+    const { loadingSelections, loadingFolders } = getFileStructure(args.files);
 
     // Set text in the editor to Loading file...
     while (editor === null) {
@@ -304,7 +318,7 @@ export default function Editor(props) {
   const saveTab = (tab) => {
     // Send the save event to IPC
     ipc.send('writeFile', {
-      file: path.join(projects[id].directory, editorTabs[tab].name),
+      file: editorTabs[tab].path,
       content: editor.getValue(),
     });
 
@@ -371,7 +385,7 @@ export default function Editor(props) {
     send('switchTab', { tab: tab });
     if (tab >= 0) {
       ipc.send('getFile', {
-        file: path.join(projects[id].directory, editorTabs[tab].name),
+        file: editorTabs[tab].path,
       });
     }
   };
@@ -384,7 +398,7 @@ export default function Editor(props) {
   const popOut = (tab) => {
     if (editorTab < 0) return;
     ipc.send('editorPopOut', {
-      file: path.join(projects[id].directory, editorTabs[tab].name),
+      file: editorTabs[tab].path,
       index: tab,
       id: id,
     });
@@ -570,7 +584,7 @@ export default function Editor(props) {
           send={send}
           selectTab={selectTab}
           popOut={popOut}
-          saveTab={selectTab}
+          saveTab={saveTab}
         />
       </div>
       {/* {deleteProjectElement} */}

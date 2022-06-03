@@ -74,6 +74,8 @@ function PaneSelector(props) {
       </div>
     ];
 
+    let selectionStartIndex = selectionPane.length;
+
     // Make selection pane expand and have tabs for pane and layout
 
     for(let i = 0; i < editorTabs.length; i++) {
@@ -135,7 +137,7 @@ function PaneSelector(props) {
     }
 
     for(let i = 0; i < editorFolders.length; i++) {
-      selectionPane.push(
+      selectionPane.splice(editorFolders[i].index + selectionStartIndex, 0, 
         <ContextMenuArea key={i + editorTabs.length} menuItems={
           <>
             <MenuHeader>{editorFolders[i].name}</MenuHeader>

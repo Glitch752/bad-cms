@@ -179,6 +179,22 @@ ipc.on("deleteFile", (event, args) => {
   }
 });
 
+ipc.on("deleteFolder", (event, args) => {
+  var folderPath = args.folder;
+  var files = getFilesFromDirectory(folderPath);
+  // Close all files inside the folder
+  for(var i = 0; i < files.length; i++) {
+    fs.unlinkSync(files[i]);
+    for(var i = 0; i < popoutWindiows.length; i++) {
+      var url = popoutWindiows[i].window.webContents.getURL().replace(/%20/g, " ");
+      if(url.endsWith(args.file)) {
+        popoutWindiows[i].window.close();
+      }
+    }
+  }
+});
+
+
 ipc.on('getFile', (event, args) => {
   let imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".ico"];
   let fileExtension = path.extname(args.file);

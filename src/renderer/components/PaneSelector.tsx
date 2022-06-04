@@ -160,7 +160,7 @@ function PaneSelector(props) {
             {editorFolders[i].name}
             <div className={styles.editorSelectionHoverButtons}>
               <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
-                // send("deleteFolder", { folder: editorFolders[i] });
+                send("deleteFolder", { folder: editorFolders[i].path });
               }}></i>
             </div>
           </div>

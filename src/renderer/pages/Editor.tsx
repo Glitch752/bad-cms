@@ -69,6 +69,46 @@ export default function Editor(props) {
               }),
             ],
           },
+          deleteFolder: {
+            actions: [
+              (context: any, event: any) => {
+                ipc.send('deleteFolder', {
+                  folder: event.folder,
+                });
+              },
+              assign((context: any, event: any) => {
+                // Check if the selected tab is in the deleted folder
+                let tab = context.editorTabs[context.tab];
+                let selectedTab = context.tab;
+
+                if(tab.name.startsWith(event.folder)) {
+                  // Find the first tab that isn't in the deleted folder
+                  for(let i = 0; i < context.editorTabs.length; i++) {
+                    if(!context.editorTabs[i].name.startsWith(event.folder)) {
+                      selectedTab = i;
+                      break;
+                    }
+                  }
+                }
+
+                // Remove all tabs in the deleted folder
+                let newTabs = context.editorTabs.filter(
+                  (tab: any) => !tab.path.startsWith(event.folder)
+                );
+
+                // Remove all folders in the deleted folder
+                let newFolders = context.editorFolders.filter(
+                  (folder: any) => !folder.path.startsWith(event.folder)
+                );
+
+                return {
+                  tab: selectedTab,
+                  editorTabs: newTabs,
+                  editorFolders: newFolders,
+                }
+              }),
+            ],
+          },
         },
         states: {
           loading: {
@@ -292,7 +332,7 @@ export default function Editor(props) {
     return { loadingSelections, loadingFolders };
   }
 
-  ipc.once('getFilesReply', async (_event, args) => {
+  ipc.once('getFilesReply', async (event, args) => {
     const { loadingSelections, loadingFolders } = getFileStructure(args.files);
 
     // Set text in the editor to Loading file...

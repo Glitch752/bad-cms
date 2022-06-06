@@ -183,15 +183,17 @@ ipc.on("deleteFolder", (event, args) => {
   var folderPath = args.folder;
   var files = getFilesFromDirectory(folderPath);
   // Close all files inside the folder
-  for(var i = 0; i < files.length; i++) {
-    fs.unlinkSync(files[i]);
-    for(var i = 0; i < popoutWindiows.length; i++) {
-      var url = popoutWindiows[i].window.webContents.getURL().replace(/%20/g, " ");
-      if(url.endsWith(args.file)) {
-        popoutWindiows[i].window.close();
+  for(let i = 0; i < files.length; i++) {
+    for(let j = 0; j < popoutWindiows.length; j++) {
+      var url = popoutWindiows[j].window.webContents.getURL().replace(/%20/g, " ");
+      if(url.endsWith(files[i])) {
+        popoutWindiows[j].window.close();
       }
     }
   }
+
+  // Delete the folder
+  fs.rmSync(folderPath, { recursive: true });
 });
 
 

@@ -91,15 +91,44 @@ export default function Editor(props) {
                   }
                 }
 
-                // Remove all tabs in the deleted folder
-                let newTabs = context.editorTabs.filter(
-                  (tab: any) => !tab.path.startsWith(event.folder)
-                );
-
                 // Remove all folders in the deleted folder
-                let newFolders = context.editorFolders.filter(
-                  (folder: any) => !folder.path.startsWith(event.folder)
-                );
+                let newFolders = context.editorFolders;
+                for(let index = 0; index < newFolders.length; index++) {
+                  let folder = newFolders[index];
+                  console.log(folder);
+                  let removeFolder = folder.path.startsWith(event.folder + '\\') || folder.path === event.folder;
+                  if(removeFolder) {
+                    // Decrement the index of all folders that are after the deleted tab
+                    for(let i = 0; i < newFolders.length; i++) {
+                      if(newFolders[i].index > newFolders[index].index) {
+                        // console.log(newFolders[i].path);
+                        newFolders[i].index--;
+                      }
+                    }
+                    newFolders.splice(index, 1);
+                    // Check if the folder after is in the same directory: wierd solution for a bug I don't understand
+                    if(newFolders[index] && newFolders[index].path.startsWith(event.folder.substr(0, event.folder.lastIndexOf('\\')))) {
+                      newFolders[index].index--;
+                    }
+                    index--
+                  }
+                };
+
+                // Remove all tabs in the deleted folder
+                console.log(context.editorTabs);
+                let newTabs = context.editorTabs.filter((tab: any, index) => {
+                  let keepTab = !tab.path.startsWith( event.folder );
+                  if(!keepTab) {
+                    // Decrement the index of all folders that are after the deleted tab
+                    for(let i = 0; i < newFolders.length; i++) {
+                      index++
+                      if(newFolders[i].index > index) {
+                        newFolders[i].index--;
+                      }
+                    }
+                  }
+                  return keepTab;
+                });
 
                 return {
                   tab: selectedTab,
@@ -322,7 +351,6 @@ export default function Editor(props) {
           indent: depth,
         });
         prevIndex += 1;
-        console.log(files[i], prevIndex);
         let newLoading = getFileStructure(files[i].children, depth + 1, prevIndex);
         prevIndex = newLoading.prevIndex;
 

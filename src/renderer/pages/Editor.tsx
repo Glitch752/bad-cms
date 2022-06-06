@@ -300,26 +300,31 @@ export default function Editor(props) {
   });
 
   // TODO: redo this system to be more efficient and readable
-  const getFileStructure = (files, depth = 0) => {
+  const getFileStructure = (files, depth = 0, prevIndex = 0) => {
     var loadingSelections = [];
     let loadingFolders = [];
+
     for (let i = 0; i < files.length; i++) {
       if (files[i].isFile) {
-        loadingSelections.push({
+        loadingSelections.splice(prevIndex, 0, ({
           name: files[i].name,
           window: false,
           unsaved: false,
           path: files[i].path,
           indent: depth,
-        });
+        }));
+        prevIndex += 1;
       } else {
         loadingFolders.push({
           name: files[i].name,
           path: files[i].path,
-          index: i + depth,
+          index: prevIndex,
           indent: depth,
         });
-        let newLoading = getFileStructure(files[i].children, depth + 1);
+        prevIndex += 1;
+        console.log(files[i], prevIndex);
+        let newLoading = getFileStructure(files[i].children, depth + 1, prevIndex);
+        prevIndex = newLoading.prevIndex;
 
         let newLoadingSelections = newLoading.loadingSelections;
         let newLoadingFolders = newLoading.loadingFolders;
@@ -329,7 +334,7 @@ export default function Editor(props) {
       }
     }
 
-    return { loadingSelections, loadingFolders };
+    return { loadingSelections, loadingFolders, prevIndex };
   }
 
   ipc.once('getFilesReply', async (event, args) => {

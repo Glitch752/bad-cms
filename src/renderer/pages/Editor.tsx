@@ -52,6 +52,9 @@ export default function Editor(props) {
               }),
             ],
           },
+          stopAddingTab: {
+            target: 'addingTab.false',
+          },
           deleteTab: {
             actions: [
               (context: any, event: any) => {

@@ -252,6 +252,29 @@
   top: -0.25em;
 }
 
+.tabWarningMessage {
+  position: absolute;
+  background-color: #ff000080;
+  z-index: 100;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  width: calc(100% - 2rem);
+  display: none;
+  box-shadow: 3px 3px #af414180;
+}
+/* Arrow pointing up from the top */
+.tabWarningMessage::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateY(-20px);
+  margin-left: -5px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #ff000080 transparent;
+}
+
 .creatorElementSection {
   margin: 10px;
   background-color: #0c151b;

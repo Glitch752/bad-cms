@@ -12,6 +12,7 @@ import Elements from '../components/elements';
 import { store } from 'renderer/store';
 import { useParams } from 'react-router-dom';
 import path from 'path';
+import { useRef } from 'react';
 
 const ipc = require('electron').ipcRenderer;
 
@@ -168,23 +169,57 @@ function PaneSelector(props) {
       );
     }
 
+    const fileNameValid = (name: string) => {
+      if((name.lastIndexOf(".") !== -1 && name.substring(0, name.lastIndexOf(".")).length < 1) || name.length < 1) {
+        return "File must have a name";
+      }
+
+      if(name.substring(name.lastIndexOf(".") + 1, name.length).length < 1) {
+        return "Extension must not be empty";
+      }
+      
+      if(name.length > 100) {
+        return "File name must be 100 characters or less";
+      }
+
+      let invalidCharacters = ["/", "\\", ":", "*", "?", "\"", "<", ">", "|"];
+
+      for(let i = 0; i < invalidCharacters.length; i++) {
+        if(name.indexOf(invalidCharacters[i]) !== -1) {
+          return "File name cannot contain the chataracter \"" + invalidCharacters[i] + "\"";
+        }
+      }
+
+      return true;
+    }
+
+    let tabWarningMessage = useRef(null);
+
     if(state.matches({ addingTab: "true" })) {
       selectionPane.push(
         <div key="adding" className={styles.editorSelection}>
           <i className={"fas fa-plus " + styles.editorSelectionIcon}></i>
-          <input type="text" placeholder="file name..." className={styles.editorSelectionInput} onBlur={(event) => {
-            // Make sure the file name is valid
+          <input type="text" placeholder="file name..." className={styles.editorSelectionInput} onChange={(event) => {
             let name = event.target.value;
-            if(name.length === 0) {
-              name = "new file";
+            let validation = fileNameValid(name);
+
+            if(validation === true) {
+              tabWarningMessage.current.style.display = "none";
+              return
+            }
+
+            tabWarningMessage.current.style.display = "block";
+            tabWarningMessage.current.innerText = validation;
+          }} onBlur={(event) => {
+            let name = event.target.value;
+
+            if(fileNameValid(name) !== true) {
+              send("stopAddingTab");
+              return;
             }
 
             if(name.indexOf(".") === -1) {
               name += ".txt";
-            }
-
-            if(!name.startsWith("\\")) {
-              name = "\\" + name;
             }
 
             // Make sure the file doesn't already exist
@@ -215,11 +250,14 @@ function PaneSelector(props) {
             let newTab = {
               name: name,
               window: false,
-              unsaved: false
+              unsaved: false,
+              path: path.join(projects[id].directory, name),
+              indent: 0
             };
 
             send("addTabData", { tab: newTab });
           }}></input>
+          <div className={styles.tabWarningMessage} ref={tabWarningMessage}></div>
         </div>
       );
     }

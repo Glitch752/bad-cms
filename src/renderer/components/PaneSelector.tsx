@@ -79,6 +79,8 @@ function PaneSelector(props) {
 
     // Make selection pane expand and have tabs for pane and layout
 
+    let renameFileWarning = useRef(null);
+
     for(let i = 0; i < editorTabs.length; i++) {
       let selected = (i === editorTab ? styles.selectedSelection : "");
       
@@ -103,39 +105,72 @@ function PaneSelector(props) {
         unsavedIcon = <i className={"fas fa-circle " + styles.unsavedIcon}></i>;
       }
 
-      selectionPane.push(
-        <ContextMenuArea key={i} menuItems={
-          <>
-            <MenuHeader>{editorTabs[i].name}</MenuHeader>
-            <MenuItem onClick={e => {
-              send("deleteTab", { tab: editorTabs[i] });
-            }}>Delete file</MenuItem>
-            <MenuItem disabled={true}>Rename file</MenuItem>
-            <MenuItem disabled={!editorTabs[i].unsaved} onClick={e => {
-              saveTab(i);
-            }}>Save file</MenuItem>
-            <MenuItem onClick={e => {
-              ipc.send("openInExplorer", editorTabs[i].path);
-            }}>Open in file explorer</MenuItem>
-            <MenuDivider />
-            <MenuItem disabled={editorTabs[i].window !== false} onClick={e => {
-              popOut(i);
-            }}>Open in popout window</MenuItem>
-          </>
-        }>
-          {/* @ts-ignore */}
-          <div className={styles.editorSelection + " " + selected} style={{"--indent": editorTabs[i].indent}} onClick={() => clickFunction()}>
+      if(state.context.renamingTab === i) {
+        selectionPane.push(
+          // @ts-ignore
+          <div key={i} className={styles.editorSelection + " " + selected} style={{"--indent": editorTabs[i].indent}}>
             {icon}
-            {editorTabs[i].name}
-            {unsavedIcon}
-            <div className={styles.editorSelectionHoverButtons}>
-              <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
-                send("deleteTab", { tab: editorTabs[i] });
-              }}></i>
-            </div>
+            <input type="text" className={styles.editorSelectionInput} defaultValue={editorTabs[i].name} onBlur={e => {
+              let value = e.target.value;
+              let validation = fileNameValid(value);
+
+              if(validation === true) {
+                send("renameTab", { name: e.target.value, path: editorTabs[i].path });
+              } else {
+                send("stopRanamingTab");
+              }
+            }} onChange={e => {
+              let value = e.target.value;
+              let validation = fileNameValid(value);
+              
+              if(validation === true) {
+                renameFileWarning.current.style.display = "none";
+                return
+              }
+
+              renameFileWarning.current.style.display = "block";
+              renameFileWarning.current.innerText = validation;
+            }} />
+            <div className={styles.tabWarningMessage} ref={renameFileWarning}></div>
           </div>
-        </ContextMenuArea>
-      );
+        );
+      } else {
+        selectionPane.push(
+          <ContextMenuArea key={i} menuItems={
+            <>
+              <MenuHeader>{editorTabs[i].name}</MenuHeader>
+              <MenuItem onClick={e => {
+                send("deleteTab", { tab: editorTabs[i] });
+              }}>Delete file</MenuItem>
+              <MenuItem disabled={state.context.renamingTab !== false} onClick={e => {
+                send("setRenameTab", { tab: i });
+              }}>Rename file</MenuItem>
+              <MenuItem disabled={!editorTabs[i].unsaved} onClick={e => {
+                saveTab(i);
+              }}>Save file</MenuItem>
+              <MenuItem onClick={e => {
+                ipc.send("openInExplorer", editorTabs[i].path);
+              }}>Open in file explorer</MenuItem>
+              <MenuDivider />
+              <MenuItem disabled={editorTabs[i].window !== false} onClick={e => {
+                popOut(i);
+              }}>Open in popout window</MenuItem>
+            </>
+          }>
+            {/* @ts-ignore */}
+            <div className={styles.editorSelection + " " + selected} style={{"--indent": editorTabs[i].indent}} onClick={() => clickFunction()}>
+              {icon}
+              {editorTabs[i].name}
+              {unsavedIcon}
+              <div className={styles.editorSelectionHoverButtons}>
+                <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
+                  send("deleteTab", { tab: editorTabs[i] });
+                }}></i>
+              </div>
+            </div>
+          </ContextMenuArea>
+        );
+      }
     }
 
     for(let i = 0; i < editorFolders.length; i++) {

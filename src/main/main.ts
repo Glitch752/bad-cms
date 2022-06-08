@@ -196,6 +196,12 @@ ipc.on("deleteFolder", (event, args) => {
   fs.rmSync(folderPath, { recursive: true });
 });
 
+ipc.on('renameFile', (event, args) => {
+  var oldPath = args.path;
+  var newPath = path.join(path.dirname(oldPath), args.name);
+
+  fs.renameSync(oldPath, newPath);
+});
 
 ipc.on('getFile', (event, args) => {
   let imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".ico"];

@@ -25,6 +25,7 @@ export default function Editor(props) {
     id: 'editor',
     context: {
       tab: 0,
+      renamingTab: false,
       editorTabs: [],
       editorFolders: [],
       monaco: null,
@@ -65,11 +66,53 @@ export default function Editor(props) {
               assign((context: any, event: any) => {
                 return {
                   editorTabs: context.editorTabs.filter(
-                    (tab: any) => tab.name !== event.tab.name
+                    (tab: any) => tab.path !== event.tab.path
                   ),
                   tab: 0,
                 };
               }),
+            ],
+          },
+          setRenameTab: {
+            actions: [
+              assign((context: any, event: any) => {
+                return {
+                  renamingTab: event.tab,
+                };
+              }),
+            ]
+          },
+          stopRanamingTab: {
+            actions: [
+              assign((context: any, event: any) => {
+                return {
+                  renamingTab: false,
+                };
+              }),
+            ]
+          },
+          renameTab: {
+            actions: [
+              (context: any, event: any) => {
+                ipc.send('renameFile', {
+                  path: event.path,
+                  name: event.name,
+                });
+              },
+              assign((context: any, event: any) => {
+                return {
+                  editorTabs: context.editorTabs.map((tab: any) => {
+                    if (tab.path === event.path) {
+                      let newdata = tab;
+                      newdata.name = event.name;
+                      newdata.path = path.join(path.dirname(event.path), event.name);
+                      return newdata;
+                    }
+                    return tab;
+                  }),
+                  renamingTab: false,
+                };
+              })
             ],
           },
           deleteFolder: {

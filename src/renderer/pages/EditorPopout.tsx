@@ -52,6 +52,19 @@ export default function Editor(props) {
 
     let monaco = null;
 
+    useEffect(() => {
+      window.addEventListener('resize', windowResize);
+      return () => {
+        window.removeEventListener('resize', windowResize);
+      }
+    }, []);
+
+    const windowResize = () => {
+      if(monaco !== null) {
+        monaco.layout();
+      }
+    }
+
     const keyPressed = (e) => {
       if(e.ctrlKey && e.key === "s") {
         e.preventDefault();
@@ -81,6 +94,7 @@ export default function Editor(props) {
         }}
         editorDidMount={(editor) => {
           monaco = editor;
+          windowResize();
         }}
       />
 

@@ -90,11 +90,13 @@ function PaneSelector(props) {
       if(editorTabs[i].window !== false) {
         icon = <i className={"fas fa-arrow-up-right-from-square " + styles.editorSelectionIcon}></i>;
         clickFunction = () => {
+          send("setSelectedFolder", { folder: false });
           focusWindow(editorTabs[i].window);
         }
       } else {
         icon = <i className={"fas fa-angle-right " + styles.editorSelectionIcon}></i>;
         clickFunction = () => {
+          send("setSelectedFolder", { folder: false });
           selectTab(i);
         };
       }
@@ -174,6 +176,7 @@ function PaneSelector(props) {
     }
 
     for(let i = 0; i < editorFolders.length; i++) {
+      let folderSelected = state.context.selectedFolder === i ? styles.selectedFolder : "";
       selectionPane.splice(editorFolders[i].index + selectionStartIndex, 0, 
         <ContextMenuArea key={i + editorTabs.length} menuItems={
           <>
@@ -189,8 +192,9 @@ function PaneSelector(props) {
           </>
         }>
           {/* @ts-ignore */}
-          <div className={styles.editorSelection + " " + styles.folderSelection} style={{"--indent": editorFolders[i].indent}} onClick={() => {
+          <div className={styles.editorSelection + " " + styles.folderSelection + " " + folderSelected} style={{"--indent": editorFolders[i].indent}} onClick={() => {
             // TODO: collapse / expand folder
+            send("setSelectedFolder", { folder: i });
           }}>
             <i className={"fas fa-folder " + styles.editorSelectionIcon}></i>
             {editorFolders[i].name}
@@ -231,8 +235,12 @@ function PaneSelector(props) {
     let tabWarningMessage = useRef(null);
 
     if(state.matches({ addingTab: "true" })) {
-      selectionPane.push(
-        <div key="adding" className={styles.editorSelection}>
+      let index = state.context.selectedFolder === false ? 
+        state.context.editorTabs.length + state.context.editorFolders.length 
+        : state.context.editorFolders[state.context.selectedFolder].index + 1;
+      selectionPane.splice(index + selectionStartIndex, 0,
+        // @ts-ignore
+        <div key="adding" className={styles.editorSelection} style={{"--indent": state.context.selectedFolder === false ? 0 : state.context.editorFolders[state.context.selectedFolder].indent + 1}}>
           <i className={"fas fa-plus " + styles.editorSelectionIcon}></i>
           <input type="text" placeholder="file name..." className={styles.editorSelectionInput} onChange={(event) => {
             let name = event.target.value;
@@ -257,6 +265,9 @@ function PaneSelector(props) {
               name += ".txt";
             }
 
+            let basepath = state.context.selectedFolder === false ? projects[id].directory : state.context.editorFolders[state.context.selectedFolder].path;
+            console.log(basepath);
+
             // Make sure the file doesn't already exist
             let fileExists = true;
             while(fileExists) {
@@ -264,7 +275,7 @@ function PaneSelector(props) {
               let hasNumber = false;
               fileExists = false;
               for(let i = 0; i < editorTabs.length; i++) {
-                if(editorTabs[i].name === name) {
+                if(editorTabs[i].path === basepath) {
                   fileExists = true;
                   if(editorTabs[i].name.split("(")[1] !== undefined) {
                     tabNumber = parseInt(editorTabs[i].name.split("(")[1].split(")")[0]) + 1;
@@ -286,7 +297,7 @@ function PaneSelector(props) {
               name: name,
               window: false,
               unsaved: false,
-              path: path.join(projects[id].directory, name),
+              path: path.join(basepath, name),
               indent: 0
             };
 

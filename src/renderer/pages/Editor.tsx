@@ -26,6 +26,7 @@ export default function Editor(props) {
     context: {
       tab: 0,
       renamingTab: false,
+      selectedFolder: false,
       editorTabs: [],
       editorFolders: [],
       monaco: null,
@@ -47,8 +48,19 @@ export default function Editor(props) {
                 });
               },
               assign((context: any, event: any) => {
+                let newTabs = context.editorTabs;
+                let index = context.selectedFolder === false ? newTabs.length : context.editorFolders[context.selectedFolder].index; 
+                event.tab.indent = context.selectedFolder === false ? 0 : context.editorFolders[context.selectedFolder].indent + 1;
+                let newFolders = context.editorFolders;
+                for(let i = 0; i < newFolders.length; i++) {
+                  if(newFolders[i].index > index) {
+                    newFolders[i].index++;
+                  }
+                }
+                newTabs.splice(index, 0, event.tab);
                 return {
-                  editorTabs: [...context.editorTabs, event.tab],
+                  editorTabs: newTabs, 
+                  editorFolders: newFolders,
                 };
               }),
             ],
@@ -114,6 +126,15 @@ export default function Editor(props) {
                 };
               })
             ],
+          },
+          setSelectedFolder: {
+            actions: [
+              assign((context: any, event: any) => {
+                return {
+                  selectedFolder: event.folder,
+                };
+              }),
+            ]
           },
           deleteFolder: {
             actions: [

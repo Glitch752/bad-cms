@@ -242,6 +242,8 @@
   background-color: transparent;
   color: #fff;
   font-size: 16px;
+  display: inline-block;
+  width: calc(100% - var(--indentPixels) - 3rem);
 }
 .editorSelectionSave {
   margin-left: 10px;
@@ -252,9 +254,8 @@
   top: -0.25em;
 }
 
-.editorSelectionInput {
-  display: inline-block;
-  width: calc(100% - var(--indentPixels) - 2rem);
+.selectedFolder {
+  background-color: #223141;
 }
 
 .tabWarningMessage {

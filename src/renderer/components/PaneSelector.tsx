@@ -175,37 +175,72 @@ function PaneSelector(props) {
       }
     }
 
+    let renameFolderWarning = useRef(null);
+
     for(let i = 0; i < editorFolders.length; i++) {
       let folderSelected = state.context.selectedFolder === i ? styles.selectedFolder : "";
-      selectionPane.splice(editorFolders[i].index + selectionStartIndex, 0, 
-        <ContextMenuArea key={i + editorTabs.length} menuItems={
-          <>
-            <MenuHeader>{editorFolders[i].name}</MenuHeader>
-            <MenuItem disabled={true} onClick={e => {
-              // send("deleteFolder", { folder: editorFolders[i] });
-            }}>Delete folder</MenuItem>
-            <MenuItem disabled={true}>Rename folder</MenuItem>
-            <MenuDivider />
-            <MenuItem onClick={e => {
-              ipc.send("openInExplorer", editorFolders[i].path);
-            }}>Open in file explorer</MenuItem>
-          </>
-        }>
-          {/* @ts-ignore */}
-          <div className={styles.editorSelection + " " + styles.folderSelection + " " + folderSelected} style={{"--indent": editorFolders[i].indent}} onClick={() => {
-            // TODO: collapse / expand folder
-            send("setSelectedFolder", { folder: i });
-          }}>
+      if(state.context.renamingFolder === i) {
+        selectionPane.splice(editorFolders[i].index + selectionStartIndex, 0, 
+          // @ts-ignore
+          <div className={styles.editorSelection + " " + styles.folderSelection + " " + folderSelected} style={{"--indent": editorFolders[i].indent}} key={i + editorTabs.length}>
             <i className={"fas fa-folder " + styles.editorSelectionIcon}></i>
-            {editorFolders[i].name}
-            <div className={styles.editorSelectionHoverButtons}>
-              <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
-                send("deleteFolder", { folder: editorFolders[i].path });
-              }}></i>
-            </div>
+            <input type="text" className={styles.editorSelectionInput} defaultValue={editorFolders[i].name} onBlur={e => {
+              let value = e.target.value;
+              let validation = folderNameValid(value);
+
+              if(validation === true) {
+                send("renameFolder", { name: value, path: editorFolders[i].path });
+              } else {
+                send("stopRanamingFolder");
+              }
+            }} onChange={e => {
+              let value = e.target.value;
+              let validation = folderNameValid(value);
+              
+              if(validation === true) {
+                renameFolderWarning.current.style.display = "none";
+                return
+              }
+
+              renameFolderWarning.current.style.display = "block";
+              renameFolderWarning.current.innerText = validation;
+            }} />
+            <div className={styles.tabWarningMessage} ref={renameFolderWarning}></div>
           </div>
-        </ContextMenuArea>
-      );
+        );
+      } else {
+        selectionPane.splice(editorFolders[i].index + selectionStartIndex, 0, 
+          <ContextMenuArea key={i + editorTabs.length} menuItems={
+            <>
+              <MenuHeader>{editorFolders[i].name}</MenuHeader>
+              <MenuItem onClick={e => {
+                send("deleteFolder", { folder: editorFolders[i].path });
+              }}>Delete folder</MenuItem>
+              <MenuItem disabled={state.context.renamingFolder !== false} onClick={e => {
+                send("setRenameFolder", { folder: i });
+              }}>Rename folder</MenuItem>
+              <MenuDivider />
+              <MenuItem onClick={e => {
+                ipc.send("openInExplorer", editorFolders[i].path);
+              }}>Open in file explorer</MenuItem>
+            </>
+          }>
+            {/* @ts-ignore */}
+            <div className={styles.editorSelection + " " + styles.folderSelection + " " + folderSelected} style={{"--indent": editorFolders[i].indent}} onClick={() => {
+              // TODO: collapse / expand folder
+              send("setSelectedFolder", { folder: i });
+            }}>
+              <i className={"fas fa-folder " + styles.editorSelectionIcon}></i>
+              {editorFolders[i].name}
+              <div className={styles.editorSelectionHoverButtons}>
+                <i className={styles.editorSelectionHoverButton + " fa-solid fa-trash-alt"} onClick={() => {
+                  send("deleteFolder", { folder: editorFolders[i].path });
+                }}></i>
+              </div>
+            </div>
+          </ContextMenuArea>
+        );
+      }
     }
 
     const fileNameValid = (name: string) => {
@@ -226,6 +261,26 @@ function PaneSelector(props) {
       for(let i = 0; i < invalidCharacters.length; i++) {
         if(name.indexOf(invalidCharacters[i]) !== -1) {
           return "File name cannot contain the chataracter \"" + invalidCharacters[i] + "\"";
+        }
+      }
+
+      return true;
+    }
+
+    const folderNameValid = (name: string) => {
+      if(name.length < 1) {
+        return "Folder must have a name";
+      }
+
+      if(name.length > 100) {
+        return "Folder name must be 100 characters or less";
+      }
+
+      let invalidCharacters = ["/", "\\", ":", "*", "?", "\"", "<", ">", "|"];
+
+      for(let i = 0; i < invalidCharacters.length; i++) {
+        if(name.indexOf(invalidCharacters[i]) !== -1) {
+          return "Folder name cannot contain the chataracter \"" + invalidCharacters[i] + "\"";
         }
       }
 

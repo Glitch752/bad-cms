@@ -214,6 +214,16 @@ ipc.on('renameFile', (event, args) => {
   event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
 });
 
+ipc.on('renameFolder', (event, args) => {
+  let oldPath = args.path;
+  let newPath = path.join(path.join(oldPath, ".."), args.name);
+
+  fs.renameSync(oldPath, newPath);
+
+  var dirFiles = getFilesAndFolders(args.directory); // Returns an array of file paths in a directory, including subdirectories
+  event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
+});
+
 ipc.on('getFile', (event, args) => {
   let imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".ico"];
   let fileExtension = path.extname(args.file);

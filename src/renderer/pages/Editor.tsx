@@ -26,6 +26,7 @@ export default function Editor(props) {
     context: {
       tab: 0,
       renamingTab: false,
+      renamingFolder: false,
       selectedFolder: false,
       editorTabs: [],
       editorFolders: [],
@@ -92,6 +93,40 @@ export default function Editor(props) {
               assign((context: any, event: any) => {
                 return {
                   renamingTab: false,
+                };
+              }),
+            ],
+          },
+          setRenameFolder: {
+            actions: [
+              assign((context: any, event: any) => {
+                return {
+                  renamingFolder: event.folder,
+                };
+              }),
+            ]
+          },
+          stopRanamingFolder: {
+            actions: [
+              assign((context: any, event: any) => {
+                return {
+                  renamingFolder: false,
+                };
+              }),
+            ]
+          },
+          renameFolder: {
+            actions: [
+              (context: any, event: any) => {
+                ipc.send('renameFolder', {
+                  path: event.path,
+                  name: event.name,
+                  directory: projects[id].directory,
+                });
+              },
+              assign((context: any, event: any) => {
+                return {
+                  renamingFolder: false,
                 };
               }),
             ],

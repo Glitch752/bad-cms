@@ -163,8 +163,10 @@ ipc.on('writeFile', (event, args) => {
 });
 
 ipc.on("addFile", (event, args) => {
-  var filePath = path.join(args.directory, args.file);
-  fs.writeFileSync(filePath, "");
+  fs.writeFileSync(args.path, "");
+
+  var dirFiles = getFilesAndFolders(args.directory); // Returns an array of file paths in a directory, including subdirectories
+  event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
 });
 
 ipc.on("deleteFile", (event, args) => {
@@ -177,6 +179,9 @@ ipc.on("deleteFile", (event, args) => {
       popoutWindiows[i].window.close();
     }
   }
+  
+  var dirFiles = getFilesAndFolders(args.directory); // Returns an array of file paths in a directory, including subdirectories
+  event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
 });
 
 ipc.on("deleteFolder", (event, args) => {
@@ -194,6 +199,9 @@ ipc.on("deleteFolder", (event, args) => {
 
   // Delete the folder
   fs.rmSync(folderPath, { recursive: true });
+  
+  var dirFiles = getFilesAndFolders(args.directory); // Returns an array of file paths in a directory, including subdirectories
+  event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
 });
 
 ipc.on('renameFile', (event, args) => {
@@ -201,6 +209,9 @@ ipc.on('renameFile', (event, args) => {
   var newPath = path.join(path.dirname(oldPath), args.name);
 
   fs.renameSync(oldPath, newPath);
+
+  var dirFiles = getFilesAndFolders(args.directory); // Returns an array of file paths in a directory, including subdirectories
+  event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
 });
 
 ipc.on('getFile', (event, args) => {

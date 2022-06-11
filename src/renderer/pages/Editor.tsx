@@ -44,25 +44,9 @@ export default function Editor(props) {
               (context: any, event: any) => {
                 ipc.send('addFile', {
                   directory: projects[id].directory,
-                  file: event.tab.name,
+                  path: event.tab.path,
                 });
               },
-              assign((context: any, event: any) => {
-                let newTabs = context.editorTabs;
-                let index = context.selectedFolder === false ? newTabs.length : context.editorFolders[context.selectedFolder].index; 
-                event.tab.indent = context.selectedFolder === false ? 0 : context.editorFolders[context.selectedFolder].indent + 1;
-                let newFolders = context.editorFolders;
-                for(let i = 0; i < newFolders.length; i++) {
-                  if(newFolders[i].index > index) {
-                    newFolders[i].index++;
-                  }
-                }
-                newTabs.splice(index, 0, event.tab);
-                return {
-                  editorTabs: newTabs, 
-                  editorFolders: newFolders,
-                };
-              }),
             ],
           },
           stopAddingTab: {
@@ -73,16 +57,9 @@ export default function Editor(props) {
               (context: any, event: any) => {
                 ipc.send('deleteFile', {
                   file: event.tab.path,
+                  directory: projects[id].directory,
                 });
               },
-              assign((context: any, event: any) => {
-                return {
-                  editorTabs: context.editorTabs.filter(
-                    (tab: any) => tab.path !== event.tab.path
-                  ),
-                  tab: 0,
-                };
-              }),
             ],
           },
           setRenameTab: {
@@ -109,22 +86,14 @@ export default function Editor(props) {
                 ipc.send('renameFile', {
                   path: event.path,
                   name: event.name,
+                  directory: projects[id].directory,
                 });
               },
               assign((context: any, event: any) => {
                 return {
-                  editorTabs: context.editorTabs.map((tab: any) => {
-                    if (tab.path === event.path) {
-                      let newdata = tab;
-                      newdata.name = event.name;
-                      newdata.path = path.join(path.dirname(event.path), event.name);
-                      return newdata;
-                    }
-                    return tab;
-                  }),
                   renamingTab: false,
                 };
-              })
+              }),
             ],
           },
           setSelectedFolder: {
@@ -141,68 +110,9 @@ export default function Editor(props) {
               (context: any, event: any) => {
                 ipc.send('deleteFolder', {
                   folder: event.folder,
+                  directory: projects[id].directory,
                 });
               },
-              assign((context: any, event: any) => {
-                // Check if the selected tab is in the deleted folder
-                let tab = context.editorTabs[context.tab];
-                let selectedTab = context.tab;
-
-                if(tab.name.startsWith(event.folder)) {
-                  // Find the first tab that isn't in the deleted folder
-                  for(let i = 0; i < context.editorTabs.length; i++) {
-                    if(!context.editorTabs[i].name.startsWith(event.folder)) {
-                      selectedTab = i;
-                      break;
-                    }
-                  }
-                }
-
-                // Remove all folders in the deleted folder
-                let newFolders = context.editorFolders;
-                for(let index = 0; index < newFolders.length; index++) {
-                  let folder = newFolders[index];
-                  console.log(folder);
-                  let removeFolder = folder.path.startsWith(event.folder + '\\') || folder.path === event.folder;
-                  if(removeFolder) {
-                    // Decrement the index of all folders that are after the deleted tab
-                    for(let i = 0; i < newFolders.length; i++) {
-                      if(newFolders[i].index > newFolders[index].index) {
-                        // console.log(newFolders[i].path);
-                        newFolders[i].index--;
-                      }
-                    }
-                    newFolders.splice(index, 1);
-                    // Check if the folder after is in the same directory: wierd solution for a bug I don't understand
-                    if(newFolders[index] && newFolders[index].path.startsWith(event.folder.substr(0, event.folder.lastIndexOf('\\')))) {
-                      newFolders[index].index--;
-                    }
-                    index--
-                  }
-                };
-
-                // Remove all tabs in the deleted folder
-                console.log(context.editorTabs);
-                let newTabs = context.editorTabs.filter((tab: any, index) => {
-                  let keepTab = !tab.path.startsWith( event.folder );
-                  if(!keepTab) {
-                    // Decrement the index of all folders that are after the deleted tab
-                    for(let i = 0; i < newFolders.length; i++) {
-                      index++
-                      if(newFolders[i].index > index) {
-                        newFolders[i].index--;
-                      }
-                    }
-                  }
-                  return keepTab;
-                });
-
-                return {
-                  tab: selectedTab,
-                  editorTabs: newTabs,
-                  editorFolders: newFolders,
-                }
-              }),
             ],
           },
         },

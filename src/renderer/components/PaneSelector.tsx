@@ -266,7 +266,6 @@ function PaneSelector(props) {
             }
 
             let basepath = state.context.selectedFolder === false ? projects[id].directory : state.context.editorFolders[state.context.selectedFolder].path;
-            console.log(basepath);
 
             // Make sure the file doesn't already exist
             let fileExists = true;
@@ -275,7 +274,7 @@ function PaneSelector(props) {
               let hasNumber = false;
               fileExists = false;
               for(let i = 0; i < editorTabs.length; i++) {
-                if(editorTabs[i].path === basepath) {
+                if(editorTabs[i].path === path.join(basepath, name)) {
                   fileExists = true;
                   if(editorTabs[i].name.split("(")[1] !== undefined) {
                     tabNumber = parseInt(editorTabs[i].name.split("(")[1].split(")")[0]) + 1;
@@ -294,11 +293,7 @@ function PaneSelector(props) {
 
             // Create the file
             let newTab = {
-              name: name,
-              window: false,
-              unsaved: false,
               path: path.join(basepath, name),
-              indent: 0
             };
 
             send("addTabData", { tab: newTab });

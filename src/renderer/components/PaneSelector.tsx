@@ -69,7 +69,11 @@ function PaneSelector(props) {
             addFile();
           }}></i>
           <i className={styles.editorSelectionTitleButton + " fa-solid fa-folder-plus"} onClick={() => {
+            // TODO: implement addition of folders
             console.log("Not implemented");
+          }}></i>
+          <i className="fa-solid fa-arrow-rotate-right" onClick={() => {
+            ipc.send("getFiles", { directory: projects[id].directory });
           }}></i>
         </div>
       </div>

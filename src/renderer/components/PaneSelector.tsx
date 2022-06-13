@@ -50,6 +50,16 @@ function PaneSelector(props) {
 
     const addFile = () => {
       send("addTab");
+      if(state.matches({ addingFolder: true })) {
+        send("stopAddingFolder");
+      }
+    }
+
+    const addFolder = () => {
+      send("addFolder");
+      if(state.matches({ addingTab: true })) {
+        send("stopAddingTab");
+      }
     }
 
     let selectionPane = [
@@ -69,8 +79,7 @@ function PaneSelector(props) {
             addFile();
           }}></i>
           <i className={styles.editorSelectionTitleButton + " fa-solid fa-folder-plus"} onClick={() => {
-            // TODO: implement addition of folders
-            console.log("Not implemented");
+            addFolder();
           }}></i>
           <i className="fa-solid fa-arrow-rotate-right" onClick={() => {
             ipc.send("getFiles", { directory: projects[id].directory });
@@ -337,6 +346,9 @@ function PaneSelector(props) {
                   fileExists = true;
                   if(editorTabs[i].name.split("(")[1] !== undefined) {
                     tabNumber = parseInt(editorTabs[i].name.split("(")[1].split(")")[0]) + 1;
+                    if(isNaN(tabNumber)) {
+                      tabNumber = 1;
+                    }
                     hasNumber = true;
                   }
                 }
@@ -358,6 +370,76 @@ function PaneSelector(props) {
             send("addTabData", { tab: newTab });
           }}></input>
           <div className={styles.tabWarningMessage} ref={tabWarningMessage}></div>
+        </div>
+      );
+    }
+
+    let folderWarningMessage = useRef(null);
+
+    if(state.matches({ addingFolder: "true" })) {
+      let index = state.context.selectedFolder === false ? 
+        state.context.editorTabs.length + state.context.editorFolders.length 
+        : state.context.editorFolders[state.context.selectedFolder].index + 1;
+      selectionPane.splice(index + selectionStartIndex, 0,
+        // @ts-ignore
+        <div key="addingFolder" className={styles.editorSelection} style={{"--indent": state.context.selectedFolder === false ? 0 : state.context.editorFolders[state.context.selectedFolder].indent + 1}}>
+          <i className={"fas fa-plus " + styles.editorSelectionIcon}></i>
+          <input type="text" placeholder="folder name..." className={styles.editorSelectionInput} onChange={(event) => {
+            let name = event.target.value;
+            let validation = folderNameValid(name);
+
+            if(validation === true) {
+              folderWarningMessage.current.style.display = "none";
+              return
+            }
+
+            folderWarningMessage.current.style.display = "block";
+            folderWarningMessage.current.innerText = validation;
+          }} onBlur={(event) => {
+            let name = event.target.value;
+
+            if(folderNameValid(name) !== true) {
+              send("stopAddingFolder");
+              return;
+            }
+
+            let basepath = state.context.selectedFolder === false ? projects[id].directory : state.context.editorFolders[state.context.selectedFolder].path;
+
+            // Make sure the file doesn't already exist
+            let folderExists = true;
+            while(folderExists) {
+              let tabNumber = 1;
+              let hasNumber = false;
+              folderExists = false;
+              for(let i = 0; i < editorFolders.length; i++) {
+                if(editorFolders[i].path === path.join(basepath, name)) {
+                  folderExists = true;
+                  if(editorFolders[i].name.split("(")[1] !== undefined) {
+                    tabNumber = parseInt(editorFolders[i].name.split("(")[1].split(")")[0]) + 1;
+                    if(isNaN(tabNumber)) {
+                      tabNumber = 1;
+                    }
+                    hasNumber = true;
+                  }
+                }
+              }
+
+              if(folderExists) {
+                if(hasNumber) {
+                  name = name.split("(")[0] + name.split(")")[1];
+                }
+                name = name + `(${tabNumber})`;
+              }
+            }
+
+            // Create the file
+            let newFolder = {
+              path: path.join(basepath, name),
+            };
+
+            send("addFolderData", { folder: newFolder });
+          }}></input>
+          <div className={styles.tabWarningMessage} ref={folderWarningMessage}></div>
         </div>
       );
     }

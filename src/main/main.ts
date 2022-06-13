@@ -169,6 +169,13 @@ ipc.on("addFile", (event, args) => {
   event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
 });
 
+ipc.on("addFolder", (event, args) => {
+  fs.mkdirSync(args.path, { recursive: true });
+
+  var dirFiles = getFilesAndFolders(args.directory); // Returns an array of file paths in a directory, including subdirectories
+  event.sender.send('getFilesReply', {files: dirFiles, directory: args.directory});
+});
+
 ipc.on("deleteFile", (event, args) => {
   var filePath = args.file;
   fs.unlinkSync(filePath);

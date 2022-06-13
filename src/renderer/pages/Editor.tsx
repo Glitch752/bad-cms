@@ -53,6 +53,20 @@ export default function Editor(props) {
           stopAddingTab: {
             target: 'addingTab.false',
           },
+          addFolderData: {
+            target: 'addingFolder.false',
+            actions: [
+              (context: any, event: any) => {
+                ipc.send('addFolder', {
+                  directory: projects[id].directory,
+                  path: event.folder.path,
+                });
+              },
+            ],
+          },
+          stopAddingFolder: {
+            target: 'addingFolder.false',
+          },
           deleteTab: {
             actions: [
               (context: any, event: any) => {
@@ -282,6 +296,17 @@ export default function Editor(props) {
           true: {},
         },
       },
+      addingFolder: {
+        initial: 'false',
+        on: {
+          addFolder: '.true',
+          cancel: '.false',
+        },
+        states: {
+          false: {},
+          true: {},
+        },
+      }
     },
   });
 

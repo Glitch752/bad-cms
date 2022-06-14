@@ -42,6 +42,25 @@
     width: var(--menu-width);
     height: calc(100vh - var(--titlebar-height));
     background-color: #121e25;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.paneSelector::-webkit-scrollbar-track {
+    background-color: #121e25;
+}
+.paneSelector::-webkit-scrollbar {
+    width: 10px;
+    background-color: #121e25;
+}
+.paneSelector::-webkit-scrollbar-thumb {
+    background-color: #1c2e3f;
+    border-radius: 10px;
+}
+.paneSelector::-webkit-scrollbar-thumb:hover {
+    background-color: #28425a;
+}
+.paneSelector::-webkit-scrollbar-corner {
+    background-color: #121e25;
 }
 .widePane .paneSelector {
     padding-top: 24px;

@@ -198,10 +198,12 @@ function Creator(props) {
       editorContent,
     });
   };
-
+  
   const addedClass = (className) => {
     className = className.trim();
     className = className.replace(/\s/g, '-');
+    if(className.length === 0) return;
+    console.log(`Class: ${className}`);
     let classList = state.context.editorContent.find(
       (e) => e.type === 'classList'
     ).classList;

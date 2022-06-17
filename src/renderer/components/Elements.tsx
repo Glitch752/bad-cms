@@ -49,6 +49,19 @@ function Elements() {
     };
   };
 
+  useEffect(() => {
+    window.addEventListener('resize', resizeHighlight);
+    return () => {
+      window.removeEventListener('resize', resizeHighlight);
+    }
+  });
+
+  const resizeHighlight = () => {
+    if (highlightedElement !== null) {
+      setElementHightlight(highlightedElement);
+    }
+  }
+
   const getElementTree = () => {
     return (
       <div className={styles.elementsContainer}>
@@ -149,14 +162,8 @@ function ElementHighlight({ elementHighlightRef }) {
   });
 
   const setHighlight = (style) => {
-    console.log(style);
     setHighlightState(style);
   }
-  
-  useEffect(() => {
-    console.log(highlight);
-  }, [highlight]);
-  console.log(highlight);
 
   useEffect(() => {
     elementHighlightRef.current = setHighlight
@@ -285,26 +292,35 @@ function Element(props) {
       default:
         return (
           <>
-            <ContextMenuArea menuItems={contextMenu}>
-              {/* @ts-ignore */}
-              <span className={`${styles.elementName} ${styles.elementLine}`} style={{ '--depth': depth }}>
-                &lt;{element.tagName.toLowerCase()}
-                {getElementAttributes(element)}&gt;
+            {/* @ts-ignore */}
+            <div className={`${hasContextMenu ? styles.elementLine : ""}`} style={{ '--depth': depth }}>
+                {/* @ts-ignore */}
+              <span onMouseEnter={(e) => highlightElement(e, element)} className={`${hasContextMenu ? "" : styles.elementLine}`} style={{ '--depth': depth }}>
+                <ContextMenuArea menuItems={contextMenu}>
+                  {/* @ts-ignore */}
+                  <span className={`${styles.elementName}`} style={{ '--depth': depth }}>
+                    &lt;{element.tagName.toLowerCase()}
+                    {getElementAttributes(element)}&gt;
+                  </span>
+                </ContextMenuArea>
               </span>
-            </ContextMenuArea>
-            {hasContextMenu ? (
-              <ContextMenuArea menuItems={contextMenu}>
+              {hasContextMenu ? (
+                <ContextMenuArea menuItems={contextMenu}>
+                  <span className={`${styles.elementText}`} onMouseEnter={(e) => highlightElement(e, element)}>{content}</span>
+                </ContextMenuArea>
+              ) : (
                 <span className={`${styles.elementText}`}>{content}</span>
-              </ContextMenuArea>
-            ) : (
-              <span className={`${styles.elementText}`}>{content}</span>
-            )}
-            <ContextMenuArea menuItems={contextMenu}>
+              )}
               {/* @ts-ignore */}
-              <span className={`${styles.elementClosingTag} ${styles.elementLine}`} style={{ '--depth': depth }}>
-                &lt;/{element.tagName.toLowerCase()}&gt;
+              <span onMouseEnter={(e) => highlightElement(e, element)} className={`${hasContextMenu ? "" : styles.elementLine}`} style={{ '--depth': depth }}>
+                <ContextMenuArea menuItems={contextMenu}>
+                  {/* @ts-ignore */}
+                  <span className={`${styles.elementClosingTag}`} style={{ '--depth': depth }}>
+                    &lt;/{element.tagName.toLowerCase()}&gt;
+                  </span>
+                </ContextMenuArea>
               </span>
-            </ContextMenuArea>
+            </div>
           </>
         );
     }
@@ -344,14 +360,14 @@ function Element(props) {
     <>
       <div className={styles.element}>
         {element.type === 'text' ? (
-          <div onClick={(e) => highlightElement(e, element.element)}>
+          <div>
             <span className={styles.elementText}>
               "{element.element.textContent}"
             </span>
           </div>
         ) : element.children.length > 0 ? (
           depth > 0 && isFolded ? (
-            <div onClick={(e) => highlightElement(e, element.element)}>
+            <div>
               {getTagName(element.element, '...')}
               <i
                 className={`fa-solid fa-caret-right ${styles.elementFold}`}
@@ -391,7 +407,7 @@ function Element(props) {
             </>
           )
         ) : (
-          <div onClick={(e) => highlightElement(e, element.element)}>
+          <div>
             {getTagName(element.element, element.element.textContent)}
           </div>
         )}

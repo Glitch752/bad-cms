@@ -422,8 +422,19 @@
 .elementHighlight {
   position: fixed;
   display: none;
-  background-color: #ff000066;
-  border: 0.1rem solid #ff0000;
+  background-color: #0066ff66;
+  z-index: 10000;
+  pointer-events: none;
+}
+.elementHighlightMargin {
+  position: fixed;
+  background-color: #ff990066;
+  z-index: 10000;
+  pointer-events: none;
+}
+.elementHighlightPadding {
+  position: fixed;
+  background-color: #00ff6666;
   z-index: 10000;
   pointer-events: none;
 }

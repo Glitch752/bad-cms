@@ -11,7 +11,7 @@ import {
 
 
 function Elements() {
-  const elementHighlight = React.useRef(null);
+  const elementHighlightRef = React.useRef(null);
 
   // This function gets all the elements from the iframe in the format of the element data and it's children
   const getElements = (
@@ -50,7 +50,6 @@ function Elements() {
   };
 
   const getElementTree = () => {
-    console.log(getElements());
     return (
       <div className={styles.elementsContainer}>
         <Element
@@ -88,8 +87,10 @@ function Elements() {
   let highlightedElement = null;
 
   const setElementHightlight = (element) => {
+    let highlight: any = {};
     if (!element.getBoundingClientRect) {
-      elementHighlight.current.style.display = 'none';
+      highlight.display = 'none';
+      elementHighlightRef.current(highlight);
       return;
     }
     highlightedElement = element;
@@ -99,23 +100,135 @@ function Elements() {
       .getElementById('editorFrame')
       .getBoundingClientRect();
 
-    const top = iframePosition.top + boundingRect.top;
-    const left = iframePosition.left + boundingRect.left;
-    const width = boundingRect.width;
-    const height = boundingRect.height;
+    highlight.top = iframePosition.top + boundingRect.top;
+    highlight.left = iframePosition.left + boundingRect.left;
+    highlight.width = boundingRect.width;
+    highlight.height = boundingRect.height;
 
-    elementHighlight.current.style.top = top + 'px';
-    elementHighlight.current.style.left = left + 'px';
-    elementHighlight.current.style.width = width + 'px';
-    elementHighlight.current.style.height = height + 'px';
-    elementHighlight.current.style.display = 'inline-block';
+    highlight.display = 'inline-block';
+
+    highlight.paddingTop = parseInt(window.getComputedStyle(element).getPropertyValue('padding-top'));
+    highlight.paddingLeft = parseInt(window.getComputedStyle(element).getPropertyValue('padding-left'));
+    highlight.paddingRight = parseInt(window.getComputedStyle(element).getPropertyValue('padding-right'));
+    highlight.paddingBottom = parseInt(window.getComputedStyle(element).getPropertyValue('padding-bottom'));
+
+    highlight.marginTop = parseInt(window.getComputedStyle(element).getPropertyValue('margin-top'));
+    highlight.marginLeft = parseInt(window.getComputedStyle(element).getPropertyValue('margin-left'));
+    highlight.marginRight = parseInt(window.getComputedStyle(element).getPropertyValue('margin-right'));
+    highlight.marginBottom = parseInt(window.getComputedStyle(element).getPropertyValue('margin-bottom'));
+
+    elementHighlightRef.current(highlight);
   };
 
   return (
     <>
-      <div className={styles.elementHighlight} ref={elementHighlight}></div>
+      <ElementHighlight elementHighlightRef={elementHighlightRef} />
       {getElementTree()}
     </>
+  );
+}
+
+function ElementHighlight({ elementHighlightRef }) {
+  const [highlight, setHighlightState]: any = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+    height: 0,
+  
+    display: 'none',
+
+    paddingTop: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingBottom: 0,
+
+    marginTop: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginBottom: 0,
+  });
+
+  const setHighlight = (style) => {
+    console.log(style);
+    setHighlightState(style);
+  }
+  
+  useEffect(() => {
+    console.log(highlight);
+  }, [highlight]);
+  console.log(highlight);
+
+  useEffect(() => {
+    elementHighlightRef.current = setHighlight
+  }, []);
+
+  return (
+    <div className={styles.elementHighlight} style={{
+      "top": highlight.top + highlight.paddingTop, 
+      "left": highlight.left + highlight.paddingLeft, 
+      "width": highlight.width - highlight.paddingLeft - highlight.paddingRight,
+      "height": highlight.height - highlight.paddingTop - highlight.paddingBottom,
+      "display": highlight.display
+    }}>
+      {/* Left */}
+      <div className={styles.elementHighlightMargin} style={{
+        "top": highlight.top - highlight.marginTop,
+        "left": highlight.left - highlight.marginLeft,
+        "width": highlight.marginLeft,
+        "height": highlight.height + highlight.marginTop + highlight.marginBottom
+      }}></div>
+      {/* Right */}
+      <div className={styles.elementHighlightMargin} style={{
+        "top": highlight.top - highlight.marginTop,
+        "left": highlight.left + highlight.width,
+        "width": highlight.marginRight,
+        "height": highlight.height + highlight.marginTop + highlight.marginBottom
+      }}></div>
+      {/* Top */}
+      <div className={styles.elementHighlightMargin} style={{
+        "top": highlight.top - highlight.marginTop,
+        "left": highlight.left,
+        "width": highlight.width,
+        "height": highlight.marginTop
+      }}></div>
+      {/* Bottom */}
+      <div className={styles.elementHighlightMargin} style={{
+        "top": highlight.top + highlight.height,
+        "left": highlight.left,
+        "width": highlight.width,
+        "height": highlight.marginBottom
+      }}></div>
+
+      {/* Padding */}
+      {/* Left */}
+      <div className={styles.elementHighlightPadding} style={{
+        "top": highlight.top + highlight.paddingTop,
+        "left": highlight.left,
+        "width": highlight.paddingLeft,
+        "height": highlight.height - highlight.paddingTop - highlight.paddingBottom
+      }}></div>
+      {/* Right */}
+      <div className={styles.elementHighlightPadding} style={{
+        "top": highlight.top + highlight.paddingTop,
+        "left": highlight.left + highlight.width - highlight.paddingRight,
+        "width": highlight.paddingRight,
+        "height": highlight.height - highlight.paddingTop - highlight.paddingBottom
+      }}></div>
+      {/* Top */}
+      <div className={styles.elementHighlightPadding} style={{
+        "top": highlight.top,
+        "left": highlight.left,
+        "width": highlight.width,
+        "height": highlight.paddingTop
+      }}></div>
+      {/* Bottom */}
+      <div className={styles.elementHighlightPadding} style={{
+        "top": highlight.top + highlight.height - highlight.paddingBottom,
+        "left": highlight.left,
+        "width": highlight.width,
+        "height": highlight.paddingBottom
+      }}></div>
+    </div>
   );
 }
 

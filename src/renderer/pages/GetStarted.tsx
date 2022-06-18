@@ -77,7 +77,7 @@ function ChooseTemplate(props) {
             <div className={styles.templates}>
                 <div className={styles.template} onClick={() => SetTemplate("Basic")}>
                     <div className={styles.templateimage}>
-                        <img src='../assets/templates/basic.png' alt='Basic'/>
+                        <img src='./assets/templates/basic.png' alt='Basic'/>
                     </div>
                     <div className={styles.templatename}>
                         <h1>Basic</h1>
@@ -86,7 +86,7 @@ function ChooseTemplate(props) {
                 </div>
                 <div className={styles.template} onClick={() => SetTemplate("Blog")}>
                     <div className={styles.templateimage}>
-                        <img src='../assets/templates/blog.png' alt='Blog'/>
+                        <img src='./assets/templates/blog.png' alt='Blog'/>
                     </div>
                     <div className={styles.templatename}>
                         <h1>Blog</h1>
@@ -95,7 +95,7 @@ function ChooseTemplate(props) {
                 </div>
                 <div className={styles.template} onClick={() => SetTemplate("Portfolio")}>
                     <div className={styles.templateimage}>
-                        <img src='../assets/templates/portfolio.png' alt='Portfolio'/>
+                        <img src='./assets/templates/portfolio.png' alt='Portfolio'/>
                     </div>
                     <div className={styles.templatename}>
                         <h1>Portfolio</h1>
@@ -104,7 +104,7 @@ function ChooseTemplate(props) {
                 </div>
                 <div className={styles.template} onClick={() => SetTemplate("Website")}>
                     <div className={styles.templateimage}>
-                        <img src='../assets/templates/website.png' alt='Website'/>
+                        <img src='./assets/templates/website.png' alt='Website'/>
                     </div>
                     <div className={styles.templatename}>
                         <h1>Website</h1>
@@ -113,7 +113,7 @@ function ChooseTemplate(props) {
                 </div>
                 <div className={styles.template} onClick={() => SetTemplate("NoTemplate")}>
                     <div className={styles.templateimage}>
-                        <img src='../assets/templates/notemplate.png' alt='No template'/>
+                        <img src='./assets/templates/notemplate.png' alt='No template'/>
                     </div>
                     <div className={styles.templatename}>
                         <h1>No template</h1>

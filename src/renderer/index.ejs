@@ -13,5 +13,12 @@
         <h1>Loading...</h1>
       </main>
     </div>
+    <script>
+      if(process.env.NODE_ENV === 'development') {
+        require('./src/public/menu.js');
+      } else {
+        require('./menu.js');
+      }
+    </script>
   </body>
 </html>

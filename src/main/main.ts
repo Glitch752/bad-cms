@@ -285,6 +285,13 @@ ipc.on('editorPopOut', (event, args) => {
 
   let newWin = popoutWindiows[newWinIndex].window;
 
+  newWin.on('maximize', () => {
+    newWin.webContents.send('maximized');
+  });
+  newWin.on('unmaximize', () => {
+    newWin.webContents.send('unmaximized');
+  });
+
   newWin.loadURL(`${resolveHtmlPath("index.html")}#/editorPopout/${args.id}/${args.file}`);
 
   remoteMain.enable(newWin.webContents)
@@ -335,6 +342,24 @@ ipc.on('deleteProject', (event, args) => {
     event.sender.send('deleteProjectReply', "Folder does not exist. This is likely due to an error in the project creation process.");
   }
 });
+
+ipc.on('minimizeWindow', (event, args) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  window.minimize();
+});
+ipc.on('maximizeWindow', (event, args) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  window.maximize();
+});
+ipc.on('unmaximizeWindow', (event, args) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  window.unmaximize();
+});
+ipc.on('closeWindow', (event, args) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  window.close();
+});
+
 
 const getFilesFromDirectory = function(dirPath, arrayOfFiles = []) {
   var files = fs.readdirSync(dirPath)
@@ -406,6 +431,13 @@ const createWindow = async () => {
       //   : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
     frame: false,
+  });
+
+  mainWindow.on('maximize', () => {
+    mainWindow.webContents.send('maximized');
+  });
+  mainWindow.on('unmaximize', () => {
+    mainWindow.webContents.send('unmaximized');
   });
   
   remoteMain.enable(mainWindow.webContents);

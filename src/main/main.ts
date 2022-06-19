@@ -45,15 +45,18 @@ ipc.on('CreateProject', (event, args) => {
   } else {
     const app = require('electron').app;
 
-    var templatePath = path.join(app.getAppPath(), "/templates", args.template);
+    if(process.env.NODE_ENV === 'development') {
+      var templatePath = path.join(app.getAppPath(), "/templates", args.template);
+    } else {
+      var templatePath = path.join(app.getAppPath(), "/dist/templates", args.template);
+    }
 
     var ncp = require('ncp').ncp;
-    fs.mkdirSync(projectPath, { recursive: true })
+    fs.mkdirSync(projectPath, { recursive: true });
 
-    ncp(templatePath, projectPath, 
-    function (err) {
+    ncp(templatePath, projectPath, function (err) {
       if (err) {
-          console.log('ncp error');
+          console.log(err);
           return console.error(err);
       }
   
@@ -62,6 +65,7 @@ ipc.on('CreateProject', (event, args) => {
         const file = files[i];
         const extnames = [".html", ".js", ".css"];
         if(extnames.includes(path.extname(file))) {
+          fs.chmodSync(file, 0o777);
           const template = Handlebars.compile(fs.readFileSync(file, 'utf8'));
           var saveText = template({ 
             name: args.name,

@@ -17,7 +17,10 @@ export default function Template() {
     ipc.send('CreateProject', {name: projectName, icon: projectIcon, template: type});
 
     ipc.once('CreateProjectReply', (event, args) => {
-        if(args == false) navigate("/GetStarted");
+        if(args == false) {
+            navigate("/GetStarted");
+            return;
+        }
         var currentProjects: any = store.get('projects', []);
         currentProjects.push({
             name: location.state.name,

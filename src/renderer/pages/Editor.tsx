@@ -254,11 +254,15 @@ export default function Editor(props) {
                   elementsTab: {
                     target: '.elementsTab',
                   },
+                  JSNodesTab: {
+                    target: '.JSNodesTab',
+                  }
                 },
                 states: {
                   selectionTab: {},
                   creatorTab: {},
                   elementsTab: {},
+                  JSNodesTab: {},
                 },
               },
               image: {},

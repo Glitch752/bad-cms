@@ -462,3 +462,18 @@
 .creatorElementSectionListItem:hover .creatorElementSectionListItemValue {
   border-color: #0c151b;
 }
+
+.JSNodesContainer {
+  height: calc(100vh - var(--titlebar-height) - 48px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #10191f;
+}
+.JSNodesNode {
+  margin: 10px;
+  background-color: #0c151b;
+  padding: 10px;
+  position: relative;
+}

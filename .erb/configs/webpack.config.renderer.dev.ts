@@ -149,6 +149,10 @@ const configuration: webpack.Configuration = {
           from: path.join(webpackPaths.srcPath, 'public'),
           to: path.join(webpackPaths.distRendererPath),
         },
+        {
+          from: path.join(webpackPaths.srcMainPath, 'templates'),
+          to: path.join(webpackPaths.distPath, 'templates'),
+        }
       ]
     }),
   ],

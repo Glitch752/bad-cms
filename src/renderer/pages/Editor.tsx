@@ -540,10 +540,17 @@ export default function Editor(props) {
       window.frames['editorFrame'].document.getElementsByTagName('head')[0];
     var myscript = document.createElement('script');
     myscript.type = 'text/javascript';
-    myscript.src = path.join(
-      args,
-      '../renderer/pages/editorLayoutInjectScript.js'
-    );
+    if(process.env.NODE_ENV === "development") {
+      myscript.src = path.join(
+        args,
+        '../renderer/editorLayoutInjectScript.js'
+      );
+    } else {
+      myscript.src = path.join(
+        args,
+        './dist/renderer/editorLayoutInjectScript.js'
+      );
+    }
     iFrameHead.appendChild(myscript);
   });
 

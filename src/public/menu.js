@@ -7,8 +7,6 @@ const ipc = require('electron').ipcRenderer;
 // When document has loaded, initialise
 waitForWindowControls();
 
-console.log('menu.js loaded');
-
 window.onbeforeunload = (event) => {
     /* If window is reloaded, remove win event listeners
     (DOM element listeners get auto garbage collected but not
@@ -28,22 +26,18 @@ function waitForWindowControls() {
 function handleWindowControls() {
     // Make minimise/maximise/restore/close buttons work when they are clicked
     document.getElementById('min-button').addEventListener("click", event => {
-        // win.minimize();
         ipc.send('minimizeWindow');
     });
 
     document.getElementById('max-button').addEventListener("click", event => {
-        // win.maximize();
         ipc.send('maximizeWindow');
     });
 
     document.getElementById('restore-button').addEventListener("click", event => {
-        // win.unmaximize();
         ipc.send('unmaximizeWindow');
     });
 
     document.getElementById('close-button').addEventListener("click", event => {
-        // win.close();
         ipc.send('closeWindow');
         ipc.send('windowClosedRenderer', window.location.href);
     });

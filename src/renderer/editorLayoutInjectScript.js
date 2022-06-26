@@ -9,7 +9,8 @@ document.querySelectorAll("*").forEach(function (element) {
             parent.postMessage(JSON.stringify({
                 "type": "clickedElement", 
                 "classList": [...element.classList],
-                "styles": getCssRules(element)
+                "styles": getCssRules(element),
+                "properties": getProperties(element),
             }), "*");
             element.classList.add(clickedClassRandom);
             setTimeout(() => {
@@ -33,6 +34,11 @@ window.addEventListener("message", function (event) {
         });
     } else if(parsedData.type === "reloadCss") {
         reloadCss();
+    } else if(parsedData.type === "changeProperty") {
+        document.querySelectorAll(`.${clickedClassRandom}`).forEach(function (element) {
+            element.setAttribute(parsedData.property, parsedData.value);
+            sendSiteHTML();
+        });
     }
 });
 
@@ -42,6 +48,19 @@ window.addEventListener("scroll", function (event) {
         "scroll": window.scrollY
     }), "*");
 });
+
+function getProperties(element) {
+    const properties = [];
+    for (let i = 0; i < element.attributes.length; i++) {
+        const attribute = element.attributes[i];
+        if(attribute.name === "class") continue
+        properties.push({
+            "name": attribute.name,
+            "value": attribute.value
+        });
+    }
+    return properties;
+}
 
 function getCssRules(element) {
     const allCSS = [...document.styleSheets].map(styleSheet => {
@@ -107,13 +126,13 @@ function sendSiteHTML() {
     // Remove the editorLayoutInjectScript from the siteHTML, AKA remove any script with editorLayoutInjectScript as a part of its src
     siteHTML = siteHTML.replace(/<script.*editorLayoutInjectScript.js.*<\/script>/g, "");
 
-    // Remove all clicked__2zZxPmy5ml classes from the siteHTML
-    siteHTML = siteHTML.replace(/clicked__2zZxPmy5ml/g, "");
+    // Remove all {clickedClassRandom} classes from the siteHTML
+    let replaceRegex = new RegExp(`\\b${clickedClassRandom}\\b`, "g");
+    siteHTML = siteHTML.replace(replaceRegex, "");
 
     parent.postMessage(JSON.stringify({
         "type": "siteHTML", 
         "html": siteHTML,
-        "currentPage": window.location.href
     }), "*");
 }
 

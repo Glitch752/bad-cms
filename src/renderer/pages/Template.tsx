@@ -2,6 +2,8 @@ import React, { useLayoutEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import path from 'path';
 
+import localization, { templatePage as thislocalization } from "../localization/en/localization.json";
+
 import { store } from '../store';
 
 const ipc = require('electron').ipcRenderer;
@@ -33,7 +35,7 @@ export default function Template() {
 
     return (
         <main>
-            <h1>Creating project...</h1>
+            <h1>{thislocalization.creatingProject}</h1>
         </main>
     );
 }

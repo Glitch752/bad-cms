@@ -18,6 +18,8 @@ import { useRef } from 'react';
 
 const ipc = require('electron').ipcRenderer;
 
+import localization, { paneSelectorComponent as thislocalization } from "../localization/en/localization.json";
+
 function PaneSelector(props) {
     // TODO: refactor so more of the relevant code is in the components
 
@@ -45,10 +47,10 @@ function PaneSelector(props) {
 
     let tabSelector = editorTab === -2 ? 
       <div key="tabs" className={styles.tabSelector}>
-        <div className={styles.tabSelectorItem + " " + tabsTabSelected} onClick={() => send("selectionTab")}>Tabs</div>
-        <div className={styles.tabSelectorItem + " " + siteTabSelected} onClick={() => send("creatorTab")}>Site creator</div>
-        <div className={styles.tabSelectorItem + " " + elementsTabSelected} onClick={() => send("elementsTab")}>Elements</div>
-        <div className={styles.tabSelectorItem + " " + JSNodesTabSelected} onClick={() => send("JSNodesTab")}>Javascript nodes</div>
+        <div className={styles.tabSelectorItem + " " + tabsTabSelected} onClick={() => send("selectionTab")}>{thislocalization.tabs}</div>
+        <div className={styles.tabSelectorItem + " " + siteTabSelected} onClick={() => send("creatorTab")}>{thislocalization.propertyManagement}</div>
+        <div className={styles.tabSelectorItem + " " + elementsTabSelected} onClick={() => send("elementsTab")}>{thislocalization.elements}</div>
+        <div className={styles.tabSelectorItem + " " + JSNodesTabSelected} onClick={() => send("JSNodesTab")}>{thislocalization.javascriptNodes}</div>
       </div>
     : null;
 
@@ -70,11 +72,11 @@ function PaneSelector(props) {
       tabSelector,
       <div key="settings" className={styles.editorSelection + " " + settingsSelected} onClick={() => selectTab(-1)}>
         <i className={"fas fa-gear " + styles.editorSelectionIcon}></i>
-        Settings
+        {thislocalization.settings}
       </div>,
       <div key="layout" className={styles.editorSelection + " " + layoutEditorSelected} onClick={() => selectTab(-2)}>
         <i className={"fas fa-table " + styles.editorSelectionIcon}></i>
-        Layout editor
+        {thislocalization.layoutEditor}
       </div>,
       <div key="buttons" className={styles.editorSelectionTitle}>
         <div className={styles.editorSelectionTitleText}>Files</div>
@@ -160,20 +162,20 @@ function PaneSelector(props) {
               <MenuHeader>{editorTabs[i].name}</MenuHeader>
               <MenuItem onClick={e => {
                 send("deleteTab", { tab: editorTabs[i] });
-              }}>Delete file</MenuItem>
+              }}>{thislocalization.deleteFile}</MenuItem>
               <MenuItem disabled={state.context.renamingTab !== false} onClick={e => {
                 send("setRenameTab", { tab: i });
-              }}>Rename file</MenuItem>
+              }}>{thislocalization.renameFile}</MenuItem>
               <MenuItem disabled={!editorTabs[i].unsaved} onClick={e => {
                 saveTab(i);
-              }}>Save file</MenuItem>
+              }}>{thislocalization.saveFile}</MenuItem>
               <MenuItem onClick={e => {
                 ipc.send("openInExplorer", editorTabs[i].path);
-              }}>Open in file explorer</MenuItem>
+              }}>{thislocalization.openFileExplorer}</MenuItem>
               <MenuDivider />
               <MenuItem disabled={editorTabs[i].window !== false} onClick={e => {
                 popOut(i);
-              }}>Open in popout window</MenuItem>
+              }}>{thislocalization.openInPopout}</MenuItem>
             </>
           }>
             {/* @ts-ignore */}
@@ -232,14 +234,14 @@ function PaneSelector(props) {
               <MenuHeader>{editorFolders[i].name}</MenuHeader>
               <MenuItem onClick={e => {
                 send("deleteFolder", { folder: editorFolders[i].path });
-              }}>Delete folder</MenuItem>
+              }}>{thislocalization.deleteFolder}</MenuItem>
               <MenuItem disabled={state.context.renamingFolder !== false} onClick={e => {
                 send("setRenameFolder", { folder: i });
-              }}>Rename folder</MenuItem>
+              }}>{thislocalization.renameFolder}</MenuItem>
               <MenuDivider />
               <MenuItem onClick={e => {
                 ipc.send("openInExplorer", editorFolders[i].path);
-              }}>Open in file explorer</MenuItem>
+              }}>{thislocalization.openFileExplorer}</MenuItem>
             </>
           }>
             {/* @ts-ignore */}
@@ -262,22 +264,22 @@ function PaneSelector(props) {
 
     const fileNameValid = (name: string) => {
       if((name.lastIndexOf(".") !== -1 && name.substring(0, name.lastIndexOf(".")).length < 1) || name.length < 1) {
-        return "File must have a name";
+        return thislocalization.fileNeedsName;
       }
 
       if(name.substring(name.lastIndexOf(".") + 1, name.length).length < 1) {
-        return "Extension must not be empty";
+        return thislocalization.fileNeedsExtension;
       }
       
       if(name.length > 100) {
-        return "File name must be 100 characters or less";
+        return thislocalization.fileNameTooLong;
       }
 
       let invalidCharacters = ["/", "\\", ":", "*", "?", "\"", "<", ">", "|"];
 
       for(let i = 0; i < invalidCharacters.length; i++) {
         if(name.indexOf(invalidCharacters[i]) !== -1) {
-          return "File name cannot contain the chataracter \"" + invalidCharacters[i] + "\"";
+          return `${thislocalization.invalidFileCharacter} "${invalidCharacters[i]}"`;
         }
       }
 
@@ -286,18 +288,18 @@ function PaneSelector(props) {
 
     const folderNameValid = (name: string) => {
       if(name.length < 1) {
-        return "Folder must have a name";
+        return thislocalization.folderNeedsName;
       }
 
       if(name.length > 100) {
-        return "Folder name must be 100 characters or less";
+        return thislocalization.folderNameTooLong;
       }
 
       let invalidCharacters = ["/", "\\", ":", "*", "?", "\"", "<", ">", "|"];
 
       for(let i = 0; i < invalidCharacters.length; i++) {
         if(name.indexOf(invalidCharacters[i]) !== -1) {
-          return "Folder name cannot contain the chataracter \"" + invalidCharacters[i] + "\"";
+          return `${thislocalization.invalidFolderCharacter} "${invalidCharacters[i]}"`;
         }
       }
 
@@ -314,7 +316,7 @@ function PaneSelector(props) {
         // @ts-ignore
         <div key="adding" className={styles.editorSelection} style={{"--indent": state.context.selectedFolder === false ? 0 : state.context.editorFolders[state.context.selectedFolder].indent + 1}}>
           <i className={"fas fa-plus " + styles.editorSelectionIcon}></i>
-          <input type="text" placeholder="file name..." className={styles.editorSelectionInput} onChange={(event) => {
+          <input type="text" placeholder={thislocalization.fileName} className={styles.editorSelectionInput} onChange={(event) => {
             let name = event.target.value;
             let validation = fileNameValid(name);
 
@@ -388,7 +390,7 @@ function PaneSelector(props) {
         // @ts-ignore
         <div key="addingFolder" className={styles.editorSelection} style={{"--indent": state.context.selectedFolder === false ? 0 : state.context.editorFolders[state.context.selectedFolder].indent + 1}}>
           <i className={"fas fa-plus " + styles.editorSelectionIcon}></i>
-          <input type="text" placeholder="folder name..." className={styles.editorSelectionInput} onChange={(event) => {
+          <input type="text" placeholder={thislocalization.folderName} className={styles.editorSelectionInput} onChange={(event) => {
             let name = event.target.value;
             let validation = folderNameValid(name);
 

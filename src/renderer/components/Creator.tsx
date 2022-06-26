@@ -5,6 +5,8 @@ import { useMachine } from '@xstate/react';
 import path from 'path';
 
 import CodeEditor from "react-monaco-editor";
+import { store } from '../store';
+import { useParams } from 'react-router-dom';
 
 const ipc = require('electron').ipcRenderer;
 
@@ -30,6 +32,9 @@ function Creator(props) {
       editing: {},
     },
   });
+  
+  const projects = store.get('projects', false);
+  let { id } = useParams();
 
   const [state, send, service] = useMachine(creatorMachine);
 
@@ -58,6 +63,7 @@ function Creator(props) {
         files: Array.from(cssFiles),
         projectPath: props.project.directory,
       });
+
       send('click', {
         editorContent: [
           {
@@ -69,10 +75,14 @@ function Creator(props) {
             type: 'stylesPlaceholder',
             styles: parsedData.styles,
           },
+          {
+            type: 'properties',
+            properties: parsedData.properties
+          }
         ],
       });
     } else if (parsedData.type === 'siteHTML') {
-      let url = parsedData.currentPage;
+      let url = path.join(projects[id].directory, 'index.html');
       if (url.startsWith('file:///')) {
         url = url.substring(8);
       }
@@ -168,6 +178,10 @@ function Creator(props) {
           type: 'styles',
           styles: newStyleAttr,
         },
+        {
+          type: 'properties',
+          properties: state.context.editorContent[2].properties,
+        }
       ],
     });
   });
@@ -369,6 +383,42 @@ function Creator(props) {
             </div>
           </div>
         );
+      } else if (element.type === 'properties') {
+        creatorElement.push(
+          <div key={i} className={styles.creatorElementSection}>
+            <div className={styles.creatorElementSectionName}>Properties</div>
+            <div className={styles.creatorElementSectionList}>
+              {element.properties.map((property, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={styles.creatorElementSectionListItem}
+                  >
+                    <span className={styles.creatorElementSectionListItemName}>
+                      {property.name}
+                    </span>
+                    <input className={styles.creatorElementSectionListItemValue} type="text" defaultValue={property.value} onBlur={(event) => {
+                      let editorContent = state.context.editorContent;
+                      editorContent[2].properties[index].value = event.target.value;
+                      send('click', {
+                        editorContent: editorContent,
+                      });
+                      window.frames['editorFrame'].postMessage(
+                        JSON.stringify({
+                          type: 'changeProperty',
+                          property: property.name,
+                          value: event.target.value,
+                        }),
+                        '*'
+                      );
+                      sendRefreshPage();
+                    }}></input>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )
       } else if (element.type === 'styles') {
         let oldCssFile = '';
         creatorElement.push(

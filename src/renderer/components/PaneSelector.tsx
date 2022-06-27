@@ -7,8 +7,10 @@ import {
   MenuHeader
 } from '@szhsin/react-menu';
 
-import Creator from '../components/creator';
-import Elements from '../components/elements';
+import Creator from './creator';
+import Elements from './elements';
+import JSNodes from './JSNodes';
+
 import { store } from 'renderer/store';
 import { useParams } from 'react-router-dom';
 import path from 'path';
@@ -39,12 +41,14 @@ function PaneSelector(props) {
     const tabsTabSelected = state.matches({ editor: { editor: { layout: "selectionTab" } } }) ? styles.selectedTabSelectorItem : "";
     const siteTabSelected = state.matches({ editor: { editor: { layout: "creatorTab" } } }) ? styles.selectedTabSelectorItem : "";
     const elementsTabSelected = state.matches({ editor: { editor: { layout: "elementsTab" } } }) ? styles.selectedTabSelectorItem : "";
+    const JSNodesTabSelected = state.matches({ editor: { editor: { layout: "JSNodesTab" } } }) ? styles.selectedTabSelectorItem : "";
 
     let tabSelector = editorTab === -2 ? 
       <div key="tabs" className={styles.tabSelector}>
         <div className={styles.tabSelectorItem + " " + tabsTabSelected} onClick={() => send("selectionTab")}>Tabs</div>
         <div className={styles.tabSelectorItem + " " + siteTabSelected} onClick={() => send("creatorTab")}>Site creator</div>
         <div className={styles.tabSelectorItem + " " + elementsTabSelected} onClick={() => send("elementsTab")}>Elements</div>
+        <div className={styles.tabSelectorItem + " " + JSNodesTabSelected} onClick={() => send("JSNodesTab")}>Javascript nodes</div>
       </div>
     : null;
 
@@ -453,6 +457,11 @@ function PaneSelector(props) {
       selectionPane = [
         tabSelector,
         <Elements key="elements" />
+      ]
+    } else if(state.matches({ editor: { editor: { layout: "JSNodesTab" } } })) {
+      selectionPane = [
+        tabSelector,
+        <JSNodes key="jsnodes" />
       ]
     }
 

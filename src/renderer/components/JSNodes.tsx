@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Script } from "vm";
 import styles from "../pages/Editor.module.css";
 
+const acorn = require("acorn");
+
 function JSNodes() {
     const [selectedScript, setSelectedScript] = useState(0);
     
@@ -27,22 +29,12 @@ function JSNodes() {
                     file: "index.html"
                 });
             }
-    
-            let code = scriptContent[scriptContent.length - 1].code;
-            // Remove all comments
-            code = code.replace(/\/\*[\s\S]*?\*\//g, "");
-            code = code.replace(/\/\/.*/g, "");
-            // Remove all unnecessary whitespace
-            code = code.replace(/\s+/g, " ");
-            // Remove all newlines
-            code = code.replace(/\n/g, "");
-            // Trim
-            code = code.trim();
-            scriptContent[scriptContent.length - 1].code = code;
         }
     
         return scriptContent;
     }
+
+    console.log(acorn.parse(getContentOfScripts()[selectedScript].code, {ecmaVersion: "latest"}));
 
     return (
         <div className={styles.JSNodesContainer}>
@@ -66,19 +58,42 @@ function JSNodes() {
                     </div>
                 </> : <div className={styles.JSNodesDropdownItem}>No scripts found</div>
             }
-            {
-                getContentOfScripts().length > 0 && getContentOfScripts()[selectedScript].code.split(";").map((code, index) => {
-                    return (
-                        <div key={index} className={styles.JSNodesNode}>
-                            <div className={styles.JSNodesNodeCode}>
-                                {code}
-                            </div>
-                        </div>
-                    );
-                })
-            }
+            <NodeEditor scripts={getContentOfScripts()} selectedScript={selectedScript} />
         </div>
     );
+}
+
+function NodeEditor(props) {
+    const {scripts, selectedScript} = props;
+    return (
+        scripts.length > 0 && acorn.parse(scripts[selectedScript].code, {ecmaVersion: "latest"}).body.map((code, index) => {
+            return (
+                <div key={index} className={styles.JSNodesNode} style={{"left": Math.random() * 100 + "%", "top": Math.random() * 100 + "%"}}>
+                    <div className={styles.JSNodesNodeTitle}>
+                        {code.type}
+                    </div>
+                    <div className={styles.JSNodesNodeContent}>
+                        Content<br />
+                        And stuff<br />
+                        And things<br />
+                        And stuff<br />
+                        And things<br />
+                        <div className={styles.JSNodesNodeInputs}>
+                            <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputBlue}`} />
+                            <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputGreen}`} />
+                            <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputBlue}`} />
+                            <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputGreen}`} />
+                        </div>
+                        <div className={styles.JSNodesNodeOutputs}>
+                            <div className={`${styles.JSNodesNodeOutput} ${styles.JSNodeOutputRed}`} />
+                            <div className={`${styles.JSNodesNodeOutput} ${styles.JSNodeOutputOrange}`} />
+                            <div className={`${styles.JSNodesNodeOutput} ${styles.JSNodeOutputRed}`} />
+                        </div>
+                    </div>
+                </div>
+            );
+        })
+    )
 }
 
 export default JSNodes;

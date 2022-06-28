@@ -1,6 +1,10 @@
+import { useState } from "react";
+import { Script } from "vm";
 import styles from "../pages/Editor.module.css";
 
 function JSNodes() {
+    const [selectedScript, setSelectedScript] = useState(0);
+    
     function getContentOfScripts() {
         let scripts = window.frames['editorFrame'].document.scripts;
         let scriptContent = [];
@@ -43,16 +47,31 @@ function JSNodes() {
     return (
         <div className={styles.JSNodesContainer}>
             {
-                getContentOfScripts().map((script, index) => {
+                getContentOfScripts().length > 0 ? <>
+                    <div className={styles.JSNodesDropdown}>
+                        {
+                            // Make it so that the selected script is the first one
+                            getContentOfScripts()
+                                .map((script, index) => {return {...script, originalIndex: index}})
+                                .sort((a, b) =>  a.originalIndex === selectedScript ? -1 : 1)
+                                .map((script, index) => {
+                                    return (
+                                        <div className={styles.JSNodesDropdownItem} key={index} onClick={() => setSelectedScript(script.originalIndex)}>
+                                            {script.file}
+                                        </div>
+                                    )
+                            })
+                        }
+                        <i className={`fa-solid fa-caret-down ${styles.JSNodesDropdownIcon}`}></i>
+                    </div>
+                </> : <div className={styles.JSNodesDropdownItem}>No scripts found</div>
+            }
+            {
+                getContentOfScripts().length > 0 && getContentOfScripts()[selectedScript].code.split(";").map((code, index) => {
                     return (
                         <div key={index} className={styles.JSNodesNode}>
-                            <div className={styles.JSNodesNodeeader}>
-                                <div className={styles.JSNodesNodeHeaderText}>
-                                    {script.file}
-                                </div>
-                            </div>
                             <div className={styles.JSNodesNodeCode}>
-                                {script.code}
+                                {code}
                             </div>
                         </div>
                     );

@@ -4,6 +4,8 @@ import styles from "../pages/Editor.module.css";
 
 const acorn = require("acorn");
 
+import localization, { JSNodesComponent as thislocalization } from "../localization/en/localization.json";
+
 function JSNodes() {
     const [selectedScript, setSelectedScript] = useState(0);
     

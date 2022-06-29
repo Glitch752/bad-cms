@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './NotFound.module.css';
 
+import localization, { notFoundPage as thislocalization } from "../localization/en/localization.json";
 
 export default function NotFound(props) {
     const navigate = useNavigate();
@@ -13,9 +14,9 @@ export default function NotFound(props) {
     return (
         <main>
             <h1>404</h1>
-            <p>Couldn't find the page you're looking for!</p>
-            <p>Page: {window.location.href.substring(window.location.href.indexOf('#') + 1)}</p>
-            <button className={styles.goHome} onClick={NavigateTo}>Go back home</button>
+            <p>{thislocalization.couldNotFindPage}</p>
+            <p>{thislocalization.page} {window.location.href.substring(window.location.href.indexOf('#') + 1)}</p>
+            <button className={styles.goHome} onClick={NavigateTo}>{thislocalization.goBackHome}</button>
         </main>
     );
 }

@@ -10,6 +10,8 @@ import { useParams } from 'react-router-dom';
 
 const ipc = require('electron').ipcRenderer;
 
+import localization, { creatorComponent as thislocalization } from "../localization/en/localization.json";
+
 function Creator(props) {
   let creatorMachine = createMachine({
     id: 'creator',
@@ -323,9 +325,7 @@ function Creator(props) {
   });
 
   let creatorElement = [
-    <div key="clickElement" className={styles.creatorElementSection}>
-      Click on an element to change it.
-    </div>,
+    <div key="clickElement" className={styles.creatorElementSection}>{thislocalization.clickElement}</div>,
   ];
 
   if (state.matches('editing')) {
@@ -335,7 +335,7 @@ function Creator(props) {
       if (element.type === 'classList') {
         creatorElement.push(
           <div key={i} className={styles.creatorElementSection}>
-            <div className={styles.creatorElementSectionName}>Class list</div>
+            <div className={styles.creatorElementSectionName}>{thislocalization.classList}</div>
             <i
               className={'fas fa-plus ' + styles.creatorElementSectionIcon}
               onClick={() => {
@@ -373,7 +373,7 @@ function Creator(props) {
                   <input
                     className={styles.creatorElementSectionListItemName}
                     type="text"
-                    placeholder="Class name"
+                    placeholder={thislocalization.className}
                     onBlur={(event) => {
                       addedClass(event.target.value);
                     }}
@@ -386,7 +386,7 @@ function Creator(props) {
       } else if (element.type === 'properties') {
         creatorElement.push(
           <div key={i} className={styles.creatorElementSection}>
-            <div className={styles.creatorElementSectionName}>Properties</div>
+            <div className={styles.creatorElementSectionName}>{thislocalization.properties}</div>
             <div className={styles.creatorElementSectionList}>
               {element.properties.map((property, index) => {
                 return (
@@ -423,7 +423,7 @@ function Creator(props) {
         let oldCssFile = '';
         creatorElement.push(
           <div key={i} className={styles.creatorElementSection}>
-            <div className={styles.creatorElementSectionName}>Styles</div>
+            <div className={styles.creatorElementSectionName}>{thislocalization.styles}</div>
             {element.styles.map((style, index) => {
               let oldOldCssFile = oldCssFile;
               oldCssFile = style.shortCssFile;

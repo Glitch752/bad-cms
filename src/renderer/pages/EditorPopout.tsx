@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './EditorPopout.module.css';
+import localization, { editorPopoutPage as thislocalization } from "../localization/en/localization.json";
 
 import CodeEditor from "react-monaco-editor";
 
@@ -15,7 +16,7 @@ export default function Editor(props) {
     let { file, id } = useParams();
 
     //Probably a way to optimize this as well
-    let [editorCode, setEditorCode] = React.useState("Loading editor...");
+    let [editorCode, setEditorCode] = React.useState(thislocalization.loadingEditor);
     let [editorLanguage, setEditorLanguage] = React.useState("");
     let [unsaved, setUnsaved] = React.useState(false);
 
@@ -44,7 +45,7 @@ export default function Editor(props) {
 
     props.settitle([
       <span key="left" className="leftText">Bad CMS for Devs</span>,
-      <span key="center" className="centerText">Editing {file.substring(projects[id].directory.length)}
+      <span key="center" className="centerText">{thislocalization.editing} {file.substring(projects[id].directory.length)}
         {unsaved ? <i className={"fas fa-circle " + styles.unsavedIcon}></i> : ""}
       </span>,
       <span key="right" className="rightText"></span>

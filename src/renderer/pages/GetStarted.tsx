@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './GetStarted.module.css';
 
 import { icons } from '../icons.js';
+import localization, { getStartedPage as thislocalization } from "../localization/en/localization.json";
 
 export default function GetStarted() {
     const navigate = useNavigate();
@@ -57,9 +58,9 @@ function ChooseData(props) {
     return (
         <main>
             <i className={"fa-solid fa-arrow-left " + styles.leaveIcon} onClick={() => goBack()}></i>
-            <h1>Project name</h1>
-            <input id="shakeName" onChange={NameChange} className={styles.name} type="text" placeholder="Project name" />
-            <h1>Project icon</h1>
+            <h1>{thislocalization.projectName}</h1>
+            <input id="shakeName" onChange={NameChange} className={styles.name} type="text" placeholder={thislocalization.projectName} />
+            <h1>{thislocalization.projectIcon}</h1>
             <div className={styles.icons}>
                 { iconCode }
             </div>
@@ -80,8 +81,8 @@ function ChooseTemplate(props) {
                         <img src='./assets/templates/basic.png' alt='Basic'/>
                     </div>
                     <div className={styles.templatename}>
-                        <h1>Basic</h1>
-                        <p>A basic template with a single page.</p>
+                        <h1>{thislocalization.templates.templateBasic.name}</h1>
+                        <p>{thislocalization.templates.templateBasic.description}</p>
                     </div>
                 </div>
                 <div className={styles.template} onClick={() => SetTemplate("Blog")}>
@@ -89,8 +90,8 @@ function ChooseTemplate(props) {
                         <img src='./assets/templates/blog.png' alt='Blog'/>
                     </div>
                     <div className={styles.templatename}>
-                        <h1>Blog</h1>
-                        <p>A template for a blog.</p>
+                        <h1>{thislocalization.templates.templateBlog.name}</h1>
+                        <p>{thislocalization.templates.templateBlog.description}</p>
                     </div>
                 </div>
                 <div className={styles.template} onClick={() => SetTemplate("Portfolio")}>
@@ -98,8 +99,8 @@ function ChooseTemplate(props) {
                         <img src='./assets/templates/portfolio.png' alt='Portfolio'/>
                     </div>
                     <div className={styles.templatename}>
-                        <h1>Portfolio</h1>
-                        <p>A template for a portfolio.</p>
+                        <h1>{thislocalization.templates.templatePortfolio.name}</h1>
+                        <p>{thislocalization.templates.templatePortfolio.description}</p>
                     </div>
                 </div>
                 <div className={styles.template} onClick={() => SetTemplate("Website")}>
@@ -107,8 +108,8 @@ function ChooseTemplate(props) {
                         <img src='./assets/templates/website.png' alt='Website'/>
                     </div>
                     <div className={styles.templatename}>
-                        <h1>Website</h1>
-                        <p>A template for a website.</p>
+                        <h1>{thislocalization.templates.templateWebsite.name}</h1>
+                        <p>{thislocalization.templates.templateWebsite.description}</p>
                     </div>
                 </div>
                 <div className={styles.template} onClick={() => SetTemplate("NoTemplate")}>
@@ -116,8 +117,8 @@ function ChooseTemplate(props) {
                         <img src='./assets/templates/notemplate.png' alt='No template'/>
                     </div>
                     <div className={styles.templatename}>
-                        <h1>No template</h1>
-                        <p>No template, start from scratch.</p>
+                        <h1>{thislocalization.templates.templateNoTemplate.name}</h1>
+                        <p>{thislocalization.templates.templateNoTemplate.description}</p>
                     </div>
                 </div>
             </div>

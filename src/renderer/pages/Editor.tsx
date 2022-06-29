@@ -14,6 +14,7 @@ import { store } from '../store';
 import PaneSelector from '../components/PaneSelector';
 
 const ipc = require('electron').ipcRenderer;
+import localization, { editorPage as thislocalization } from "../localization/en/localization.json";
 
 // Editor code (js)
 export default function Editor(props) {
@@ -539,7 +540,6 @@ export default function Editor(props) {
   };
 
   ipc.once('getAppPathReply', (event, args) => {
-    console.log(window.location.href);
     var iFrameHead =
       window.frames['editorFrame'].document.getElementsByTagName('head')[0];
     var myscript = document.createElement('script');
@@ -570,7 +570,7 @@ export default function Editor(props) {
       navigate('/');
     } else {
       navigate('/Error', {
-        state: { error: 'Error deleting project!', errorMessage: args },
+        state: { error: thislocalization.errorDeleting, errorMessage: args },
       });
     }
   });
@@ -583,23 +583,16 @@ export default function Editor(props) {
     const deleteMenu = isDeleting ? (
       <div className={styles.confirmDelete}>
         <div className={styles.confirmDeleteContainer}>
-          <div className={styles.confirmDeleteText}>
-            Are you sure you want to delete this project? This action is
-            irreversible.
-          </div>
+          <div className={styles.confirmDeleteText}>{localization.confirmDelete}</div>
           <div className={styles.confirmDeleteButtons}>
             <button
               className={`${styles.confirmDeleteButton} ${styles.confirmDeleteButtonCancel}`}
               onClick={() => send('closeDelete')}
-            >
-              Cancel
-            </button>
+            >{localization.buttons.cancel}</button>
             <button
               className={styles.confirmDeleteButton}
               onClick={() => deleteProjectConfirm()}
-            >
-              Delete
-            </button>
+            >{localization.buttons.delete}</button>
           </div>
         </div>
       </div>
@@ -609,24 +602,20 @@ export default function Editor(props) {
 
     editingMenu = [
       <div key="settings" className={styles.settingsMenu}>
-        <div className={styles.settingsMenuSeparator}>Misc</div>
+        <div className={styles.settingsMenuSeparator}>{thislocalization.settings.miscellaneous}</div>
         <div className={styles.settingsMenuSection}>
-          Some sort of settings menu idk
+          Some sort of settings menu
         </div>
         <div
           className={`${styles.settingsMenuSeparator} ${styles.settingMenuDanger}`}
-        >
-          DANGER ZONE
-        </div>
+        >{thislocalization.settings.dangerZone}</div>
         <div className={styles.settingsMenuSection}>
           <button
             className={styles.deleteProjectButton}
             onClick={() => {
               send('openDelete');
             }}
-          >
-            Delete Project
-          </button>
+          >{localization.deleteProject}</button>
         </div>
         {deleteMenu}
       </div>,
@@ -670,7 +659,7 @@ export default function Editor(props) {
       {editorName}
     </span>,
     <span key="right" className="rightText">
-      Editing "{projects[id].name}"
+      {localization.editing} "{projects[id].name}"
     </span>,
   ]);
 

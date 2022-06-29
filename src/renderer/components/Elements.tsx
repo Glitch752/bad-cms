@@ -8,7 +8,7 @@ import {
   MenuHeader
 } from '@szhsin/react-menu';
 
-
+import localization, { elementsComponent as thislocalization } from "../localization/en/localization.json";
 
 function Elements() {
   const elementHighlightRef = React.useRef(null);
@@ -246,25 +246,24 @@ function Element(props) {
 
   const contextMenu = (
     <>
-      <MenuHeader>Attributes</MenuHeader>
-      <MenuItem disabled>Add attribute</MenuItem>
-      <MenuItem disabled>Edit attribute</MenuItem>
+      {/* TODO: add features to this menu */}
+      <MenuHeader>{thislocalization.attributes}</MenuHeader>
+      <MenuItem disabled>{thislocalization.addAttribute}</MenuItem>
+      <MenuItem disabled>{thislocalization.editAttribute}</MenuItem>
       <MenuDivider />
-      <MenuHeader>Element</MenuHeader>
-      <MenuItem disabled>Delete element</MenuItem>
-      <MenuItem disabled>Duplicate element</MenuItem>
-      <MenuItem disabled>Edit as HTML</MenuItem>
+      <MenuHeader>{thislocalization.element}</MenuHeader>
+      <MenuItem disabled>{thislocalization.deleteElement}</MenuItem>
+      <MenuItem disabled>{thislocalization.duplicateElement}</MenuItem>
+      <MenuItem disabled>{thislocalization.editAsHTML}</MenuItem>
       <MenuDivider />
-      <MenuItem disabled>Expand recursively</MenuItem>
+      <MenuItem disabled>{thislocalization.expandRecursively}</MenuItem>
       <MenuItem
         onClick={(e) => {
           setIsFolded(
             isFolded === false || isFolded === true ? 2 : isFolded + 1
           );
         }}
-      >
-        Collapse children
-      </MenuItem>
+      >{thislocalization.collapseChildren}</MenuItem>
     </>
   );
 

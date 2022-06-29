@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { store } from '../store';
 
-// store.delete('unicorn');
-// console.log(store.get('unicorn'));
+import localization from '../localization/en/localization.json';
 
 export default function Welcome() {
     const navigate = useNavigate();
@@ -18,7 +17,7 @@ export default function Welcome() {
     });
     return (
         <main>
-            <h1>Loading...</h1>
+            <h1>{localization.loading}</h1>
         </main>
     );
 }

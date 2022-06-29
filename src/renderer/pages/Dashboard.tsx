@@ -12,6 +12,8 @@ import {
 } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 
+import localization, { dashboardPage as thislocalization } from "../localization/en/localization.json";
+
 const ipc = require('electron').ipcRenderer;
 
 function HoverMenu(props) {
@@ -29,7 +31,7 @@ function HoverMenu(props) {
             onClose={() => setOpen(false)}
           >
             <MenuItem className={`${styles.deleteMenuButton} ${styles.menuButton}`} onClick={(e) => props.deleteProject()}>
-                <i className={`fa-solid fa-trash ${styles.deleteIcon}`}></i>Delete project
+                <i className={`fa-solid fa-trash ${styles.deleteIcon}`}></i>{localization.deleteProject}
             </MenuItem>
           </ControlledMenu>
         </>
@@ -78,23 +80,16 @@ export default function Dashboard(props) {
     const deleteMenu = deleting !== -1 ? (
         <div className={styles.confirmDelete}>
           <div className={styles.confirmDeleteContainer}>
-            <div className={styles.confirmDeleteText}>
-              Are you sure you want to delete this project? This action is
-              irreversible.
-            </div>
+            <div className={styles.confirmDeleteText}>{localization.confirmDelete}</div>
             <div className={styles.confirmDeleteButtons}>
               <button
                 className={`${styles.confirmDeleteButton} ${styles.confirmDeleteButtonCancel}`}
                 onClick={() => setDeleting(-1)}
-              >
-                Cancel
-              </button>
+              >{localization.buttons.cancel}</button>
               <button
                 className={styles.confirmDeleteButton}
                 onClick={() => deleteProjectConfirm()}
-              >
-                Delete
-              </button>
+              >{localization.buttons.delete}</button>
             </div>
           </div>
         </div>
@@ -104,12 +99,12 @@ export default function Dashboard(props) {
         <main>
             <div className={styles.menugrid}>
                 <div className={styles.menutop}>
-                    <h1>Dashboard</h1>
+                    <h1>{thislocalization.dashboard}</h1>
                 </div>
                 <div className={styles.menuleft}>
                     <div className={styles.menuleftoption}>
                         <i className="fas fa-angle-right"></i>
-                        <p>Projects</p>
+                        <p>{thislocalization.projects}</p>
                     </div>
                     {/* <div className={styles.menuleftoption}>
                         <i className="fas fa-angle-right"></i>

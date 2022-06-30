@@ -1,110 +1,110 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "تحميل...",
+    "confirmDelete": "هل أنت متأكد من أنك تريد حذف هذا المشروع؟ هذا الإجراء لا رجعة فيه.",
+    "deleteProject": "حذف المشروع",
+    "editing": "تحرير",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "إلغاء",
+        "delete": "حذف"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "مرحبا بك",
+        "welcomeText": "مرحبا بكم في نظام إدارة المحتوى السيئ لأجزاء! نأمل أن هذا النظام ليس في الواقع سيئاً، لكنه مصنوع للأشخاص الذين يرغبون في الحصول على أيديهم قذرة مع تعديل الشفرة في الواقع. نظام إدارة المحتوى هذا يساعدك فقط على إنشاء بنية أساسية لموقع الويب الخاص بك! لماذا لا نبدأ، إذًا؟",
+        "getStarted": "ابدأ!"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects"
+        "dashboard": "لوحة التحكم",
+        "projects": "المشاريع"
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "خطأ في حذف المشروع!",
         "settings": {
-            "miscellaneous": "miscellaneous",
-            "dangerZone": "DANGER ZONE"
+            "miscellaneous": "متنوعات",
+            "dangerZone": "الزنزانة الموقوفة"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "تحميل المحرر..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "العودة إلى المنزل"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "اسم المشروع",
+        "projectIcon": "أيقونة المشروع",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "اساسي",
+                "description": "نموذج أساسي."
             },
             "templateBlog": {
-                "name": "Blog",
-                "description": "A template for a blog."
+                "name": "المدونة",
+                "description": "قالب للمدونة."
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "الحافظة",
+                "description": "نموذج لحافظة."
             },
             "templateWebsite": {
-                "name": "Website",
-                "description": "A template for a website."
+                "name": "الموقع",
+                "description": "نموذج لموقع على شبكة الإنترنت."
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "لا يوجد قالب",
+                "description": "لا يوجد قالب، ابدأ من الصفر."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "تعذر العثور على الصفحة التي تبحث عنها!",
+        "page": "الصفحة:",
+        "goBackHome": "العودة إلى المنزل"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "إنشاء المشروع..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
-        "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "attributes": "سمات",
+        "addAttribute": "إضافة سمة",
+        "editAttribute": "تعديل السمة",
+        "element": "العنصر",
+        "deleteElement": "حذف العنصر",
+        "duplicateElement": "مكرر العنصر",
+        "editAsHTML": "تحرير كـ HTML",
+        "expandRecursively": "توسيع بشكل متكرر",
+        "collapseChildren": "سقوط الأطفال"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
-        "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
-        "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
-        "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "propertyManagement": "إدارة الممتلكات",
+        "elements": "عناصر",
+        "javascriptNodes": "عقد جافا سكريبت",
+        "settings": "الإعدادات",
+        "layoutEditor": "محرر التخطيط",
+        "deleteFile": "حذف الملف",
+        "renameFile": "إعادة تسمية الملف",
+        "saveFile": "حفظ الملف",
+        "openFileExplorer": "فتح في مستكشف الملفات",
+        "openInPopout": "فتح في نافذة منبثقة",
+        "deleteFolder": "حذف المجلد",
+        "renameFolder": "إعادة تسمية المجلد",
+        "fileNeedsName": "يجب أن يكون للملف اسم",
+        "fileNeedsExtension": "يجب ألا يكون الملحق فارغاً",
+        "fileNameTooLong": "اسم الملف يجب أن يكون أقصر من 100 حرف",
+        "invalidFileCharacter": "لا يمكن أن يحتوي اسم الملف على الدردشة",
+        "folderNeedsName": "يجب أن يكون للمجلد اسم",
+        "folderNameTooLong": "اسم المجلد يجب أن يكون أقصر من 100 حرف",
+        "invalidFolderCharacter": "لا يمكن أن يحتوي اسم المجلد على الدردشة",
+        "fileName": "اسم الملف...",
+        "folderName": "اسم المجلد..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "انقر على عنصر لتغييره",
+        "classList": "قائمة الصف الدراسي",
+        "className": "اسم الصف الدراسي",
+        "properties": "الخصائص",
         "styles": "Styles"
     }
 }

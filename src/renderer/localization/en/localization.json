@@ -75,9 +75,7 @@
         "expandRecursively": "Expand Recursively",
         "collapseChildren": "Collapse Children"
     },
-    "JSNodesComponent": {
-
-    },
+    "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
         "propertyManagement": "Property Management",

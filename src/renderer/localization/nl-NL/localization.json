@@ -1,0 +1,110 @@
+{
+    "loading": "Laden...",
+    "confirmDelete": "Weet je zeker dat je dit project wilt verwijderen? Deze actie is onomkeerbaar.",
+    "deleteProject": "Project verwijderen",
+    "editing": "Bewerken",
+    "buttons": {
+        "cancel": "annuleren",
+        "delete": "Verwijderen"
+    },
+    "welcomePage": {
+        "welcome": "Verwelkoming",
+        "welcomeText": "Welkom bij Bad CMS voor devs! We hopen dat dit CMS niet echt zo slecht is, maar het is gemaakt voor mensen die hun handen vuil willen maken met het bewerken van een code. Dit CMS helpt u om een basisstructuur voor uw website te maken! Waarom starten we dan niet?",
+        "getStarted": "Aan de slag!"
+    },
+    "dashboardPage": {
+        "dashboard": "Dashboard",
+        "projects": "Projecten"
+    },
+    "editorPage": {
+        "errorDeleting": "Fout bij verwijderen project!",
+        "settings": {
+            "miscellaneous": "overige",
+            "dangerZone": "DANGER ZONE"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Editor laden..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Ga terug naar huis"
+    },
+    "getStartedPage": {
+        "projectName": "Project Naam",
+        "projectIcon": "Project icoon",
+        "templates": {
+            "templateBasic": {
+                "name": "Eenvoudig",
+                "description": "Een basissjabloon."
+            },
+            "templateBlog": {
+                "name": "Blog",
+                "description": "Een sjabloon voor een blog."
+            },
+            "templatePortfolio": {
+                "name": "Presentatie",
+                "description": "Een sjabloon voor een portfolio."
+            },
+            "templateWebsite": {
+                "name": "website",
+                "description": "Een sjabloon voor een website."
+            },
+            "templateNoTemplate": {
+                "name": "Geen sjabloon",
+                "description": "Geen sjabloon, begin vanaf nul."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Kon de pagina die je zoekt niet vinden!",
+        "page": "Pagina:",
+        "goBackHome": "Ga terug naar huis"
+    },
+    "templatePage": {
+        "creatingProject": "Project aanmaken..."
+    },
+    "elementsComponent": {
+        "attributes": "Kenmerken",
+        "addAttribute": "Attribuut toevoegen",
+        "editAttribute": "Attribuut bewerken",
+        "element": "Element",
+        "deleteElement": "Element verwijderen",
+        "duplicateElement": "Dubbele element",
+        "editAsHTML": "Bewerk als HTML",
+        "expandRecursively": "Recursief uitbreiden",
+        "collapseChildren": "Onderliggende items inklappen"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Beheer accommodaties",
+        "elements": "Elementen",
+        "javascriptNodes": "Javascript Nodes",
+        "settings": "Instellingen",
+        "layoutEditor": "Lay-out editor",
+        "deleteFile": "Bestand verwijderen",
+        "renameFile": "Hernoem bestand",
+        "saveFile": "bestand opslaan",
+        "openFileExplorer": "Open in bestandsverkenner",
+        "openInPopout": "Openen in pop-upvenster",
+        "deleteFolder": "Map verwijderen",
+        "renameFolder": "Map hernoemen",
+        "fileNeedsName": "Bestand moet een naam hebben",
+        "fileNeedsExtension": "Extensie mag niet leeg zijn",
+        "fileNameTooLong": "Bestandsnaam moet korter zijn dan 100 tekens",
+        "invalidFileCharacter": "Bestandsnaam mag de chataracter niet bevatten",
+        "folderNeedsName": "Map moet een naam hebben",
+        "folderNameTooLong": "Mapnaam moet korter zijn dan 100 tekens",
+        "invalidFolderCharacter": "Mapnaam kan de chataracter niet bevatten",
+        "fileName": "Bestandsnaam ...",
+        "folderName": "Map naam..."
+    },
+    "creatorComponent": {
+        "clickElement": "Klik op een element om het te wijzigen",
+        "classList": "Les lijst",
+        "className": "Klasse naam",
+        "properties": "Eigenschappen",
+        "styles": "Styles"
+    }
+}

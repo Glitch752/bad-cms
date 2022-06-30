@@ -1,0 +1,110 @@
+{
+    "loading": "Загрузка...",
+    "confirmDelete": "Вы уверены, что хотите удалить этот проект? Это действие необратимо.",
+    "deleteProject": "Удалить проект",
+    "editing": "Редактирование",
+    "buttons": {
+        "cancel": "Отмена",
+        "delete": "Удалить"
+    },
+    "welcomePage": {
+        "welcome": "Добро пожаловать",
+        "welcomeText": "Добро пожаловать в Bad CMS для разработчиков! Мы надеемся, что этот CMS не так плохо, но он создан для людей, которые хотят получить свои руки грязно, с реальным редактированием кода. Этот CMS поможет вам создать базовую структуру для вашего веб-сайта! Почему бы не начать?",
+        "getStarted": "Начнем!"
+    },
+    "dashboardPage": {
+        "dashboard": "Панель",
+        "projects": "Проекты"
+    },
+    "editorPage": {
+        "errorDeleting": "Ошибка удаления проекта!",
+        "settings": {
+            "miscellaneous": "Разное",
+            "dangerZone": "ДАННАЯ ЗОНА"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Загрузка редактора..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Вернуться домой"
+    },
+    "getStartedPage": {
+        "projectName": "Название проекта",
+        "projectIcon": "Иконка проекта",
+        "templates": {
+            "templateBasic": {
+                "name": "Базовый",
+                "description": "Основной шаблон."
+            },
+            "templateBlog": {
+                "name": "Блог",
+                "description": "Шаблон для блога."
+            },
+            "templatePortfolio": {
+                "name": "Портфолио",
+                "description": "Шаблон для портфолио."
+            },
+            "templateWebsite": {
+                "name": "Сайт",
+                "description": "Шаблон для веб-сайта."
+            },
+            "templateNoTemplate": {
+                "name": "Нет шаблона",
+                "description": "Нет шаблона, начинается с нуля."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Не удалось найти запрашиваемую страницу!",
+        "page": "Страница:",
+        "goBackHome": "Вернуться домой"
+    },
+    "templatePage": {
+        "creatingProject": "Создание проекта..."
+    },
+    "elementsComponent": {
+        "attributes": "Атрибуты",
+        "addAttribute": "Добавить атрибут",
+        "editAttribute": "Изменить атрибут",
+        "element": "Элемент",
+        "deleteElement": "Удалить элемент",
+        "duplicateElement": "Дубликат элемента",
+        "editAsHTML": "Изменить как HTML",
+        "expandRecursively": "Развернуть рекурсивно",
+        "collapseChildren": "Свернуть дочерние узлы"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Управление имуществом",
+        "elements": "Элементы",
+        "javascriptNodes": "Узлы Javascript",
+        "settings": "Настройки",
+        "layoutEditor": "Редактор макета",
+        "deleteFile": "Удалить файл",
+        "renameFile": "Переименовать файл",
+        "saveFile": "saveFile",
+        "openFileExplorer": "Открыть в файловом обозревателе",
+        "openInPopout": "Открыть во всплывающем окне",
+        "deleteFolder": "Удалить папку",
+        "renameFolder": "Переименовать папку",
+        "fileNeedsName": "Файл должен иметь имя",
+        "fileNeedsExtension": "Расширение не должно быть пустым",
+        "fileNameTooLong": "Имя файла должно быть короче 100 символов",
+        "invalidFileCharacter": "Имя файла не может содержать чатартер",
+        "folderNeedsName": "Папка должна иметь имя",
+        "folderNameTooLong": "Имя папки должно быть короче 100 символов",
+        "invalidFolderCharacter": "Имя папки не может содержать chataracter",
+        "fileName": "Имя файла...",
+        "folderName": "Имя папки..."
+    },
+    "creatorComponent": {
+        "clickElement": "Нажмите на элемент, чтобы изменить его",
+        "classList": "Список уроков",
+        "className": "Название класса",
+        "properties": "Свойства",
+        "styles": "Styles"
+    }
+}

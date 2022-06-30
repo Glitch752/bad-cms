@@ -1,0 +1,110 @@
+{
+    "loading": "Ladataan...",
+    "confirmDelete": "Oletko varma, että haluat poistaa tämän projektin? Tämä toiminto on peruuttamaton.",
+    "deleteProject": "Poista projekti",
+    "editing": "Muokataan",
+    "buttons": {
+        "cancel": "Peruuta",
+        "delete": "Poista"
+    },
+    "welcomePage": {
+        "welcome": "Tervetuloa",
+        "welcomeText": "Tervetuloa väärään CMS-järjestelmään deveille! Toivomme, että tämä CMS ei ole todella niin huono, mutta se on tehty ihmisille, jotka haluavat saada kätensä likainen kanssa todella editointi koodi. Tämä CMS vain auttaa sinua tekemään perusrakenteen sivustollesi! Miksi emme päästä alkuun, sitten?",
+        "getStarted": "Aloita alku!"
+    },
+    "dashboardPage": {
+        "dashboard": "Hallintapaneeli",
+        "projects": "Projektit"
+    },
+    "editorPage": {
+        "errorDeleting": "Virhe poistettaessa projektia!",
+        "settings": {
+            "miscellaneous": "sekalainen",
+            "dangerZone": "DANGER ZONE"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Ladataan editoria..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Siirry takaisin kotiin"
+    },
+    "getStartedPage": {
+        "projectName": "Projektin Nimi",
+        "projectIcon": "Projektin Kuvake",
+        "templates": {
+            "templateBasic": {
+                "name": "Perus",
+                "description": "Perusmalli (basic templat)."
+            },
+            "templateBlog": {
+                "name": "Blogi",
+                "description": "Sivupohja blogiin ."
+            },
+            "templatePortfolio": {
+                "name": "Salkku",
+                "description": "Vakavaraisuusasetuksen 36 artiklan 1 kohdan b alakohta"
+            },
+            "templateWebsite": {
+                "name": "Sivusto",
+                "description": "Sivupohja tälle sivustolle."
+            },
+            "templateNoTemplate": {
+                "name": "Ei Sivupohjaa",
+                "description": "Ei sivupohjaa, aloita tyhjästä."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Sivua ei löytynyt, jota etsit!",
+        "page": "Sivu:",
+        "goBackHome": "Siirry takaisin kotiin"
+    },
+    "templatePage": {
+        "creatingProject": "Luodaan projektia..."
+    },
+    "elementsComponent": {
+        "attributes": "Ominaisuudet",
+        "addAttribute": "Lisää attribuutti",
+        "editAttribute": "Muokkaa attribuuttia",
+        "element": "Elementti",
+        "deleteElement": "Poista elementti",
+        "duplicateElement": "Monista elementti",
+        "editAsHTML": "Muokkaa HTML",
+        "expandRecursively": "Laajenna Rekursiivisesti",
+        "collapseChildren": "Kutista Lapset"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Kiinteistöjen Hallinta",
+        "elements": "Elementit",
+        "javascriptNodes": "JavaScript-solmut",
+        "settings": "Asetukset",
+        "layoutEditor": "Asettelun Muokkain",
+        "deleteFile": "Poista tiedosto",
+        "renameFile": "Nimeä tiedosto uudelleen",
+        "saveFile": "saveFile",
+        "openFileExplorer": "Avaa tiedostojen tutkimusohjelmassa",
+        "openInPopout": "Avaa ponnahdusikkunassa",
+        "deleteFolder": "Poista kansio",
+        "renameFolder": "Nimeä kansio uudelleen",
+        "fileNeedsName": "Tiedostolla on oltava nimi",
+        "fileNeedsExtension": "Lisäosa ei saa olla tyhjä",
+        "fileNameTooLong": "Tiedostonimen on oltava lyhyempi kuin 100 merkkiä pitkä",
+        "invalidFileCharacter": "Tiedostonimi ei voi sisältää chataracteria",
+        "folderNeedsName": "Kansiolla täytyy olla nimi",
+        "folderNameTooLong": "Kansion nimen on oltava lyhyempi kuin 100 merkkiä pitkä",
+        "invalidFolderCharacter": "Kansion nimi ei voi sisältää chataracteria",
+        "fileName": "Tiedoston nimi...",
+        "folderName": "Kansion nimi..."
+    },
+    "creatorComponent": {
+        "clickElement": "Napsauta elementtiä muuttaaksesi sitä",
+        "classList": "Luokan Lista",
+        "className": "Luokan Nimi",
+        "properties": "Ominaisuudet",
+        "styles": "Styles"
+    }
+}

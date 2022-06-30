@@ -1,110 +1,110 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "Indlæser...",
+    "confirmDelete": "Er du sikker på, at du vil slette dette projekt? Denne handling er irreversibel.",
+    "deleteProject": "Slet projekt",
+    "editing": "Redigering",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "Annuller",
+        "delete": "Slet"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "Velkommen",
+        "welcomeText": "Velkommen til Dårlig CMS for udviklere! Vi håber dette CMS er faktisk ikke så slemt, men det er lavet til folk, der ønsker at få deres hænder beskidt med faktisk redigering kode. Dette CMS hjælper dig med at lave en grundlæggende struktur for din hjemmeside! Hvorfor ikke vi kommer i gang, så?",
+        "getStarted": "Kom i gang!"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects"
+        "dashboard": "Instrumentbræt",
+        "projects": "Projekter"
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "Fejl ved sletning af projektet!",
         "settings": {
-            "miscellaneous": "miscellaneous",
+            "miscellaneous": "diverse",
             "dangerZone": "DANGER ZONE"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "Indlæser editor..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "Gå hjem"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "Projekt Navn",
+        "projectIcon": "Projekt Ikon",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "Grundlæggende",
+                "description": "En grundlæggende skabelon."
             },
             "templateBlog": {
                 "name": "Blog",
-                "description": "A template for a blog."
+                "description": "En skabelon til en blog."
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "Portefølje",
+                "description": "En skabelon for en portefølje."
             },
             "templateWebsite": {
-                "name": "Website",
-                "description": "A template for a website."
+                "name": "Hjemmeside",
+                "description": "En skabelon til et websted."
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "Ingen Skabelon",
+                "description": "Ingen skabelon, start fra bunden."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "Kunne ikke finde den side, du leder efter!",
+        "page": "Side:",
+        "goBackHome": "Gå hjem"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "Opretter projekt..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
+        "attributes": "Attributter",
+        "addAttribute": "Tilføj attribut",
+        "editAttribute": "Rediger attribut",
         "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "deleteElement": "Slet element",
+        "duplicateElement": "Dupliker element",
+        "editAsHTML": "Rediger som HTML",
+        "expandRecursively": "Udvid Rekursivt",
+        "collapseChildren": "Fold Børn Sammen"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
+        "propertyManagement": "Håndtering Af Egenskaber",
+        "elements": "Elementer",
         "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
+        "settings": "Indstillinger",
         "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
+        "deleteFile": "Slet fil",
+        "renameFile": "Omdøb fil",
         "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "openFileExplorer": "Åbn i filexplorer",
+        "openInPopout": "Åbn i popout vindue",
+        "deleteFolder": "Slet mappe",
+        "renameFolder": "Omdøb mappe",
+        "fileNeedsName": "Filen skal have et navn",
+        "fileNeedsExtension": "Udvidelse må ikke være tom",
+        "fileNameTooLong": "Filnavn skal være kortere end 100 tegn",
+        "invalidFileCharacter": "Filnavnet kan ikke indeholde chataracteren",
+        "folderNeedsName": "Mappe skal have et navn",
+        "folderNameTooLong": "Mappenavn skal være kortere end 100 tegn",
+        "invalidFolderCharacter": "Mappenavn kan ikke indeholde chataracteren",
+        "fileName": "Fil navn...",
+        "folderName": "Mappenavn..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "Klik på et element for at ændre det",
+        "classList": "Klasse Liste",
+        "className": "Klasse Navn",
+        "properties": "Egenskaber",
         "styles": "Styles"
     }
 }

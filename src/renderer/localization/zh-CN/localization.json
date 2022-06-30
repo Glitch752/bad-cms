@@ -1,0 +1,110 @@
+{
+    "loading": "加载中...",
+    "confirmDelete": "您确定要删除此项目吗？此操作是不可逆的。",
+    "deleteProject": "删除项目",
+    "editing": "编辑",
+    "buttons": {
+        "cancel": "取消",
+        "delete": "删除"
+    },
+    "welcomePage": {
+        "welcome": "欢迎使用",
+        "welcomeText": "欢迎来到错误CMS供开发者使用！ 我们希望，这个CMS实际上不是坏事，但它是为那些想要通过实际编辑代码获得自己的脏话的人制造的。 这个CMS只是帮助您为您的网站建立一个基本结构！为什么我们不要开始，然后？",
+        "getStarted": "开始！"
+    },
+    "dashboardPage": {
+        "dashboard": "仪表板",
+        "projects": "项目"
+    },
+    "editorPage": {
+        "errorDeleting": "删除项目时发生错误！",
+        "settings": {
+            "miscellaneous": "杂项",
+            "dangerZone": "危险区域"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "加载编辑器..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "返回首页"
+    },
+    "getStartedPage": {
+        "projectName": "项目名称",
+        "projectIcon": "项目图标",
+        "templates": {
+            "templateBasic": {
+                "name": "基本的",
+                "description": "一个基本模板。"
+            },
+            "templateBlog": {
+                "name": "博客",
+                "description": "博客模板。"
+            },
+            "templatePortfolio": {
+                "name": "投资组合",
+                "description": "一个组合模板。"
+            },
+            "templateWebsite": {
+                "name": "网址",
+                "description": "网站模板。"
+            },
+            "templateNoTemplate": {
+                "name": "没有模板",
+                "description": "没有模板，从零开始。"
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "找不到您正在寻找的页面！",
+        "page": "页面：",
+        "goBackHome": "返回首页"
+    },
+    "templatePage": {
+        "creatingProject": "正在创建项目..."
+    },
+    "elementsComponent": {
+        "attributes": "属性",
+        "addAttribute": "添加属性",
+        "editAttribute": "编辑属性",
+        "element": "元素",
+        "deleteElement": "删除元素",
+        "duplicateElement": "复制元素",
+        "editAsHTML": "编辑为 HTML",
+        "expandRecursively": "递归扩展",
+        "collapseChildren": "折叠子项"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "财产管理",
+        "elements": "要件",
+        "javascriptNodes": "Javascript 节点",
+        "settings": "设置",
+        "layoutEditor": "布局编辑器",
+        "deleteFile": "删除文件",
+        "renameFile": "重命名文件",
+        "saveFile": "保存文件",
+        "openFileExplorer": "在文件浏览器中打开",
+        "openInPopout": "在弹出窗口中打开",
+        "deleteFolder": "删除文件夹",
+        "renameFolder": "重命名文件夹",
+        "fileNeedsName": "文件必须有名称",
+        "fileNeedsExtension": "扩展名不能为空",
+        "fileNameTooLong": "文件名必须小于 100 个字符",
+        "invalidFileCharacter": "文件名不能包含聊天栏",
+        "folderNeedsName": "文件夹必须有名称",
+        "folderNameTooLong": "文件夹名称必须小于 100 个字符",
+        "invalidFolderCharacter": "文件夹名称不能包含聊天栏",
+        "fileName": "文件名...",
+        "folderName": "文件夹名称..."
+    },
+    "creatorComponent": {
+        "clickElement": "点击一个元素来更改",
+        "classList": "类列表",
+        "className": "类名",
+        "properties": "属性",
+        "styles": "Styles"
+    }
+}

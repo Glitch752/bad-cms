@@ -1,0 +1,110 @@
+{
+    "loading": "Načítám...",
+    "confirmDelete": "Opravdu chcete odstranit tento projekt? Tato akce je nevratná.",
+    "deleteProject": "Odstranit projekt",
+    "editing": "Úprava",
+    "buttons": {
+        "cancel": "Zrušit",
+        "delete": "Vymazat"
+    },
+    "welcomePage": {
+        "welcome": "Vítejte",
+        "welcomeText": "Vítejte v Bad CMS pro devs! Doufáme, že tento CMS není ve skutečnosti tak špatný, ale je to pro lidi, kteří chtějí dostat ruce špinavé s upravováním kódu. Tento CMS vám pomůže vytvořit základní strukturu pro vaše webové stránky! Proč tedy nezačneme?",
+        "getStarted": "Začněte!"
+    },
+    "dashboardPage": {
+        "dashboard": "Nástěnka",
+        "projects": "Projekty"
+    },
+    "editorPage": {
+        "errorDeleting": "Chyba při odstraňování projektu!",
+        "settings": {
+            "miscellaneous": "různé",
+            "dangerZone": "DANGER ZON"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Načítání editoru..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Návrat domů"
+    },
+    "getStartedPage": {
+        "projectName": "Název projektu",
+        "projectIcon": "Ikona projektu",
+        "templates": {
+            "templateBasic": {
+                "name": "Základní",
+                "description": "Základní šablona."
+            },
+            "templateBlog": {
+                "name": "Blog",
+                "description": "Šablona pro blog."
+            },
+            "templatePortfolio": {
+                "name": "Portfolio",
+                "description": "Šablona pro portfolio."
+            },
+            "templateWebsite": {
+                "name": "Webová stránka",
+                "description": "Šablona pro webové stránky."
+            },
+            "templateNoTemplate": {
+                "name": "Žádná šablona",
+                "description": "Žádná šablona, začíná od nuly."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Nelze najít stránku, kterou hledáte!",
+        "page": "Stránka:",
+        "goBackHome": "Návrat domů"
+    },
+    "templatePage": {
+        "creatingProject": "Vytváření projektu..."
+    },
+    "elementsComponent": {
+        "attributes": "Atributy",
+        "addAttribute": "Přidat atribut",
+        "editAttribute": "Upravit atribut",
+        "element": "Prvek",
+        "deleteElement": "Odstranit prvek",
+        "duplicateElement": "Duplikovat prvek",
+        "editAsHTML": "Upravit jako HTML",
+        "expandRecursively": "Rozbalit rekurzivně",
+        "collapseChildren": "Skrýt potomky"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Správa majetku",
+        "elements": "Prvky",
+        "javascriptNodes": "Javascript uzly",
+        "settings": "Nastavení",
+        "layoutEditor": "Editor rozložení",
+        "deleteFile": "Odstranit soubor",
+        "renameFile": "Přejmenovat soubor",
+        "saveFile": "Uložit soubor",
+        "openFileExplorer": "Otevřít v Průzkumníku souborů",
+        "openInPopout": "Otevřít v okně",
+        "deleteFolder": "Odstranit složku",
+        "renameFolder": "Přejmenovat složku",
+        "fileNeedsName": "Soubor musí mít název",
+        "fileNeedsExtension": "Rozšíření nesmí být prázdné",
+        "fileNameTooLong": "Název souboru musí být kratší než 100 znaků",
+        "invalidFileCharacter": "Název souboru nemůže obsahovat chataracter",
+        "folderNeedsName": "Složka musí mít název",
+        "folderNameTooLong": "Název složky musí být kratší než 100 znaků",
+        "invalidFolderCharacter": "Název složky nemůže obsahovat chataracter",
+        "fileName": "Název souboru...",
+        "folderName": "Název složky..."
+    },
+    "creatorComponent": {
+        "clickElement": "Klikněte na prvek pro jeho změnu",
+        "classList": "Seznam tříd",
+        "className": "Název třídy",
+        "properties": "Vlastnosti",
+        "styles": "Styles"
+    }
+}

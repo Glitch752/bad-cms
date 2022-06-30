@@ -1,110 +1,110 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "Încărcare...",
+    "confirmDelete": "Sunteţi sigur că doriţi să ştergeţi acest proiect? Această acţiune este ireversibilă.",
+    "deleteProject": "Ștergere proiect",
+    "editing": "Editare",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "Anulează",
+        "delete": "Ștergere"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "Bun venit",
+        "welcomeText": "Bine ai venit la CMS greșit pentru dezvoltatori! Sperăm ca acest CMS să nu fie chiar aşa de rău, dar este făcut pentru oamenii care vor să le ia mâinile murdari prin editarea efectivă a codului. Acest CMS te ajută să creezi o structură de bază pentru website-ul tău! De ce nu începem, atunci?",
+        "getStarted": "Începe!"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects"
+        "dashboard": "Panou",
+        "projects": "Proiecte"
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "Eroare la ștergerea proiectului!",
         "settings": {
-            "miscellaneous": "miscellaneous",
-            "dangerZone": "DANGER ZONE"
+            "miscellaneous": "diverse",
+            "dangerZone": "Zona DANGERULUI"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "Încărcare editor..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "Întoarce-te acasă"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "Nume Proiect",
+        "projectIcon": "Iconiță proiect",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "Baza",
+                "description": "Un șablon de bază."
             },
             "templateBlog": {
                 "name": "Blog",
-                "description": "A template for a blog."
+                "description": "Un şablon pentru un blog."
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "Portofoliu",
+                "description": "Un model pentru un portofoliu."
             },
             "templateWebsite": {
                 "name": "Website",
-                "description": "A template for a website."
+                "description": "Un şablon pentru un site."
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "Niciun șablon",
+                "description": "Fără șablon, începe de la zero."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "Nu s-a putut găsi pagina pe care o căutați!",
+        "page": "Pagină:",
+        "goBackHome": "Întoarce-te acasă"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "Se creează proiectul..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
+        "attributes": "Atribute",
+        "addAttribute": "Adaugă atribut",
+        "editAttribute": "Editează atributul",
         "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "deleteElement": "Ștergere element",
+        "duplicateElement": "Element duplicat",
+        "editAsHTML": "Editează ca HTML",
+        "expandRecursively": "Extinde Recursiv",
+        "collapseChildren": "Restrânge copiii"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
-        "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
-        "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
-        "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "propertyManagement": "Gestionare proprietăți",
+        "elements": "Elemente",
+        "javascriptNodes": "Noduri Javascript",
+        "settings": "Setări",
+        "layoutEditor": "Editor aspect",
+        "deleteFile": "Ștergeți fișierul",
+        "renameFile": "Redenumire fișier",
+        "saveFile": "salveazăFișier",
+        "openFileExplorer": "Deschide în exploratorul de fișiere",
+        "openInPopout": "Deschide în fereastra poput",
+        "deleteFolder": "Ștergere dosar",
+        "renameFolder": "Redenumire folder",
+        "fileNeedsName": "Fișierul trebuie să aibă un nume",
+        "fileNeedsExtension": "Extensia nu trebuie să fie goală",
+        "fileNameTooLong": "Numele fișierului trebuie să fie mai scurt de 100 de caractere",
+        "invalidFileCharacter": "Numele fișierului nu poate conține chataracter",
+        "folderNeedsName": "Dosarul trebuie să aibă un nume",
+        "folderNameTooLong": "Numele dosarului trebuie să fie mai mic de 100 de caractere",
+        "invalidFolderCharacter": "Numele dosarului nu poate conține chataracter",
+        "fileName": "Nume fișier...",
+        "folderName": "Nume dosar..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "Faceți clic pe un element pentru a-l schimba",
+        "classList": "Listă de clase",
+        "className": "Numele clasei",
+        "properties": "Proprietăți",
         "styles": "Styles"
     }
 }

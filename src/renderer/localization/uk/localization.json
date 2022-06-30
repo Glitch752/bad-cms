@@ -1,110 +1,110 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "Завантажується...",
+    "confirmDelete": "Ви впевнені, що хочете видалити цей проект? Ця дія є незворотньою.",
+    "deleteProject": "Видалити проект",
+    "editing": "Редагування",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "Скасувати",
+        "delete": "Видалити"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "Вітаємо",
+        "welcomeText": "Ласкаво просимо до Bad CMS для розробників! Сподіваємося, що цей CMS не такий вже й поганий, але він з'явився для людей, які хочуть взяти свої руки в брудному курсі редагування коду. Ці CMS просто допомагає вам створити базову структуру для вашого веб-сайту! Чому б нам не почати, тоді?",
+        "getStarted": "Розпочати!"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects"
+        "dashboard": "Приладна дошка",
+        "projects": "Проекти"
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "Помилка видалення проекту!",
         "settings": {
-            "miscellaneous": "miscellaneous",
-            "dangerZone": "DANGER ZONE"
+            "miscellaneous": "різне",
+            "dangerZone": "ЗОНА"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "Завантаження редактора..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "Повернутися додому"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "Назва проекту",
+        "projectIcon": "Піктограма проекту",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "Основні налаштування",
+                "description": "Основний шаблон."
             },
             "templateBlog": {
-                "name": "Blog",
-                "description": "A template for a blog."
+                "name": "Блог",
+                "description": "Шаблон блогу."
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "Портфель",
+                "description": "Шаблон для портфоліо."
             },
             "templateWebsite": {
-                "name": "Website",
-                "description": "A template for a website."
+                "name": "Вебсайт",
+                "description": "Шаблон для сайту."
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "Немає шаблону",
+                "description": "Немає шаблону, почніть з нуля."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "Не вдалося знайти сторінку, яку ви шукаєте!",
+        "page": "Сторінка:",
+        "goBackHome": "Повернутися додому"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "Створення проекту..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
-        "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "attributes": "Атрибути",
+        "addAttribute": "Додати атрибут",
+        "editAttribute": "Редагувати атрибут",
+        "element": "Елемент",
+        "deleteElement": "Видалити елемент",
+        "duplicateElement": "Дублювати елемент",
+        "editAsHTML": "Редагувати як HTML",
+        "expandRecursively": "Розгорнути рекурсивно",
+        "collapseChildren": "Згорнути дочірні ресурси"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
-        "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
-        "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
-        "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "propertyManagement": "Керування властивостями",
+        "elements": "Елементи",
+        "javascriptNodes": "JavaScript вузли",
+        "settings": "Налаштування",
+        "layoutEditor": "Редактор полів",
+        "deleteFile": "Видалити файл",
+        "renameFile": "Перейменувати файл",
+        "saveFile": "зберегти файл",
+        "openFileExplorer": "Відкрити в провіднику",
+        "openInPopout": "Відкрити в виринаючому вікні",
+        "deleteFolder": "Видалити папку",
+        "renameFolder": "Перейменувати папку",
+        "fileNeedsName": "Файл повинен мати ім'я",
+        "fileNeedsExtension": "Розширення не може бути порожнім",
+        "fileNameTooLong": "Ім'я файлу має бути коротшим за 100 символів",
+        "invalidFileCharacter": "Ім'я файлу не може містити chataracter",
+        "folderNeedsName": "Папка повинна мати ім'я",
+        "folderNameTooLong": "Назва теки повинна містити менше 100 символів",
+        "invalidFolderCharacter": "Ім'я теки не може містити чат-картер",
+        "fileName": "Назва файлу...",
+        "folderName": "Назва папки..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "Натисніть на елемент, щоб змінити його",
+        "classList": "Список класів",
+        "className": "Ім'я класу",
+        "properties": "Властивості",
         "styles": "Styles"
     }
 }

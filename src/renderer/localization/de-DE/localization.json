@@ -1,0 +1,110 @@
+{
+    "loading": "Wird geladen...",
+    "confirmDelete": "Sind Sie sicher, dass Sie dieses Projekt löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "deleteProject": "Projekt löschen",
+    "editing": "Bearbeiten",
+    "buttons": {
+        "cancel": "Abbrechen",
+        "delete": "Löschen"
+    },
+    "welcomePage": {
+        "welcome": "Begrüßung",
+        "welcomeText": "Willkommen bei Bad CMS für Devs! Wir hoffen, dass dieses CMS nicht wirklich so schlimm ist, aber es ist für Leute gedacht, die mit der Bearbeitung von Code die Hände schmutzig bekommen wollen. Dieses CMS hilft Ihnen nur, eine grundlegende Struktur für Ihre Website zu erstellen! Warum fangen wir dann nicht an?",
+        "getStarted": "Los geht's!"
+    },
+    "dashboardPage": {
+        "dashboard": "Dashboard",
+        "projects": "Projekte"
+    },
+    "editorPage": {
+        "errorDeleting": "Fehler beim Löschen des Projekts!",
+        "settings": {
+            "miscellaneous": "sonstiges",
+            "dangerZone": "DANGERZONE"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Editor wird geladen..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Zurück nach Hause"
+    },
+    "getStartedPage": {
+        "projectName": "Projektname",
+        "projectIcon": "Projekt-Symbol",
+        "templates": {
+            "templateBasic": {
+                "name": "Einfache",
+                "description": "Eine einfache Vorlage."
+            },
+            "templateBlog": {
+                "name": "Blog",
+                "description": "Eine Vorlage für ein Blog."
+            },
+            "templatePortfolio": {
+                "name": "Portfolio",
+                "description": "Eine Vorlage für ein Portfolio."
+            },
+            "templateWebsite": {
+                "name": "Webseite",
+                "description": "Eine Vorlage für eine Website."
+            },
+            "templateNoTemplate": {
+                "name": "Keine Vorlage",
+                "description": "Keine Vorlage, fangen Sie bei Null an."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Die gesuchte Seite konnte nicht gefunden werden!",
+        "page": "Seite:",
+        "goBackHome": "Zurück nach Hause"
+    },
+    "templatePage": {
+        "creatingProject": "Projekt wird erstellt..."
+    },
+    "elementsComponent": {
+        "attributes": "Attribute",
+        "addAttribute": "Attribut hinzufügen",
+        "editAttribute": "Attribut bearbeiten",
+        "element": "Element",
+        "deleteElement": "Element löschen",
+        "duplicateElement": "Element duplizieren",
+        "editAsHTML": "Als HTML bearbeiten",
+        "expandRecursively": "Rekursiv erweitern",
+        "collapseChildren": "Kinder einklappen"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Immobilien-Management",
+        "elements": "Elemente",
+        "javascriptNodes": "Javascript-Knoten",
+        "settings": "Einstellungen",
+        "layoutEditor": "Layout-Editor",
+        "deleteFile": "Datei löschen",
+        "renameFile": "Datei umbenennen",
+        "saveFile": "speicherdatei",
+        "openFileExplorer": "Im Datei-Explorer öffnen",
+        "openInPopout": "In Popout-Fenster öffnen",
+        "deleteFolder": "Ordner löschen",
+        "renameFolder": "Ordner umbenennen",
+        "fileNeedsName": "Datei muss einen Namen haben",
+        "fileNeedsExtension": "Erweiterung darf nicht leer sein",
+        "fileNameTooLong": "Dateiname muss kürzer als 100 Zeichen sein",
+        "invalidFileCharacter": "Dateiname darf den Chatarakter nicht enthalten",
+        "folderNeedsName": "Ordner muss einen Namen haben",
+        "folderNameTooLong": "Ordnername muss kürzer als 100 Zeichen sein",
+        "invalidFolderCharacter": "Ordnername darf den Chatarakter nicht enthalten",
+        "fileName": "Dateiname...",
+        "folderName": "Ordnername..."
+    },
+    "creatorComponent": {
+        "clickElement": "Klicken Sie auf ein Element, um es zu ändern",
+        "classList": "Klassenliste",
+        "className": "Klassenname",
+        "properties": "Eigenschaften",
+        "styles": "Styles"
+    }
+}

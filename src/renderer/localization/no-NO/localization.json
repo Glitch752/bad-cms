@@ -1,0 +1,110 @@
+{
+    "loading": "Laster...",
+    "confirmDelete": "Er du sikker på at du vil slette dette prosjektet? Denne handlingen er irreversibel.",
+    "deleteProject": "Slett prosjekt",
+    "editing": "Redigering",
+    "buttons": {
+        "cancel": "Avbryt",
+        "delete": "Slett"
+    },
+    "welcomePage": {
+        "welcome": "Velkommen",
+        "welcomeText": "Velkommen til Dårlig CMS til devs! Vi håper denne CMS faktisk ikke er så dårlig, men den er laget for folk som vil få hendene skitten og som faktisk redigerer koden. Denne CMS hjelper deg bare med å lage en grunnleggende struktur for nettsiden din! Hvorfor ikke komme i gang, da?",
+        "getStarted": "Sett i gang!"
+    },
+    "dashboardPage": {
+        "dashboard": "Kontrollpanel",
+        "projects": "Prosjekter"
+    },
+    "editorPage": {
+        "errorDeleting": "Feil ved sletting av prosjekt!",
+        "settings": {
+            "miscellaneous": "diverse",
+            "dangerZone": "ENDRINGER ZONE"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Laster redigeringsprogram ..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Gå hjem igjen"
+    },
+    "getStartedPage": {
+        "projectName": "Prosjektets navn",
+        "projectIcon": "Prosjekt ikon",
+        "templates": {
+            "templateBasic": {
+                "name": "Grunnleggende",
+                "description": "En grunnleggende mal."
+            },
+            "templateBlog": {
+                "name": "Blogg",
+                "description": "En mal til en blogg."
+            },
+            "templatePortfolio": {
+                "name": "Portefølje",
+                "description": "En mal for en portefølje."
+            },
+            "templateWebsite": {
+                "name": "Nettside",
+                "description": "En mal for et nettsted."
+            },
+            "templateNoTemplate": {
+                "name": "Ingen mal",
+                "description": "Ingen mal, start fra bunnen av."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Kunne ikke finne siden du leter etter!",
+        "page": "Side:",
+        "goBackHome": "Gå hjem igjen"
+    },
+    "templatePage": {
+        "creatingProject": "Oppretter prosjekt..."
+    },
+    "elementsComponent": {
+        "attributes": "Attributter",
+        "addAttribute": "Legg til attributt",
+        "editAttribute": "Rediger attributt",
+        "element": "Element",
+        "deleteElement": "Slett element",
+        "duplicateElement": "Dupliser element",
+        "editAsHTML": "Rediger som HTML",
+        "expandRecursively": "Utvid gjentakende",
+        "collapseChildren": "Kollaps Barn"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Administrere egenskaper",
+        "elements": "Elementer",
+        "javascriptNodes": "Javascript noder",
+        "settings": "Innstillinger",
+        "layoutEditor": "Oppsett redigerer",
+        "deleteFile": "Slett fil",
+        "renameFile": "Gi nytt filnavn",
+        "saveFile": "lagreFil",
+        "openFileExplorer": "Åpne i filutforsker",
+        "openInPopout": "Åpne i popout-vindu",
+        "deleteFolder": "Slett mappe",
+        "renameFolder": "Endre mappenavn",
+        "fileNeedsName": "Filen må ha et navn",
+        "fileNeedsExtension": "Utvidelsen kan ikke være tom",
+        "fileNameTooLong": "Filnavnet må være kortere enn 100 tegn",
+        "invalidFileCharacter": "Filnavn kan ikke inneholde chataracter",
+        "folderNeedsName": "Mappen må ha et navn",
+        "folderNameTooLong": "Mappenavn må være kortere enn 100 tegn",
+        "invalidFolderCharacter": "Mappenavn kan ikke inneholde chataracter",
+        "fileName": "Filnavn...",
+        "folderName": "Mappenavn ..."
+    },
+    "creatorComponent": {
+        "clickElement": "Klikk på et element for å endre det",
+        "classList": "Klasse liste",
+        "className": "Klasse navn",
+        "properties": "Egenskaper",
+        "styles": "Styles"
+    }
+}

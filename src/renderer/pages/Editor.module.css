@@ -464,7 +464,7 @@
 }
 
 .JSNodesContainer {
-  height: calc(100vh - var(--titlebar-height) - 72px);
+  height: calc(100vh - var(--titlebar-height) - 42px);
   overflow-x: hidden;
   overflow-y: hidden;
   padding: 10px;
@@ -479,6 +479,10 @@
   position: absolute;
   top: 50px;
   left: 20px;
+  user-select: none;
+}
+.JSNodesNodeArea {
+  height: 100%;
 }
 .JSNodesNodeTitle {
   background-color: #0c151b;

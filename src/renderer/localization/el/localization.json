@@ -1,110 +1,110 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "Φόρτωση...",
+    "confirmDelete": "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το έργο? Αυτή η ενέργεια είναι μη αναστρέψιμη.",
+    "deleteProject": "Διαγραφή έργου",
+    "editing": "Επεξεργασία",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "Ακύρωση",
+        "delete": "Διαγραφή"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "Καλωσόρισμα",
+        "welcomeText": "Καλώς ήλθατε στο Bad CMS για τους προγραμματιστές! Ελπίζουμε ότι αυτό το CMS δεν είναι στην πραγματικότητα τόσο κακό, αλλά είναι φτιαγμένο για ανθρώπους που θέλουν να πάρουν τα χέρια τους βρώμικα με πραγματικά κώδικα επεξεργασίας. Αυτό το CMS σας βοηθά να κάνετε μια βασική δομή για την ιστοσελίδα σας! Γιατί δεν θα ξεκινήσουμε, τότε?",
+        "getStarted": "Ας ξεκινήσουμε!"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects"
+        "dashboard": "Ταμπλό",
+        "projects": "Έργα"
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "Σφάλμα διαγραφής έργου!",
         "settings": {
-            "miscellaneous": "miscellaneous",
-            "dangerZone": "DANGER ZONE"
+            "miscellaneous": "διάφορα",
+            "dangerZone": "ΖΩΝΗ ΚΙΝΔΥΝΟΥ"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "Φόρτωση επεξεργαστή..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "Μετάβαση πίσω στην αρχική σελίδα"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "Όνομα Έργου",
+        "projectIcon": "Εικονίδιο Έργου",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "Βασικό",
+                "description": "Ένα βασικό πρότυπο."
             },
             "templateBlog": {
-                "name": "Blog",
-                "description": "A template for a blog."
+                "name": "Ιστολόγιο",
+                "description": "Ένα πρότυπο για ένα blog."
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "Χαρτοφυλάκιο",
+                "description": "Ένα πρότυπο για ένα χαρτοφυλάκιο."
             },
             "templateWebsite": {
-                "name": "Website",
-                "description": "A template for a website."
+                "name": "Ιστοσελίδα",
+                "description": "Ένα πρότυπο για μια ιστοσελίδα."
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "Κανένα Πρότυπο",
+                "description": "Κανένα πρότυπο, έναρξη από το μηδέν."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "Δεν βρέθηκε η σελίδα που ψάχνετε!",
+        "page": "Σελίδα:",
+        "goBackHome": "Μετάβαση πίσω στην αρχική σελίδα"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "Δημιουργία έργου..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
-        "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "attributes": "Χαρακτηριστικά",
+        "addAttribute": "Προσθήκη ιδιότητας",
+        "editAttribute": "Επεξεργασία χαρακτηριστικού",
+        "element": "Στοιχείο",
+        "deleteElement": "Διαγραφή στοιχείου",
+        "duplicateElement": "Αντίγραφο στοιχείου",
+        "editAsHTML": "Επεξεργασία ως HTML",
+        "expandRecursively": "Επέκταση Αναδρομικά",
+        "collapseChildren": "Σύμπτυξη Θυγατρικών"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
-        "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
-        "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
-        "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "propertyManagement": "Διαχείριση Ιδιοκτησίας",
+        "elements": "Στοιχεία",
+        "javascriptNodes": "Κόμβοι Javascript",
+        "settings": "Ρυθμίσεις",
+        "layoutEditor": "Επεξεργαστής Διάταξης",
+        "deleteFile": "Διαγραφή αρχείου",
+        "renameFile": "Μετονομασία αρχείου",
+        "saveFile": "ΑποθήκευσηΑρχείο",
+        "openFileExplorer": "Άνοιγμα στον περιηγητή αρχείων",
+        "openInPopout": "Άνοιγμα σε αναδυόμενο παράθυρο",
+        "deleteFolder": "Διαγραφή φακέλου",
+        "renameFolder": "Μετονομασία φακέλου",
+        "fileNeedsName": "Το αρχείο πρέπει να έχει όνομα",
+        "fileNeedsExtension": "Η επέκταση δεν πρέπει να είναι κενή",
+        "fileNameTooLong": "Το όνομα αρχείου πρέπει να είναι μικρότερο από 100 χαρακτήρες",
+        "invalidFileCharacter": "Το όνομα αρχείου δεν μπορεί να περιέχει το chataracter",
+        "folderNeedsName": "Ο φάκελος πρέπει να έχει ένα όνομα",
+        "folderNameTooLong": "Το όνομα του φακέλου πρέπει να είναι μικρότερο από 100 χαρακτήρες",
+        "invalidFolderCharacter": "Το όνομα του φακέλου δεν μπορεί να περιέχει το chataracter",
+        "fileName": "Όνομα αρχείου...",
+        "folderName": "Όνομα φακέλου..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "Κάντε κλικ σε ένα στοιχείο για να το αλλάξετε",
+        "classList": "Λίστα Κλάσεων",
+        "className": "Όνομα Κλάσης",
+        "properties": "Ιδιότητες",
         "styles": "Styles"
     }
 }

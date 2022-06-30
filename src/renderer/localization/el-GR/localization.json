@@ -1,0 +1,110 @@
+{
+    "loading": "Φόρτωση...",
+    "confirmDelete": "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το έργο? Αυτή η ενέργεια είναι μη αναστρέψιμη.",
+    "deleteProject": "Διαγραφή έργου",
+    "editing": "Επεξεργασία",
+    "buttons": {
+        "cancel": "Ακύρωση",
+        "delete": "Διαγραφή"
+    },
+    "welcomePage": {
+        "welcome": "Καλωσόρισμα",
+        "welcomeText": "Καλώς ήλθατε στο Bad CMS για τους προγραμματιστές! Ελπίζουμε ότι αυτό το CMS δεν είναι στην πραγματικότητα τόσο κακό, αλλά είναι φτιαγμένο για ανθρώπους που θέλουν να πάρουν τα χέρια τους βρώμικα με πραγματικά κώδικα επεξεργασίας. Αυτό το CMS σας βοηθά να κάνετε μια βασική δομή για την ιστοσελίδα σας! Γιατί δεν θα ξεκινήσουμε, τότε?",
+        "getStarted": "Ας ξεκινήσουμε!"
+    },
+    "dashboardPage": {
+        "dashboard": "Ταμπλό",
+        "projects": "Έργα"
+    },
+    "editorPage": {
+        "errorDeleting": "Σφάλμα διαγραφής έργου!",
+        "settings": {
+            "miscellaneous": "διάφορα",
+            "dangerZone": "ΖΩΝΗ ΚΙΝΔΥΝΟΥ"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Φόρτωση επεξεργαστή..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Μετάβαση πίσω στην αρχική σελίδα"
+    },
+    "getStartedPage": {
+        "projectName": "Όνομα Έργου",
+        "projectIcon": "Εικονίδιο Έργου",
+        "templates": {
+            "templateBasic": {
+                "name": "Βασικό",
+                "description": "Ένα βασικό πρότυπο."
+            },
+            "templateBlog": {
+                "name": "Ιστολόγιο",
+                "description": "Ένα πρότυπο για ένα blog."
+            },
+            "templatePortfolio": {
+                "name": "Χαρτοφυλάκιο",
+                "description": "Ένα πρότυπο για ένα χαρτοφυλάκιο."
+            },
+            "templateWebsite": {
+                "name": "Ιστοσελίδα",
+                "description": "Ένα πρότυπο για μια ιστοσελίδα."
+            },
+            "templateNoTemplate": {
+                "name": "Κανένα Πρότυπο",
+                "description": "Κανένα πρότυπο, έναρξη από το μηδέν."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Δεν βρέθηκε η σελίδα που ψάχνετε!",
+        "page": "Σελίδα:",
+        "goBackHome": "Μετάβαση πίσω στην αρχική σελίδα"
+    },
+    "templatePage": {
+        "creatingProject": "Δημιουργία έργου..."
+    },
+    "elementsComponent": {
+        "attributes": "Χαρακτηριστικά",
+        "addAttribute": "Προσθήκη ιδιότητας",
+        "editAttribute": "Επεξεργασία χαρακτηριστικού",
+        "element": "Στοιχείο",
+        "deleteElement": "Διαγραφή στοιχείου",
+        "duplicateElement": "Αντίγραφο στοιχείου",
+        "editAsHTML": "Επεξεργασία ως HTML",
+        "expandRecursively": "Επέκταση Αναδρομικά",
+        "collapseChildren": "Σύμπτυξη Θυγατρικών"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Διαχείριση Ιδιοκτησίας",
+        "elements": "Στοιχεία",
+        "javascriptNodes": "Κόμβοι Javascript",
+        "settings": "Ρυθμίσεις",
+        "layoutEditor": "Επεξεργαστής Διάταξης",
+        "deleteFile": "Διαγραφή αρχείου",
+        "renameFile": "Μετονομασία αρχείου",
+        "saveFile": "ΑποθήκευσηΑρχείο",
+        "openFileExplorer": "Άνοιγμα στον περιηγητή αρχείων",
+        "openInPopout": "Άνοιγμα σε αναδυόμενο παράθυρο",
+        "deleteFolder": "Διαγραφή φακέλου",
+        "renameFolder": "Μετονομασία φακέλου",
+        "fileNeedsName": "Το αρχείο πρέπει να έχει όνομα",
+        "fileNeedsExtension": "Η επέκταση δεν πρέπει να είναι κενή",
+        "fileNameTooLong": "Το όνομα αρχείου πρέπει να είναι μικρότερο από 100 χαρακτήρες",
+        "invalidFileCharacter": "Το όνομα αρχείου δεν μπορεί να περιέχει το chataracter",
+        "folderNeedsName": "Ο φάκελος πρέπει να έχει ένα όνομα",
+        "folderNameTooLong": "Το όνομα του φακέλου πρέπει να είναι μικρότερο από 100 χαρακτήρες",
+        "invalidFolderCharacter": "Το όνομα του φακέλου δεν μπορεί να περιέχει το chataracter",
+        "fileName": "Όνομα αρχείου...",
+        "folderName": "Όνομα φακέλου..."
+    },
+    "creatorComponent": {
+        "clickElement": "Κάντε κλικ σε ένα στοιχείο για να το αλλάξετε",
+        "classList": "Λίστα Κλάσεων",
+        "className": "Όνομα Κλάσης",
+        "properties": "Ιδιότητες",
+        "styles": "Styles"
+    }
+}

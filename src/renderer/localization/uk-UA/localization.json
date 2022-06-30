@@ -1,0 +1,110 @@
+{
+    "loading": "Завантажується...",
+    "confirmDelete": "Ви впевнені, що хочете видалити цей проект? Ця дія є незворотньою.",
+    "deleteProject": "Видалити проект",
+    "editing": "Редагування",
+    "buttons": {
+        "cancel": "Скасувати",
+        "delete": "Видалити"
+    },
+    "welcomePage": {
+        "welcome": "Вітаємо",
+        "welcomeText": "Ласкаво просимо до Bad CMS для розробників! Сподіваємося, що цей CMS не такий вже й поганий, але він з'явився для людей, які хочуть взяти свої руки в брудному курсі редагування коду. Ці CMS просто допомагає вам створити базову структуру для вашого веб-сайту! Чому б нам не почати, тоді?",
+        "getStarted": "Розпочати!"
+    },
+    "dashboardPage": {
+        "dashboard": "Приладна дошка",
+        "projects": "Проекти"
+    },
+    "editorPage": {
+        "errorDeleting": "Помилка видалення проекту!",
+        "settings": {
+            "miscellaneous": "різне",
+            "dangerZone": "ЗОНА"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Завантаження редактора..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Повернутися додому"
+    },
+    "getStartedPage": {
+        "projectName": "Назва проекту",
+        "projectIcon": "Піктограма проекту",
+        "templates": {
+            "templateBasic": {
+                "name": "Основні налаштування",
+                "description": "Основний шаблон."
+            },
+            "templateBlog": {
+                "name": "Блог",
+                "description": "Шаблон блогу."
+            },
+            "templatePortfolio": {
+                "name": "Портфель",
+                "description": "Шаблон для портфоліо."
+            },
+            "templateWebsite": {
+                "name": "Вебсайт",
+                "description": "Шаблон для сайту."
+            },
+            "templateNoTemplate": {
+                "name": "Немає шаблону",
+                "description": "Немає шаблону, почніть з нуля."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Не вдалося знайти сторінку, яку ви шукаєте!",
+        "page": "Сторінка:",
+        "goBackHome": "Повернутися додому"
+    },
+    "templatePage": {
+        "creatingProject": "Створення проекту..."
+    },
+    "elementsComponent": {
+        "attributes": "Атрибути",
+        "addAttribute": "Додати атрибут",
+        "editAttribute": "Редагувати атрибут",
+        "element": "Елемент",
+        "deleteElement": "Видалити елемент",
+        "duplicateElement": "Дублювати елемент",
+        "editAsHTML": "Редагувати як HTML",
+        "expandRecursively": "Розгорнути рекурсивно",
+        "collapseChildren": "Згорнути дочірні ресурси"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Керування властивостями",
+        "elements": "Елементи",
+        "javascriptNodes": "JavaScript вузли",
+        "settings": "Налаштування",
+        "layoutEditor": "Редактор полів",
+        "deleteFile": "Видалити файл",
+        "renameFile": "Перейменувати файл",
+        "saveFile": "зберегти файл",
+        "openFileExplorer": "Відкрити в провіднику",
+        "openInPopout": "Відкрити в виринаючому вікні",
+        "deleteFolder": "Видалити папку",
+        "renameFolder": "Перейменувати папку",
+        "fileNeedsName": "Файл повинен мати ім'я",
+        "fileNeedsExtension": "Розширення не може бути порожнім",
+        "fileNameTooLong": "Ім'я файлу має бути коротшим за 100 символів",
+        "invalidFileCharacter": "Ім'я файлу не може містити chataracter",
+        "folderNeedsName": "Папка повинна мати ім'я",
+        "folderNameTooLong": "Назва теки повинна містити менше 100 символів",
+        "invalidFolderCharacter": "Ім'я теки не може містити чат-картер",
+        "fileName": "Назва файлу...",
+        "folderName": "Назва папки..."
+    },
+    "creatorComponent": {
+        "clickElement": "Натисніть на елемент, щоб змінити його",
+        "classList": "Список класів",
+        "className": "Ім'я класу",
+        "properties": "Властивості",
+        "styles": "Styles"
+    }
+}

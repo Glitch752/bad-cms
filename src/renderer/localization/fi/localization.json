@@ -1,110 +1,110 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "Ladataan...",
+    "confirmDelete": "Oletko varma, että haluat poistaa tämän projektin? Tämä toiminto on peruuttamaton.",
+    "deleteProject": "Poista projekti",
+    "editing": "Muokataan",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "Peruuta",
+        "delete": "Poista"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "Tervetuloa",
+        "welcomeText": "Tervetuloa väärään CMS-järjestelmään deveille! Toivomme, että tämä CMS ei ole todella niin huono, mutta se on tehty ihmisille, jotka haluavat saada kätensä likainen kanssa todella editointi koodi. Tämä CMS vain auttaa sinua tekemään perusrakenteen sivustollesi! Miksi emme päästä alkuun, sitten?",
+        "getStarted": "Aloita alku!"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects"
+        "dashboard": "Hallintapaneeli",
+        "projects": "Projektit"
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "Virhe poistettaessa projektia!",
         "settings": {
-            "miscellaneous": "miscellaneous",
+            "miscellaneous": "sekalainen",
             "dangerZone": "DANGER ZONE"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "Ladataan editoria..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "Siirry takaisin kotiin"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "Projektin Nimi",
+        "projectIcon": "Projektin Kuvake",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "Perus",
+                "description": "Perusmalli (basic templat)."
             },
             "templateBlog": {
-                "name": "Blog",
-                "description": "A template for a blog."
+                "name": "Blogi",
+                "description": "Sivupohja blogiin ."
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "Salkku",
+                "description": "Vakavaraisuusasetuksen 36 artiklan 1 kohdan b alakohta"
             },
             "templateWebsite": {
-                "name": "Website",
-                "description": "A template for a website."
+                "name": "Sivusto",
+                "description": "Sivupohja tälle sivustolle."
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "Ei Sivupohjaa",
+                "description": "Ei sivupohjaa, aloita tyhjästä."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "Sivua ei löytynyt, jota etsit!",
+        "page": "Sivu:",
+        "goBackHome": "Siirry takaisin kotiin"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "Luodaan projektia..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
-        "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "attributes": "Ominaisuudet",
+        "addAttribute": "Lisää attribuutti",
+        "editAttribute": "Muokkaa attribuuttia",
+        "element": "Elementti",
+        "deleteElement": "Poista elementti",
+        "duplicateElement": "Monista elementti",
+        "editAsHTML": "Muokkaa HTML",
+        "expandRecursively": "Laajenna Rekursiivisesti",
+        "collapseChildren": "Kutista Lapset"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
-        "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
-        "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
+        "propertyManagement": "Kiinteistöjen Hallinta",
+        "elements": "Elementit",
+        "javascriptNodes": "JavaScript-solmut",
+        "settings": "Asetukset",
+        "layoutEditor": "Asettelun Muokkain",
+        "deleteFile": "Poista tiedosto",
+        "renameFile": "Nimeä tiedosto uudelleen",
         "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "openFileExplorer": "Avaa tiedostojen tutkimusohjelmassa",
+        "openInPopout": "Avaa ponnahdusikkunassa",
+        "deleteFolder": "Poista kansio",
+        "renameFolder": "Nimeä kansio uudelleen",
+        "fileNeedsName": "Tiedostolla on oltava nimi",
+        "fileNeedsExtension": "Lisäosa ei saa olla tyhjä",
+        "fileNameTooLong": "Tiedostonimen on oltava lyhyempi kuin 100 merkkiä pitkä",
+        "invalidFileCharacter": "Tiedostonimi ei voi sisältää chataracteria",
+        "folderNeedsName": "Kansiolla täytyy olla nimi",
+        "folderNameTooLong": "Kansion nimen on oltava lyhyempi kuin 100 merkkiä pitkä",
+        "invalidFolderCharacter": "Kansion nimi ei voi sisältää chataracteria",
+        "fileName": "Tiedoston nimi...",
+        "folderName": "Kansion nimi..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "Napsauta elementtiä muuttaaksesi sitä",
+        "classList": "Luokan Lista",
+        "className": "Luokan Nimi",
+        "properties": "Ominaisuudet",
         "styles": "Styles"
     }
 }

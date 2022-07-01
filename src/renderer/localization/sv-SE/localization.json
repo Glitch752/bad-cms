@@ -1,110 +1,118 @@
 {
-    "loading": "Laddar...",
-    "confirmDelete": "Är du säker på att du vill ta bort projektet? Denna åtgärd är oåterkallelig.",
-    "deleteProject": "Ta bort projekt",
-    "editing": "Redigerar",
+    "loading": "Loading...",
+    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
+    "deleteProject": "Delete project",
+    "editing": "Editing",
     "buttons": {
-        "cancel": "Avbryt",
-        "delete": "Radera"
+        "cancel": "Cancel",
+        "delete": "Delete"
     },
     "welcomePage": {
-        "welcome": "Välkommen",
-        "welcomeText": "Välkommen till Bad CMS för devs! Vi hoppas att detta CMS faktiskt inte är så dåligt, men det är gjort för människor som vill få sina händer smutsiga med att faktiskt redigera kod. Denna CMS hjälper dig bara att göra en grundläggande struktur för din webbplats! Varför inte vi komma igång, då?",
-        "getStarted": "Kom igång!"
+        "welcome": "Welcome",
+        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
+        "getStarted": "Get started!"
     },
     "dashboardPage": {
-        "dashboard": "Instrumentpanel",
-        "projects": "Projekt"
+        "dashboard": "Dashboard",
+        "projects": "Projects",
+        "settings": "Settings",
+        "settingsMenu": {
+            "language": "Language",
+            "translation": {
+                "start": "This project is being translated on",
+                "end": "Contributions are greatly appreciated!"
+            }
+        }
     },
     "editorPage": {
-        "errorDeleting": "Fel vid borttagning av projekt!",
+        "errorDeleting": "Error deleting project!",
         "settings": {
-            "miscellaneous": "diverse",
+            "miscellaneous": "miscellaneous",
             "dangerZone": "DANGER ZONE"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Laddar redigerare..."
+        "loadingEditor": "Loading editor..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Gå tillbaka hem"
+        "gobackhome": "Go back home"
     },
     "getStartedPage": {
-        "projectName": "Projektets namn",
-        "projectIcon": "Projekt Ikon",
+        "projectName": "Project Name",
+        "projectIcon": "Project Icon",
         "templates": {
             "templateBasic": {
-                "name": "Grundläggande",
-                "description": "En grundläggande mall."
+                "name": "Basic",
+                "description": "A basic template."
             },
             "templateBlog": {
-                "name": "Blogg",
-                "description": "En mall för en blogg."
+                "name": "Blog",
+                "description": "A template for a blog."
             },
             "templatePortfolio": {
-                "name": "Portfölj",
-                "description": "En mall för en portfölj."
+                "name": "Portfolio",
+                "description": "A template for a portfolio."
             },
             "templateWebsite": {
-                "name": "Webbplats",
-                "description": "En mall för en webbplats."
+                "name": "Website",
+                "description": "A template for a website."
             },
             "templateNoTemplate": {
-                "name": "Ingen mall",
-                "description": "Ingen mall, börja från början."
+                "name": "No Template",
+                "description": "No template, start from scratch."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Kunde inte hitta sidan du letar efter!",
-        "page": "Sida:",
-        "goBackHome": "Gå tillbaka hem"
+        "couldNotFindPage": "Couldn't find the page you're looking for!",
+        "page": "Page:",
+        "goBackHome": "Go back home"
     },
     "templatePage": {
-        "creatingProject": "Skapar projekt..."
+        "creatingProject": "Creating project..."
     },
     "elementsComponent": {
-        "attributes": "Attribut",
-        "addAttribute": "Lägg till attribut",
-        "editAttribute": "Redigera attribut",
+        "attributes": "Attributes",
+        "addAttribute": "Add attribute",
+        "editAttribute": "Edit attribute",
         "element": "Element",
-        "deleteElement": "Ta bort element",
-        "duplicateElement": "Dubblera element",
-        "editAsHTML": "Redigera som HTML",
-        "expandRecursively": "Expandera rekursivt",
-        "collapseChildren": "Komprimera barn"
+        "deleteElement": "Delete element",
+        "duplicateElement": "Duplicate element",
+        "editAsHTML": "Edit as HTML",
+        "expandRecursively": "Expand Recursively",
+        "collapseChildren": "Collapse Children"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Hantering av egenskaper",
-        "elements": "Element",
-        "javascriptNodes": "Javascript noder",
-        "settings": "Inställningar",
+        "propertyManagement": "Property Management",
+        "elements": "Elements",
+        "javascriptNodes": "Javascript Nodes",
+        "settings": "Settings",
         "layoutEditor": "Layout Editor",
-        "deleteFile": "Radera fil",
-        "renameFile": "Döp om fil",
-        "saveFile": "sparaFil",
-        "openFileExplorer": "Öppna i filutforskaren",
-        "openInPopout": "Öppna i popout fönster",
-        "deleteFolder": "Ta bort mapp",
-        "renameFolder": "Döp om mapp",
-        "fileNeedsName": "Filen måste ha ett namn",
-        "fileNeedsExtension": "Tillägget får inte vara tomt",
-        "fileNameTooLong": "Filnamnet måste vara kortare än 100 tecken",
-        "invalidFileCharacter": "Filnamnet kan inte innehålla chataracter",
-        "folderNeedsName": "Mappen måste ha ett namn",
-        "folderNameTooLong": "Mappens namn måste vara kortare än 100 tecken",
-        "invalidFolderCharacter": "Mappens namn får inte innehålla chataracter",
-        "fileName": "Filnamn...",
-        "folderName": "Mappens namn..."
+        "deleteFile": "Delete file",
+        "renameFile": "Rename file",
+        "saveFile": "saveFile",
+        "openFileExplorer": "Open in file explorer",
+        "openInPopout": "Open in popout window",
+        "deleteFolder": "Delete folder",
+        "renameFolder": "Rename folder",
+        "fileNeedsName": "File must have a name",
+        "fileNeedsExtension": "Extension must not be empty",
+        "fileNameTooLong": "Filename must be shorter than 100 characters",
+        "invalidFileCharacter": "Filename cannot contain the chataracter",
+        "folderNeedsName": "Folder must have a name",
+        "folderNameTooLong": "Folder name must be shorter than 100 characters",
+        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
+        "fileName": "File name...",
+        "folderName": "Folder name..."
     },
     "creatorComponent": {
-        "clickElement": "Klicka på ett element för att ändra det",
-        "classList": "Klasslista",
-        "className": "Klassens namn",
-        "properties": "Egenskaper",
+        "clickElement": "Click on an element to change it",
+        "classList": "Class List",
+        "className": "Class Name",
+        "properties": "Properties",
         "styles": "Styles"
     }
 }

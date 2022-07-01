@@ -1,118 +1,118 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "読み込み中...",
+    "confirmDelete": "このプロジェクトを削除してもよろしいですか？この操作は元に戻せません。",
+    "deleteProject": "プロジェクトを削除",
+    "editing": "編集",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "キャンセル",
+        "delete": "削除"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "ようこそ",
+        "welcomeText": "悪いCMSへようこそ！ CMSはそんなに悪くないといいのですが、実際にコードを編集して手を汚したい人のために作られています。 このCMSは、あなたのウェブサイトの基本構造を作るのに役立ちます!それでは、始めませんか?",
+        "getStarted": "始めましょう！"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects",
-        "settings": "Settings",
+        "dashboard": "ダッシュボード",
+        "projects": "プロジェクト",
+        "settings": "設定",
         "settingsMenu": {
-            "language": "Language",
+            "language": "言語",
             "translation": {
-                "start": "This project is being translated on",
-                "end": "Contributions are greatly appreciated!"
+                "start": "このプロジェクトは翻訳されています",
+                "end": "貢献していただきありがとうございます！"
             }
         }
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "プロジェクトの削除エラー！",
         "settings": {
-            "miscellaneous": "miscellaneous",
-            "dangerZone": "DANGER ZONE"
+            "miscellaneous": "その他",
+            "dangerZone": "危険ゾーン"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "エディターを読み込んでいます..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "帰還する"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "プロジェクト名",
+        "projectIcon": "プロジェクトアイコン",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "基本",
+                "description": "基本的なテンプレート"
             },
             "templateBlog": {
-                "name": "Blog",
-                "description": "A template for a blog."
+                "name": "ブログ",
+                "description": "ブログのテンプレート"
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "ポートフォリオ",
+                "description": "ポートフォリオのテンプレート"
             },
             "templateWebsite": {
-                "name": "Website",
-                "description": "A template for a website."
+                "name": "ウェブサイト",
+                "description": "ウェブサイト用のテンプレート"
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "テンプレートがありません",
+                "description": "テンプレートはありません。最初から始めます。"
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "探しているページが見つかりませんでした！",
+        "page": "ページ:",
+        "goBackHome": "帰還する"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "プロジェクトを作成しています..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
-        "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "attributes": "属性",
+        "addAttribute": "属性を追加",
+        "editAttribute": "属性を編集",
+        "element": "要素",
+        "deleteElement": "要素を削除",
+        "duplicateElement": "要素を複製",
+        "editAsHTML": "HTML として編集",
+        "expandRecursively": "再帰的に展開",
+        "collapseChildren": "子を閉じる"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
-        "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
-        "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
+        "propertyManagement": "プロパティ管理",
+        "elements": "要素",
+        "javascriptNodes": "Javascriptノード",
+        "settings": "設定",
+        "layoutEditor": "レイアウトエディター",
+        "deleteFile": "ファイルを削除",
+        "renameFile": "ファイル名の変更",
         "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "openFileExplorer": "ファイルエクスプローラで開く",
+        "openInPopout": "ポップアウトウィンドウで開く",
+        "deleteFolder": "フォルダを削除",
+        "renameFolder": "フォルダ名を変更",
+        "fileNeedsName": "ファイルには名前が必要です",
+        "fileNeedsExtension": "エクステンションは空にできません",
+        "fileNameTooLong": "ファイル名は100文字より短くなければなりません",
+        "invalidFileCharacter": "ファイル名にチャット文字を含めることはできません",
+        "folderNeedsName": "フォルダには名前が必要です",
+        "folderNameTooLong": "フォルダ名は100文字より短くなければなりません",
+        "invalidFolderCharacter": "フォルダ名にチャット文字を含めることはできません",
+        "fileName": "ファイル名...",
+        "folderName": "フォルダ名..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "変更するには要素をクリックしてください",
+        "classList": "クラスリスト",
+        "className": "クラス名",
+        "properties": "プロパティー",
         "styles": "Styles"
     }
 }

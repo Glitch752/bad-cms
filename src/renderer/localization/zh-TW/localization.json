@@ -14,7 +14,15 @@
     },
     "dashboardPage": {
         "dashboard": "Dashboard",
-        "projects": "Projects"
+        "projects": "Projects",
+        "settings": "Settings",
+        "settingsMenu": {
+            "language": "Language",
+            "translation": {
+                "start": "This project is being translated on",
+                "end": "Contributions are greatly appreciated!"
+            }
+        }
     },
     "editorPage": {
         "errorDeleting": "Error deleting project!",

@@ -1,0 +1,118 @@
+{
+    "loading": "Laddar...",
+    "confirmDelete": "Är du säker på att du vill ta bort projektet? Denna åtgärd är oåterkallelig.",
+    "deleteProject": "Ta bort projekt",
+    "editing": "Redigerar",
+    "buttons": {
+        "cancel": "Avbryt",
+        "delete": "Radera"
+    },
+    "welcomePage": {
+        "welcome": "Välkommen",
+        "welcomeText": "Välkommen till Bad CMS för devs! Vi hoppas att detta CMS faktiskt inte är så dåligt, men det är gjort för människor som vill få sina händer smutsiga med att faktiskt redigera kod. Denna CMS hjälper dig bara att göra en grundläggande struktur för din webbplats! Varför inte vi komma igång, då?",
+        "getStarted": "Kom igång!"
+    },
+    "dashboardPage": {
+        "dashboard": "Instrumentpanel",
+        "projects": "Projekt",
+        "settings": "Inställningar",
+        "settingsMenu": {
+            "language": "Språk",
+            "translation": {
+                "start": "Detta projekt översätts på",
+                "end": "Bidragen är mycket uppskattade!"
+            }
+        }
+    },
+    "editorPage": {
+        "errorDeleting": "Fel vid borttagning av projekt!",
+        "settings": {
+            "miscellaneous": "diverse",
+            "dangerZone": "DANGER ZONE"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Laddar redigerare..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Gå tillbaka hem"
+    },
+    "getStartedPage": {
+        "projectName": "Projektets namn",
+        "projectIcon": "Projekt Ikon",
+        "templates": {
+            "templateBasic": {
+                "name": "Grundläggande",
+                "description": "En grundläggande mall."
+            },
+            "templateBlog": {
+                "name": "Blogg",
+                "description": "En mall för en blogg."
+            },
+            "templatePortfolio": {
+                "name": "Portfölj",
+                "description": "En mall för en portfölj."
+            },
+            "templateWebsite": {
+                "name": "Webbplats",
+                "description": "En mall för en webbplats."
+            },
+            "templateNoTemplate": {
+                "name": "Ingen mall",
+                "description": "Ingen mall, börja från början."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Kunde inte hitta sidan du letar efter!",
+        "page": "Sida:",
+        "goBackHome": "Gå tillbaka hem"
+    },
+    "templatePage": {
+        "creatingProject": "Skapar projekt..."
+    },
+    "elementsComponent": {
+        "attributes": "Attribut",
+        "addAttribute": "Lägg till attribut",
+        "editAttribute": "Redigera attribut",
+        "element": "Element",
+        "deleteElement": "Ta bort element",
+        "duplicateElement": "Dubblera element",
+        "editAsHTML": "Redigera som HTML",
+        "expandRecursively": "Expandera rekursivt",
+        "collapseChildren": "Komprimera barn"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Hantering av egenskaper",
+        "elements": "Element",
+        "javascriptNodes": "Javascript noder",
+        "settings": "Inställningar",
+        "layoutEditor": "Layout Editor",
+        "deleteFile": "Radera fil",
+        "renameFile": "Döp om fil",
+        "saveFile": "sparaFil",
+        "openFileExplorer": "Öppna i filutforskaren",
+        "openInPopout": "Öppna i popout fönster",
+        "deleteFolder": "Ta bort mapp",
+        "renameFolder": "Döp om mapp",
+        "fileNeedsName": "Filen måste ha ett namn",
+        "fileNeedsExtension": "Tillägget får inte vara tomt",
+        "fileNameTooLong": "Filnamnet måste vara kortare än 100 tecken",
+        "invalidFileCharacter": "Filnamnet kan inte innehålla chataracter",
+        "folderNeedsName": "Mappen måste ha ett namn",
+        "folderNameTooLong": "Mappens namn måste vara kortare än 100 tecken",
+        "invalidFolderCharacter": "Mappens namn får inte innehålla chataracter",
+        "fileName": "Filnamn...",
+        "folderName": "Mappens namn..."
+    },
+    "creatorComponent": {
+        "clickElement": "Klicka på ett element för att ändra det",
+        "classList": "Klasslista",
+        "className": "Klassens namn",
+        "properties": "Egenskaper",
+        "styles": "Styles"
+    }
+}

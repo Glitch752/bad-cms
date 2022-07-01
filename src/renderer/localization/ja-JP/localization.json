@@ -1,0 +1,118 @@
+{
+    "loading": "読み込み中...",
+    "confirmDelete": "このプロジェクトを削除してもよろしいですか？この操作は元に戻せません。",
+    "deleteProject": "プロジェクトを削除",
+    "editing": "編集",
+    "buttons": {
+        "cancel": "キャンセル",
+        "delete": "削除"
+    },
+    "welcomePage": {
+        "welcome": "ようこそ",
+        "welcomeText": "悪いCMSへようこそ！ CMSはそんなに悪くないといいのですが、実際にコードを編集して手を汚したい人のために作られています。 このCMSは、あなたのウェブサイトの基本構造を作るのに役立ちます!それでは、始めませんか?",
+        "getStarted": "始めましょう！"
+    },
+    "dashboardPage": {
+        "dashboard": "ダッシュボード",
+        "projects": "プロジェクト",
+        "settings": "設定",
+        "settingsMenu": {
+            "language": "言語",
+            "translation": {
+                "start": "このプロジェクトは翻訳されています",
+                "end": "貢献していただきありがとうございます！"
+            }
+        }
+    },
+    "editorPage": {
+        "errorDeleting": "プロジェクトの削除エラー！",
+        "settings": {
+            "miscellaneous": "その他",
+            "dangerZone": "危険ゾーン"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "エディターを読み込んでいます..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "帰還する"
+    },
+    "getStartedPage": {
+        "projectName": "プロジェクト名",
+        "projectIcon": "プロジェクトアイコン",
+        "templates": {
+            "templateBasic": {
+                "name": "基本",
+                "description": "基本的なテンプレート"
+            },
+            "templateBlog": {
+                "name": "ブログ",
+                "description": "ブログのテンプレート"
+            },
+            "templatePortfolio": {
+                "name": "ポートフォリオ",
+                "description": "ポートフォリオのテンプレート"
+            },
+            "templateWebsite": {
+                "name": "ウェブサイト",
+                "description": "ウェブサイト用のテンプレート"
+            },
+            "templateNoTemplate": {
+                "name": "テンプレートがありません",
+                "description": "テンプレートはありません。最初から始めます。"
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "探しているページが見つかりませんでした！",
+        "page": "ページ:",
+        "goBackHome": "帰還する"
+    },
+    "templatePage": {
+        "creatingProject": "プロジェクトを作成しています..."
+    },
+    "elementsComponent": {
+        "attributes": "属性",
+        "addAttribute": "属性を追加",
+        "editAttribute": "属性を編集",
+        "element": "要素",
+        "deleteElement": "要素を削除",
+        "duplicateElement": "要素を複製",
+        "editAsHTML": "HTML として編集",
+        "expandRecursively": "再帰的に展開",
+        "collapseChildren": "子を閉じる"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "プロパティ管理",
+        "elements": "要素",
+        "javascriptNodes": "Javascriptノード",
+        "settings": "設定",
+        "layoutEditor": "レイアウトエディター",
+        "deleteFile": "ファイルを削除",
+        "renameFile": "ファイル名の変更",
+        "saveFile": "saveFile",
+        "openFileExplorer": "ファイルエクスプローラで開く",
+        "openInPopout": "ポップアウトウィンドウで開く",
+        "deleteFolder": "フォルダを削除",
+        "renameFolder": "フォルダ名を変更",
+        "fileNeedsName": "ファイルには名前が必要です",
+        "fileNeedsExtension": "エクステンションは空にできません",
+        "fileNameTooLong": "ファイル名は100文字より短くなければなりません",
+        "invalidFileCharacter": "ファイル名にチャット文字を含めることはできません",
+        "folderNeedsName": "フォルダには名前が必要です",
+        "folderNameTooLong": "フォルダ名は100文字より短くなければなりません",
+        "invalidFolderCharacter": "フォルダ名にチャット文字を含めることはできません",
+        "fileName": "ファイル名...",
+        "folderName": "フォルダ名..."
+    },
+    "creatorComponent": {
+        "clickElement": "変更するには要素をクリックしてください",
+        "classList": "クラスリスト",
+        "className": "クラス名",
+        "properties": "プロパティー",
+        "styles": "Styles"
+    }
+}

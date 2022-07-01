@@ -1,0 +1,118 @@
+{
+    "loading": "Ładowanie...",
+    "confirmDelete": "Czy na pewno chcesz usunąć ten projekt? Ta akcja jest nieodwracalna.",
+    "deleteProject": "Usuń projekt",
+    "editing": "Edycja",
+    "buttons": {
+        "cancel": "Anuluj",
+        "delete": "Usuń"
+    },
+    "welcomePage": {
+        "welcome": "Witaj",
+        "welcomeText": "Witaj w Bad CMS dla deweloperów! Mamy nadzieję, że ta CMS nie jest tak zła, ale jest wykonana dla ludzi, którzy chcą dostać swoje ręce brudne przy rzeczywistej edycji kodu. Ta CMS pomaga stworzyć podstawową strukturę dla Twojej strony internetowej! Czemu więc nie zaczniemy?",
+        "getStarted": "Zacznij!"
+    },
+    "dashboardPage": {
+        "dashboard": "Pulpit",
+        "projects": "Projekty",
+        "settings": "Ustawienia",
+        "settingsMenu": {
+            "language": "Język",
+            "translation": {
+                "start": "Ten projekt jest przetłumaczony na",
+                "end": "Wkład jest bardzo wdzięczny!"
+            }
+        }
+    },
+    "editorPage": {
+        "errorDeleting": "Błąd podczas usuwania projektu!",
+        "settings": {
+            "miscellaneous": "różne",
+            "dangerZone": "STREFA DANGA"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Ładowanie edytora..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Wróć do domu"
+    },
+    "getStartedPage": {
+        "projectName": "Nazwa projektu",
+        "projectIcon": "Ikona projektu",
+        "templates": {
+            "templateBasic": {
+                "name": "Podstawowe",
+                "description": "Podstawowy szablon."
+            },
+            "templateBlog": {
+                "name": "Blog",
+                "description": "Szablon bloga."
+            },
+            "templatePortfolio": {
+                "name": "Portfel",
+                "description": "Wzór CR EQU IRB 1 zawiera informacje dotyczące obliczania kwot ekspozycji ważonych ryzykiem zgodnie z częścią trzecią tytuł II rozdział 5 sekcja 3 CRR."
+            },
+            "templateWebsite": {
+                "name": "Strona internetowa",
+                "description": "Szablon strony internetowej."
+            },
+            "templateNoTemplate": {
+                "name": "Brak szablonu",
+                "description": "Brak szablonu, zacznij od zera."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Nie można znaleźć strony, której szukasz!",
+        "page": "Strona:",
+        "goBackHome": "Wróć do domu"
+    },
+    "templatePage": {
+        "creatingProject": "Tworzenie projektu..."
+    },
+    "elementsComponent": {
+        "attributes": "Atrybut",
+        "addAttribute": "Dodaj atrybut",
+        "editAttribute": "Edytuj atrybut",
+        "element": "Element",
+        "deleteElement": "Usuń element",
+        "duplicateElement": "Duplikuj element",
+        "editAsHTML": "Edytuj jako HTML",
+        "expandRecursively": "Rozwiń rekursywnie",
+        "collapseChildren": "Zwiń dzieci"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Zarządzanie nieruchomościami",
+        "elements": "Elementy",
+        "javascriptNodes": "Węzły Javascript",
+        "settings": "Ustawienia",
+        "layoutEditor": "Edytor układu",
+        "deleteFile": "Usuń plik",
+        "renameFile": "Zmień nazwę pliku",
+        "saveFile": "zapisz plik",
+        "openFileExplorer": "Otwórz w eksploratorze plików",
+        "openInPopout": "Otwórz w wyskakującym oknie",
+        "deleteFolder": "Usuń folder",
+        "renameFolder": "Zmień nazwę folderu",
+        "fileNeedsName": "Plik musi mieć nazwę",
+        "fileNeedsExtension": "Rozszerzenie nie może być puste",
+        "fileNameTooLong": "Nazwa pliku musi być krótsza niż 100 znaków",
+        "invalidFileCharacter": "Nazwa pliku nie może zawierać czataraktera",
+        "folderNeedsName": "Folder musi mieć nazwę",
+        "folderNameTooLong": "Nazwa folderu musi być krótsza niż 100 znaków",
+        "invalidFolderCharacter": "Nazwa folderu nie może zawierać czataraktera",
+        "fileName": "Nazwa pliku...",
+        "folderName": "Nazwa folderu..."
+    },
+    "creatorComponent": {
+        "clickElement": "Kliknij na element, aby go zmienić",
+        "classList": "Lista klas",
+        "className": "Nazwa klasy",
+        "properties": "Właściwości",
+        "styles": "Styles"
+    }
+}

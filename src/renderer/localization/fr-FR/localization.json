@@ -1,0 +1,118 @@
+{
+    "loading": "Chargement en cours...",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.",
+    "deleteProject": "Supprimer le projet",
+    "editing": "Édition en cours",
+    "buttons": {
+        "cancel": "Abandonner",
+        "delete": "Supprimez"
+    },
+    "welcomePage": {
+        "welcome": "Bienvenue",
+        "welcomeText": "Bienvenue sur Mauvais CMS pour les développeurs ! Nous espérons que ce CMS n'est pas vraiment mauvais, mais il est fait pour ceux qui veulent se salir les mains avec du code d'édition. Ce CMS vous aide simplement à créer une structure de base pour votre site web! Pourquoi ne pas commencer, alors?",
+        "getStarted": "Commencez !"
+    },
+    "dashboardPage": {
+        "dashboard": "Tableau de bord",
+        "projects": "Projets",
+        "settings": "Réglages",
+        "settingsMenu": {
+            "language": "Langue",
+            "translation": {
+                "start": "Ce projet est en cours de traduction le",
+                "end": "Les contributions sont grandement appréciées !"
+            }
+        }
+    },
+    "editorPage": {
+        "errorDeleting": "Erreur de suppression du projet!",
+        "settings": {
+            "miscellaneous": "Divers",
+            "dangerZone": "ZONE DANGER"
+        }
+    },
+    "editorPopoutPage": {
+        "loadingEditor": "Chargement de l'éditeur..."
+    },
+    "errorPage": {
+        "ohno": "Oh no!",
+        "gobackhome": "Retour à la page d'accueil"
+    },
+    "getStartedPage": {
+        "projectName": "Nom du projet",
+        "projectIcon": "Icône du projet",
+        "templates": {
+            "templateBasic": {
+                "name": "Basique",
+                "description": "Un modèle de base."
+            },
+            "templateBlog": {
+                "name": "Blogue",
+                "description": "Un modèle pour un blog."
+            },
+            "templatePortfolio": {
+                "name": "Portefeuille de projet",
+                "description": "Un modèle pour un portefeuille."
+            },
+            "templateWebsite": {
+                "name": "Site Web",
+                "description": "Un modèle pour un site web."
+            },
+            "templateNoTemplate": {
+                "name": "Aucun modèle",
+                "description": "Aucun modèle, commencez par zéro."
+            }
+        }
+    },
+    "notFoundPage": {
+        "couldNotFindPage": "Impossible de trouver la page que vous cherchez!",
+        "page": "Page :",
+        "goBackHome": "Retour à la page d'accueil"
+    },
+    "templatePage": {
+        "creatingProject": "Création du projet..."
+    },
+    "elementsComponent": {
+        "attributes": "Attributs",
+        "addAttribute": "Ajouter un attribut",
+        "editAttribute": "Modifier l'attribut",
+        "element": "Élément",
+        "deleteElement": "Supprimer l'élément",
+        "duplicateElement": "Dupliquer l'élément",
+        "editAsHTML": "Modifier en tant que HTML",
+        "expandRecursively": "Développer Récursivement",
+        "collapseChildren": "Réduire les enfants"
+    },
+    "JSNodesComponent": {},
+    "paneSelectorComponent": {
+        "tabs": "Tabs",
+        "propertyManagement": "Gestion de la propriété",
+        "elements": "Éléments",
+        "javascriptNodes": "Noeuds Javascript",
+        "settings": "Réglages",
+        "layoutEditor": "Éditeur de mise en page",
+        "deleteFile": "Supprimer le fichier",
+        "renameFile": "Renommer le fichier",
+        "saveFile": "Enregistrer le fichier",
+        "openFileExplorer": "Ouvrir dans l'explorateur de fichiers",
+        "openInPopout": "Ouvrir dans une fenêtre popout",
+        "deleteFolder": "Supprimer le dossier",
+        "renameFolder": "Renommer le dossier",
+        "fileNeedsName": "Le fichier doit avoir un nom",
+        "fileNeedsExtension": "L'extension ne doit pas être vide",
+        "fileNameTooLong": "Le nom du fichier doit être inférieur à 100 caractères",
+        "invalidFileCharacter": "Le nom du fichier ne peut pas contenir le chataracter",
+        "folderNeedsName": "Le dossier doit avoir un nom",
+        "folderNameTooLong": "Le nom du dossier doit être inférieur à 100 caractères",
+        "invalidFolderCharacter": "Le nom du dossier ne peut pas contenir le chataracter",
+        "fileName": "Nom du fichier...",
+        "folderName": "Nom du dossier..."
+    },
+    "creatorComponent": {
+        "clickElement": "Cliquez sur un élément pour le modifier",
+        "classList": "Liste des classes",
+        "className": "Nom de la classe",
+        "properties": "Propriétés",
+        "styles": "Styles"
+    }
+}

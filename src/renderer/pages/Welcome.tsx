@@ -5,7 +5,7 @@ import styles from './Welcome.module.css';
 
 import { store } from '../store';
 
-import { welcomePage as localization } from "../localization/en/localization.json";
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.welcomePage;
 
 export default function Welcome() {
     const navigate = useNavigate();
@@ -18,9 +18,9 @@ export default function Welcome() {
     }
     return (
         <main>
-            <h1>{localization.welcome}</h1>
-            <p>{localization.welcomeText}</p>
-            <button className={styles.start} onClick={NavigateTo}>{localization.getStarted}</button>
+            <h1>{thislocalization.welcome}</h1>
+            <p>{thislocalization.welcomeText}</p>
+            <button className={styles.start} onClick={NavigateTo}>{thislocalization.getStarted}</button>
         </main>
     );
 }

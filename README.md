@@ -32,5 +32,5 @@ If for some reason you want to compile the app into an installer, you can do it 
 `npm run package` (packages for your current platform)  
 
 ## Localization / Translations
-If you would like to help translate BadCMSforDevs into your language, I have a [Crowdin project](https://crowdin.com/project/badcms), and help is greatly appreciated.
+If you would like to help translate BadCMSforDevs into your language, I have a [Crowdin project](https://crowdin.com/project/badcms), and help is greatly appreciated.  
 [![Crowdin](https://badges.crowdin.net/badcms/localized.svg)](https://crowdin.com/project/badcms)

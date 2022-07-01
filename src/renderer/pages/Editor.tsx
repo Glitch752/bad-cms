@@ -14,7 +14,8 @@ import { store } from '../store';
 import PaneSelector from '../components/PaneSelector';
 
 const ipc = require('electron').ipcRenderer;
-import localization, { editorPage as thislocalization } from "../localization/en/localization.json";
+
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.editorPage;
 
 // FIXME: I don't know what, but something about loading into the editor ruins the ipc events of the menu bar.
 // This means the maximize button doesn't change to a restore button and vice versa.

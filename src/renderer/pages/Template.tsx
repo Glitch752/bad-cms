@@ -2,9 +2,9 @@ import React, { useLayoutEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import path from 'path';
 
-import localization, { templatePage as thislocalization } from "../localization/en/localization.json";
-
 import { store } from '../store';
+
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.templatePage;
 
 const ipc = require('electron').ipcRenderer;
 

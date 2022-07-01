@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Script } from "vm";
 import styles from "../pages/Editor.module.css";
 
 const acorn = require("acorn");
 
-import localization, { JSNodesComponent as thislocalization } from "../localization/en/localization.json";
+import { store } from '../store';
+
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.JSNodesComponent;
 
 function JSNodes() {
     const [selectedScript, setSelectedScript] = useState(0);

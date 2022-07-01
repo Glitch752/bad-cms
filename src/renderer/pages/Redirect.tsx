@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { store } from '../store';
 
-import localization from '../localization/en/localization.json';
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`);
 
 export default function Welcome() {
     const navigate = useNavigate();

@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import styles from './GetStarted.module.css';
 
 import { icons } from '../icons.js';
-import localization, { getStartedPage as thislocalization } from "../localization/en/localization.json";
+
+import { store } from '../store';
+
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.getStartedPage;
 
 export default function GetStarted() {
     const navigate = useNavigate();

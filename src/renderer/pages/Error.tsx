@@ -1,8 +1,10 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Error.module.css';
-import localization, { errorPage as thislocalization } from "../localization/en/localization.json";
 
+import { store } from '../store';
+
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.errorPage;
 
 export default function NotFound(props) {
     const navigate = useNavigate();

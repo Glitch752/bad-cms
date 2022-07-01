@@ -8,7 +8,9 @@ import {
   MenuHeader
 } from '@szhsin/react-menu';
 
-import localization, { elementsComponent as thislocalization } from "../localization/en/localization.json";
+import { store } from '../store';
+
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.elementsComponent;
 
 function Elements() {
   const elementHighlightRef = React.useRef(null);

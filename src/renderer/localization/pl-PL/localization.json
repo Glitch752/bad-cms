@@ -1,118 +1,118 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "Ładowanie...",
+    "confirmDelete": "Czy na pewno chcesz usunąć ten projekt? Ta akcja jest nieodwracalna.",
+    "deleteProject": "Usuń projekt",
+    "editing": "Edycja",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "Anuluj",
+        "delete": "Usuń"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "Witaj",
+        "welcomeText": "Witaj w Bad CMS dla deweloperów! Mamy nadzieję, że ta CMS nie jest tak zła, ale jest wykonana dla ludzi, którzy chcą dostać swoje ręce brudne przy rzeczywistej edycji kodu. Ta CMS pomaga stworzyć podstawową strukturę dla Twojej strony internetowej! Czemu więc nie zaczniemy?",
+        "getStarted": "Zacznij!"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects",
-        "settings": "Settings",
+        "dashboard": "Pulpit",
+        "projects": "Projekty",
+        "settings": "Ustawienia",
         "settingsMenu": {
-            "language": "Language",
+            "language": "Język",
             "translation": {
-                "start": "This project is being translated on",
-                "end": "Contributions are greatly appreciated!"
+                "start": "Ten projekt jest przetłumaczony na",
+                "end": "Wkład jest bardzo wdzięczny!"
             }
         }
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "Błąd podczas usuwania projektu!",
         "settings": {
-            "miscellaneous": "miscellaneous",
-            "dangerZone": "DANGER ZONE"
+            "miscellaneous": "różne",
+            "dangerZone": "STREFA DANGA"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "Ładowanie edytora..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "Wróć do domu"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "Nazwa projektu",
+        "projectIcon": "Ikona projektu",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "Podstawowe",
+                "description": "Podstawowy szablon."
             },
             "templateBlog": {
                 "name": "Blog",
-                "description": "A template for a blog."
+                "description": "Szablon bloga."
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "Portfel",
+                "description": "Wzór CR EQU IRB 1 zawiera informacje dotyczące obliczania kwot ekspozycji ważonych ryzykiem zgodnie z częścią trzecią tytuł II rozdział 5 sekcja 3 CRR."
             },
             "templateWebsite": {
-                "name": "Website",
-                "description": "A template for a website."
+                "name": "Strona internetowa",
+                "description": "Szablon strony internetowej."
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "Brak szablonu",
+                "description": "Brak szablonu, zacznij od zera."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "Nie można znaleźć strony, której szukasz!",
+        "page": "Strona:",
+        "goBackHome": "Wróć do domu"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "Tworzenie projektu..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
+        "attributes": "Atrybut",
+        "addAttribute": "Dodaj atrybut",
+        "editAttribute": "Edytuj atrybut",
         "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "deleteElement": "Usuń element",
+        "duplicateElement": "Duplikuj element",
+        "editAsHTML": "Edytuj jako HTML",
+        "expandRecursively": "Rozwiń rekursywnie",
+        "collapseChildren": "Zwiń dzieci"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
-        "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
-        "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
-        "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "propertyManagement": "Zarządzanie nieruchomościami",
+        "elements": "Elementy",
+        "javascriptNodes": "Węzły Javascript",
+        "settings": "Ustawienia",
+        "layoutEditor": "Edytor układu",
+        "deleteFile": "Usuń plik",
+        "renameFile": "Zmień nazwę pliku",
+        "saveFile": "zapisz plik",
+        "openFileExplorer": "Otwórz w eksploratorze plików",
+        "openInPopout": "Otwórz w wyskakującym oknie",
+        "deleteFolder": "Usuń folder",
+        "renameFolder": "Zmień nazwę folderu",
+        "fileNeedsName": "Plik musi mieć nazwę",
+        "fileNeedsExtension": "Rozszerzenie nie może być puste",
+        "fileNameTooLong": "Nazwa pliku musi być krótsza niż 100 znaków",
+        "invalidFileCharacter": "Nazwa pliku nie może zawierać czataraktera",
+        "folderNeedsName": "Folder musi mieć nazwę",
+        "folderNameTooLong": "Nazwa folderu musi być krótsza niż 100 znaków",
+        "invalidFolderCharacter": "Nazwa folderu nie może zawierać czataraktera",
+        "fileName": "Nazwa pliku...",
+        "folderName": "Nazwa folderu..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "Kliknij na element, aby go zmienić",
+        "classList": "Lista klas",
+        "className": "Nazwa klasy",
+        "properties": "Właściwości",
         "styles": "Styles"
     }
 }

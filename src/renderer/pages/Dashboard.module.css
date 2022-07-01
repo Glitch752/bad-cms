@@ -1,185 +1,221 @@
 /* make better, maybe don't even use grid? At different resolutions, this looks bad/ */
 .menugrid {
-    display: inline-block;
-    width: 100vw;
-    height: 100%;
-    position: relative;
+  display: inline-block;
+  width: 100vw;
+  height: 100%;
+  position: relative;
 }
 .menutop {
-    display: inline-block;
-    width: 100vw;
-    height: 100px;
-    background-color: #111f29;
-    top: 0;
-    left: 0;
-    position: absolute;
+  display: inline-block;
+  width: 100vw;
+  height: 100px;
+  background-color: #111f29;
+  top: 0;
+  left: 0;
+  position: absolute;
 }
 .menuleft {
-    display: inline-block;
-    height: calc(100% - 100px);
-    width: 200px;
-    background-color: #081722;
-    top: 100px;
-    left: 0;
-    position: absolute;
-    text-align: left;
+  display: inline-block;
+  height: calc(100% - 100px);
+  width: 200px;
+  background-color: #081722;
+  top: 100px;
+  left: 0;
+  position: absolute;
+  text-align: left;
 }
 .menusites {
-    display: inline-flex;
-    height: calc(100% - 100px);
-    width: calc(100vw - 200px);
-    background-color: #20333f;
-    top: 100px;
-    left: 200px;
-    position: absolute;
-    text-align: left;
-    flex-wrap: wrap;
-    align-content: flex-start;
+  display: inline-flex;
+  height: calc(100% - 100px);
+  width: calc(100vw - 200px);
+  background-color: #20333f;
+  top: 100px;
+  left: 200px;
+  position: absolute;
+  text-align: left;
+  flex-wrap: wrap;
+  align-content: flex-start;
 }
 .menusite {
-    display: inline-block;
-    padding: 5px;
-    width: min(380px, max(calc(50% - 35px), 300px));
-    box-shadow: 3px 3px #1a2933;
-    height: 75px;
-    border-radius: 10px;
-    background-color: #104b63;
-    margin: 10px;
-    position: relative;
-    z-index: var(--menu-number);
-    transition: transform 200ms ease-in-out;
-    transition: all 250ms ease;
+  display: inline-block;
+  padding: 5px;
+  width: min(380px, max(calc(50% - 35px), 300px));
+  box-shadow: 3px 3px #1a2933;
+  height: 75px;
+  border-radius: 10px;
+  background-color: #104b63;
+  margin: 10px;
+  position: relative;
+  z-index: var(--menu-number);
+  transition: transform 200ms ease-in-out;
+  transition: all 250ms ease;
 }
 .menusite:hover {
-    background-color: #0f475e;
-    box-shadow: 4px 4px #1a2933;
-    transform: translate(-1px, -1px);
+  background-color: #0f475e;
+  box-shadow: 4px 4px #1a2933;
+  transform: translate(-1px, -1px);
 }
 .menusite:active {
-    background-color: #0c3849;
-    box-shadow: 1px 1px #131e25;
-    transform: translate(2px, 2px);
+  background-color: #0c3849;
+  box-shadow: 1px 1px #131e25;
+  transform: translate(2px, 2px);
 }
 
 .menuleftoption {
-    display: inline-block;
-    padding: 5px;
-    width: 100%;
+  display: inline-block;
+  padding: 5px;
+  width: 100%;
+}
+.menuleftactive {
+  background-color: #111f29;
 }
 .projectText {
-    font-size: 25px;
-    margin-left: 10px;
+  font-size: 25px;
+  margin-left: 10px;
 }
 .projectIcon {
-    font-size: 25px;
-    margin: 5px;
+  font-size: 25px;
+  margin: 5px;
 }
 .projectDir {
-    font-size: 10px;
-    margin-left: 10px;
-    position: absolute;
-    bottom: 10px;
+  font-size: 10px;
+  margin-left: 10px;
+  position: absolute;
+  bottom: 10px;
 }
 .menuleftoption:hover {
-    background-color: #1f2e38;
+  background-color: #1f2e38;
 }
 .menuleftoption p {
-    margin: 0;
-    display: inline-block;
+  margin: 0;
+  display: inline-block;
 }
 .menuleftoption i {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 .menunew {
-    display: inline-flex;
-    width: min(380px, max(calc(50% - 35px), 300px));
-    border: 2px dashed #fff;
-    height: 75px;
-    border-radius: 10px;
-    margin: 10px;
-    align-items: center;
-    justify-content: center;
+  display: inline-flex;
+  width: min(380px, max(calc(50% - 35px), 300px));
+  border: 2px dashed #fff;
+  height: 75px;
+  border-radius: 10px;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
 }
 .newProjectIcon {
-    font-size: 25px;
-    margin: 5px;
+  font-size: 25px;
+  margin: 5px;
 }
 
 .menuSettings {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 10px;
-    font-size: 25px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  font-size: 25px;
 }
 
 .deleteMenuButton {
-    color: #7b2f2f;
+  color: #7b2f2f;
 }
 .deleteIcon {
-    margin: 5px;
-    margin-left: -10px;
-    margin-right: 5px;
+  margin: 5px;
+  margin-left: -10px;
+  margin-right: 5px;
 }
 
 .confirmDelete {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: calc(100vh - var(--titlebar-height));
-    background-color: #00000080;
-    z-index: 100;
-  }
-  .confirmDeleteContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    background-color: #2b4453;
-    border-radius: 5px;
-    box-shadow: 3px 3px #20333f;
-    text-align: center;
-  }
-  .confirmDeleteText {
-    color: #fff;
-    font-size: 20px;
-    margin-top: 10px;
-    margin-left: 10px;
-  }
-  .confirmDeleteButton {
-    font-size: 20px;
-    outline: none;
-    border: none;
-    padding: 10px;
-    background-color: #e05252;
-    color: #fff;
-    border-radius: 5px;
-    margin: 10px;
-    box-shadow: 3px 3px #af4141;
-  }
-  .confirmDeleteButton:hover {
-    background-color: #d34343;
-    box-shadow: 4px 4px #9f3232;
-    transform: translate(-1px, -1px);
-  }
-  .confirmDeleteButton:active {
-    background-color: #b13c3c;
-    box-shadow: 2px 2px #912d2d;
-    transform: translate(1px, 1px);
-  }
-  .confirmDeleteButtonCancel {
-    background-color: #787878;
-    box-shadow: 3px 3px #565656;
-  }
-  .confirmDeleteButtonCancel:hover {
-    background-color: #878787;
-    box-shadow: 4px 4px #636363;
-    transform: translate(-1px, -1px);
-  }
-  .confirmDeleteButtonCancel:active {
-    background-color: #6f6f6f;
-    box-shadow: 2px 2px #5c5c5c;
-    transform: translate(1px, 1px);
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100vh - var(--titlebar-height));
+  background-color: #00000080;
+  z-index: 100;
+}
+.confirmDeleteContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: #2b4453;
+  border-radius: 5px;
+  box-shadow: 3px 3px #20333f;
+  text-align: center;
+}
+.confirmDeleteText {
+  color: #fff;
+  font-size: 20px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.confirmDeleteButton {
+  font-size: 20px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  background-color: #e05252;
+  color: #fff;
+  border-radius: 5px;
+  margin: 10px;
+  box-shadow: 3px 3px #af4141;
+}
+.confirmDeleteButton:hover {
+  background-color: #d34343;
+  box-shadow: 4px 4px #9f3232;
+  transform: translate(-1px, -1px);
+}
+.confirmDeleteButton:active {
+  background-color: #b13c3c;
+  box-shadow: 2px 2px #912d2d;
+  transform: translate(1px, 1px);
+}
+.confirmDeleteButtonCancel {
+  background-color: #787878;
+  box-shadow: 3px 3px #565656;
+}
+.confirmDeleteButtonCancel:hover {
+  background-color: #878787;
+  box-shadow: 4px 4px #636363;
+  transform: translate(-1px, -1px);
+}
+.confirmDeleteButtonCancel:active {
+  background-color: #6f6f6f;
+  box-shadow: 2px 2px #5c5c5c;
+  transform: translate(1px, 1px);
+}
+
+.settingsMenu {
+  width: 100%;
+  height: 100%;
+}
+.settingsMenu a {
+  color: #157ac2;
+}
+.settingsMenuSeparator {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  left: 0;
+  right: 0;
+  background-color: #081722;
+  padding-left: 30px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+.settingsMenuSection {
+  padding-left: 20px;
+}
+.settingsMenuCrowdinLogo {
+  width: 150px;
+  display: block;
+}
+.settingsMenuDropdown {
+  outline: none;
+  border: none;
+  padding: 10px 40px 10px 10px;
+  background-color: #0e5e97;
+  margin-top: 10px;
+  display: block;
+}

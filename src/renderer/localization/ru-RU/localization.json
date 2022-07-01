@@ -1,110 +1,118 @@
 {
-    "loading": "Загрузка...",
-    "confirmDelete": "Вы уверены, что хотите удалить этот проект? Это действие необратимо.",
-    "deleteProject": "Удалить проект",
-    "editing": "Редактирование",
+    "loading": "Loading...",
+    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
+    "deleteProject": "Delete project",
+    "editing": "Editing",
     "buttons": {
-        "cancel": "Отмена",
-        "delete": "Удалить"
+        "cancel": "Cancel",
+        "delete": "Delete"
     },
     "welcomePage": {
-        "welcome": "Добро пожаловать",
-        "welcomeText": "Добро пожаловать в Bad CMS для разработчиков! Мы надеемся, что этот CMS не так плохо, но он создан для людей, которые хотят получить свои руки грязно, с реальным редактированием кода. Этот CMS поможет вам создать базовую структуру для вашего веб-сайта! Почему бы не начать?",
-        "getStarted": "Начнем!"
+        "welcome": "Welcome",
+        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
+        "getStarted": "Get started!"
     },
     "dashboardPage": {
-        "dashboard": "Панель",
-        "projects": "Проекты"
+        "dashboard": "Dashboard",
+        "projects": "Projects",
+        "settings": "Settings",
+        "settingsMenu": {
+            "language": "Language",
+            "translation": {
+                "start": "This project is being translated on",
+                "end": "Contributions are greatly appreciated!"
+            }
+        }
     },
     "editorPage": {
-        "errorDeleting": "Ошибка удаления проекта!",
+        "errorDeleting": "Error deleting project!",
         "settings": {
-            "miscellaneous": "Разное",
-            "dangerZone": "ДАННАЯ ЗОНА"
+            "miscellaneous": "miscellaneous",
+            "dangerZone": "DANGER ZONE"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Загрузка редактора..."
+        "loadingEditor": "Loading editor..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Вернуться домой"
+        "gobackhome": "Go back home"
     },
     "getStartedPage": {
-        "projectName": "Название проекта",
-        "projectIcon": "Иконка проекта",
+        "projectName": "Project Name",
+        "projectIcon": "Project Icon",
         "templates": {
             "templateBasic": {
-                "name": "Базовый",
-                "description": "Основной шаблон."
+                "name": "Basic",
+                "description": "A basic template."
             },
             "templateBlog": {
-                "name": "Блог",
-                "description": "Шаблон для блога."
+                "name": "Blog",
+                "description": "A template for a blog."
             },
             "templatePortfolio": {
-                "name": "Портфолио",
-                "description": "Шаблон для портфолио."
+                "name": "Portfolio",
+                "description": "A template for a portfolio."
             },
             "templateWebsite": {
-                "name": "Сайт",
-                "description": "Шаблон для веб-сайта."
+                "name": "Website",
+                "description": "A template for a website."
             },
             "templateNoTemplate": {
-                "name": "Нет шаблона",
-                "description": "Нет шаблона, начинается с нуля."
+                "name": "No Template",
+                "description": "No template, start from scratch."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Не удалось найти запрашиваемую страницу!",
-        "page": "Страница:",
-        "goBackHome": "Вернуться домой"
+        "couldNotFindPage": "Couldn't find the page you're looking for!",
+        "page": "Page:",
+        "goBackHome": "Go back home"
     },
     "templatePage": {
-        "creatingProject": "Создание проекта..."
+        "creatingProject": "Creating project..."
     },
     "elementsComponent": {
-        "attributes": "Атрибуты",
-        "addAttribute": "Добавить атрибут",
-        "editAttribute": "Изменить атрибут",
-        "element": "Элемент",
-        "deleteElement": "Удалить элемент",
-        "duplicateElement": "Дубликат элемента",
-        "editAsHTML": "Изменить как HTML",
-        "expandRecursively": "Развернуть рекурсивно",
-        "collapseChildren": "Свернуть дочерние узлы"
+        "attributes": "Attributes",
+        "addAttribute": "Add attribute",
+        "editAttribute": "Edit attribute",
+        "element": "Element",
+        "deleteElement": "Delete element",
+        "duplicateElement": "Duplicate element",
+        "editAsHTML": "Edit as HTML",
+        "expandRecursively": "Expand Recursively",
+        "collapseChildren": "Collapse Children"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Управление имуществом",
-        "elements": "Элементы",
-        "javascriptNodes": "Узлы Javascript",
-        "settings": "Настройки",
-        "layoutEditor": "Редактор макета",
-        "deleteFile": "Удалить файл",
-        "renameFile": "Переименовать файл",
+        "propertyManagement": "Property Management",
+        "elements": "Elements",
+        "javascriptNodes": "Javascript Nodes",
+        "settings": "Settings",
+        "layoutEditor": "Layout Editor",
+        "deleteFile": "Delete file",
+        "renameFile": "Rename file",
         "saveFile": "saveFile",
-        "openFileExplorer": "Открыть в файловом обозревателе",
-        "openInPopout": "Открыть во всплывающем окне",
-        "deleteFolder": "Удалить папку",
-        "renameFolder": "Переименовать папку",
-        "fileNeedsName": "Файл должен иметь имя",
-        "fileNeedsExtension": "Расширение не должно быть пустым",
-        "fileNameTooLong": "Имя файла должно быть короче 100 символов",
-        "invalidFileCharacter": "Имя файла не может содержать чатартер",
-        "folderNeedsName": "Папка должна иметь имя",
-        "folderNameTooLong": "Имя папки должно быть короче 100 символов",
-        "invalidFolderCharacter": "Имя папки не может содержать chataracter",
-        "fileName": "Имя файла...",
-        "folderName": "Имя папки..."
+        "openFileExplorer": "Open in file explorer",
+        "openInPopout": "Open in popout window",
+        "deleteFolder": "Delete folder",
+        "renameFolder": "Rename folder",
+        "fileNeedsName": "File must have a name",
+        "fileNeedsExtension": "Extension must not be empty",
+        "fileNameTooLong": "Filename must be shorter than 100 characters",
+        "invalidFileCharacter": "Filename cannot contain the chataracter",
+        "folderNeedsName": "Folder must have a name",
+        "folderNameTooLong": "Folder name must be shorter than 100 characters",
+        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
+        "fileName": "File name...",
+        "folderName": "Folder name..."
     },
     "creatorComponent": {
-        "clickElement": "Нажмите на элемент, чтобы изменить его",
-        "classList": "Список уроков",
-        "className": "Название класса",
-        "properties": "Свойства",
+        "clickElement": "Click on an element to change it",
+        "classList": "Class List",
+        "className": "Class Name",
+        "properties": "Properties",
         "styles": "Styles"
     }
 }

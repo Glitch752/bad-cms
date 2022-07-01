@@ -1,110 +1,118 @@
 {
-    "loading": "Laden...",
-    "confirmDelete": "Weet je zeker dat je dit project wilt verwijderen? Deze actie is onomkeerbaar.",
-    "deleteProject": "Project verwijderen",
-    "editing": "Bewerken",
+    "loading": "Loading...",
+    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
+    "deleteProject": "Delete project",
+    "editing": "Editing",
     "buttons": {
-        "cancel": "annuleren",
-        "delete": "Verwijderen"
+        "cancel": "Cancel",
+        "delete": "Delete"
     },
     "welcomePage": {
-        "welcome": "Verwelkoming",
-        "welcomeText": "Welkom bij Bad CMS voor devs! We hopen dat dit CMS niet echt zo slecht is, maar het is gemaakt voor mensen die hun handen vuil willen maken met het bewerken van een code. Dit CMS helpt u om een basisstructuur voor uw website te maken! Waarom starten we dan niet?",
-        "getStarted": "Aan de slag!"
+        "welcome": "Welcome",
+        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
+        "getStarted": "Get started!"
     },
     "dashboardPage": {
         "dashboard": "Dashboard",
-        "projects": "Projecten"
+        "projects": "Projects",
+        "settings": "Settings",
+        "settingsMenu": {
+            "language": "Language",
+            "translation": {
+                "start": "This project is being translated on",
+                "end": "Contributions are greatly appreciated!"
+            }
+        }
     },
     "editorPage": {
-        "errorDeleting": "Fout bij verwijderen project!",
+        "errorDeleting": "Error deleting project!",
         "settings": {
-            "miscellaneous": "overige",
+            "miscellaneous": "miscellaneous",
             "dangerZone": "DANGER ZONE"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Editor laden..."
+        "loadingEditor": "Loading editor..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Ga terug naar huis"
+        "gobackhome": "Go back home"
     },
     "getStartedPage": {
-        "projectName": "Project Naam",
-        "projectIcon": "Project icoon",
+        "projectName": "Project Name",
+        "projectIcon": "Project Icon",
         "templates": {
             "templateBasic": {
-                "name": "Eenvoudig",
-                "description": "Een basissjabloon."
+                "name": "Basic",
+                "description": "A basic template."
             },
             "templateBlog": {
                 "name": "Blog",
-                "description": "Een sjabloon voor een blog."
+                "description": "A template for a blog."
             },
             "templatePortfolio": {
-                "name": "Presentatie",
-                "description": "Een sjabloon voor een portfolio."
+                "name": "Portfolio",
+                "description": "A template for a portfolio."
             },
             "templateWebsite": {
-                "name": "website",
-                "description": "Een sjabloon voor een website."
+                "name": "Website",
+                "description": "A template for a website."
             },
             "templateNoTemplate": {
-                "name": "Geen sjabloon",
-                "description": "Geen sjabloon, begin vanaf nul."
+                "name": "No Template",
+                "description": "No template, start from scratch."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Kon de pagina die je zoekt niet vinden!",
-        "page": "Pagina:",
-        "goBackHome": "Ga terug naar huis"
+        "couldNotFindPage": "Couldn't find the page you're looking for!",
+        "page": "Page:",
+        "goBackHome": "Go back home"
     },
     "templatePage": {
-        "creatingProject": "Project aanmaken..."
+        "creatingProject": "Creating project..."
     },
     "elementsComponent": {
-        "attributes": "Kenmerken",
-        "addAttribute": "Attribuut toevoegen",
-        "editAttribute": "Attribuut bewerken",
+        "attributes": "Attributes",
+        "addAttribute": "Add attribute",
+        "editAttribute": "Edit attribute",
         "element": "Element",
-        "deleteElement": "Element verwijderen",
-        "duplicateElement": "Dubbele element",
-        "editAsHTML": "Bewerk als HTML",
-        "expandRecursively": "Recursief uitbreiden",
-        "collapseChildren": "Onderliggende items inklappen"
+        "deleteElement": "Delete element",
+        "duplicateElement": "Duplicate element",
+        "editAsHTML": "Edit as HTML",
+        "expandRecursively": "Expand Recursively",
+        "collapseChildren": "Collapse Children"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Beheer accommodaties",
-        "elements": "Elementen",
+        "propertyManagement": "Property Management",
+        "elements": "Elements",
         "javascriptNodes": "Javascript Nodes",
-        "settings": "Instellingen",
-        "layoutEditor": "Lay-out editor",
-        "deleteFile": "Bestand verwijderen",
-        "renameFile": "Hernoem bestand",
-        "saveFile": "bestand opslaan",
-        "openFileExplorer": "Open in bestandsverkenner",
-        "openInPopout": "Openen in pop-upvenster",
-        "deleteFolder": "Map verwijderen",
-        "renameFolder": "Map hernoemen",
-        "fileNeedsName": "Bestand moet een naam hebben",
-        "fileNeedsExtension": "Extensie mag niet leeg zijn",
-        "fileNameTooLong": "Bestandsnaam moet korter zijn dan 100 tekens",
-        "invalidFileCharacter": "Bestandsnaam mag de chataracter niet bevatten",
-        "folderNeedsName": "Map moet een naam hebben",
-        "folderNameTooLong": "Mapnaam moet korter zijn dan 100 tekens",
-        "invalidFolderCharacter": "Mapnaam kan de chataracter niet bevatten",
-        "fileName": "Bestandsnaam ...",
-        "folderName": "Map naam..."
+        "settings": "Settings",
+        "layoutEditor": "Layout Editor",
+        "deleteFile": "Delete file",
+        "renameFile": "Rename file",
+        "saveFile": "saveFile",
+        "openFileExplorer": "Open in file explorer",
+        "openInPopout": "Open in popout window",
+        "deleteFolder": "Delete folder",
+        "renameFolder": "Rename folder",
+        "fileNeedsName": "File must have a name",
+        "fileNeedsExtension": "Extension must not be empty",
+        "fileNameTooLong": "Filename must be shorter than 100 characters",
+        "invalidFileCharacter": "Filename cannot contain the chataracter",
+        "folderNeedsName": "Folder must have a name",
+        "folderNameTooLong": "Folder name must be shorter than 100 characters",
+        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
+        "fileName": "File name...",
+        "folderName": "Folder name..."
     },
     "creatorComponent": {
-        "clickElement": "Klik op een element om het te wijzigen",
-        "classList": "Les lijst",
-        "className": "Klasse naam",
-        "properties": "Eigenschappen",
+        "clickElement": "Click on an element to change it",
+        "classList": "Class List",
+        "className": "Class Name",
+        "properties": "Properties",
         "styles": "Styles"
     }
 }

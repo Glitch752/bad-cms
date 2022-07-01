@@ -1,118 +1,118 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "Cargando...",
+    "confirmDelete": "¿Está seguro que desea eliminar este proyecto? Esta acción es irreversible.",
+    "deleteProject": "Eliminar proyecto",
+    "editing": "Editando",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "Cancelar",
+        "delete": "Eliminar"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "Bienvenida",
+        "welcomeText": "¡Bienvenido a Bad CMS para desarrolladores! Esperamos que este CMS no sea realmente tan malo, pero está hecho para la gente que quiere sumergirse en las manos con la edición de código en realidad. Este CMS sólo te ayuda a crear una estructura básica para tu sitio web! ¿Por qué no empezamos, entonces?",
+        "getStarted": "¡Empecemos!"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects",
-        "settings": "Settings",
+        "dashboard": "Tablero",
+        "projects": "Proyectos",
+        "settings": "Ajustes",
         "settingsMenu": {
-            "language": "Language",
+            "language": "Idioma",
             "translation": {
-                "start": "This project is being translated on",
-                "end": "Contributions are greatly appreciated!"
+                "start": "Este proyecto está siendo traducido el",
+                "end": "¡Las contribuciones son muy apreciadas!"
             }
         }
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "¡Error al eliminar el proyecto!",
         "settings": {
-            "miscellaneous": "miscellaneous",
-            "dangerZone": "DANGER ZONE"
+            "miscellaneous": "misceláneo",
+            "dangerZone": "ZONA DE DANGER"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "Cargando editor..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "Volver a casa"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "Nombre del proyecto",
+        "projectIcon": "Icono del proyecto",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "Básico",
+                "description": "Una plantilla básica."
             },
             "templateBlog": {
                 "name": "Blog",
-                "description": "A template for a blog."
+                "description": "Una plantilla para un blog."
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "Portafolio",
+                "description": "Una plantilla para un portafolio."
             },
             "templateWebsite": {
-                "name": "Website",
-                "description": "A template for a website."
+                "name": "Sitio web",
+                "description": "Una plantilla para un sitio web."
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "Sin Plantilla",
+                "description": "Ninguna plantilla, empezar desde cero."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "No se pudo encontrar la página que estás buscando!",
+        "page": "Página:",
+        "goBackHome": "Volver a casa"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "Creando proyecto..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
-        "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "attributes": "Atributos",
+        "addAttribute": "Añadir atributo",
+        "editAttribute": "Editar atributo",
+        "element": "Elemento",
+        "deleteElement": "Eliminar elemento",
+        "duplicateElement": "Duplicar elemento",
+        "editAsHTML": "Editar como HTML",
+        "expandRecursively": "Expandir recursivamente",
+        "collapseChildren": "Colapsar hijos"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
-        "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
-        "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
-        "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "propertyManagement": "Gestión de la propiedad",
+        "elements": "Elementos",
+        "javascriptNodes": "Nodos Javascript",
+        "settings": "Ajustes",
+        "layoutEditor": "Editor de Diseños",
+        "deleteFile": "Eliminar archivo",
+        "renameFile": "Renombrar archivo",
+        "saveFile": "guardar archivo",
+        "openFileExplorer": "Abrir en explorador de archivos",
+        "openInPopout": "Abrir en ventana emergente",
+        "deleteFolder": "Eliminar carpeta",
+        "renameFolder": "Renombrar carpeta",
+        "fileNeedsName": "El archivo debe tener un nombre",
+        "fileNeedsExtension": "La extensión no debe estar vacía",
+        "fileNameTooLong": "El nombre de archivo debe tener menos de 100 caracteres",
+        "invalidFileCharacter": "El nombre de archivo no puede contener el chataracter",
+        "folderNeedsName": "La carpeta debe tener un nombre",
+        "folderNameTooLong": "El nombre de la carpeta debe tener menos de 100 caracteres",
+        "invalidFolderCharacter": "El nombre de carpeta no puede contener el chataracter",
+        "fileName": "Nombre de archivo...",
+        "folderName": "Nombre de carpeta..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "Haga clic en un elemento para cambiarlo",
+        "classList": "Lista de clases",
+        "className": "Nombre de clase",
+        "properties": "Propiedades",
         "styles": "Styles"
     }
 }

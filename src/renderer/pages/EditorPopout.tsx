@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './EditorPopout.module.css';
-import localization, { editorPopoutPage as thislocalization } from "../localization/en/localization.json";
 
 import CodeEditor from "react-monaco-editor";
 
@@ -10,6 +9,8 @@ import path from 'path';
 const ipc = require('electron').ipcRenderer;
 
 import { store } from '../store';
+
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.editorPopoutPage;
 
 // Editor code (js)
 export default function Editor(props) {

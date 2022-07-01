@@ -18,7 +18,7 @@ import { useRef } from 'react';
 
 const ipc = require('electron').ipcRenderer;
 
-import localization, { paneSelectorComponent as thislocalization } from "../localization/en/localization.json";
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.paneSelectorComponent;
 
 function PaneSelector(props) {
     // TODO: refactor so more of the relevant code is in the components

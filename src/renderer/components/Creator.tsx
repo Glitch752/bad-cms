@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 
 const ipc = require('electron').ipcRenderer;
 
-import localization, { creatorComponent as thislocalization } from "../localization/en/localization.json";
+const localization = require(`../localization/${store.get('language', 'en')}/localization.json`), thislocalization = localization.creatorComponent;
 
 function Creator(props) {
   let creatorMachine = createMachine({

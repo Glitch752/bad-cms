@@ -1,118 +1,118 @@
 {
-    "loading": "Loading...",
-    "confirmDelete": "Are you sure you want to delete this project? This action is irreversible.",
-    "deleteProject": "Delete project",
-    "editing": "Editing",
+    "loading": "Laster...",
+    "confirmDelete": "Er du sikker på at du vil slette dette prosjektet? Denne handlingen er irreversibel.",
+    "deleteProject": "Slett prosjekt",
+    "editing": "Redigering",
     "buttons": {
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "cancel": "Avbryt",
+        "delete": "Slett"
     },
     "welcomePage": {
-        "welcome": "Welcome",
-        "welcomeText": "Welcome to Bad CMS for devs! We hope this CMS isn't actually that bad, but it's made for people who want to get their hands dirty with actually editing code. This CMS just helps you make a basic structure for your website! Why don't we get started, then?",
-        "getStarted": "Get started!"
+        "welcome": "Velkommen",
+        "welcomeText": "Velkommen til Dårlig CMS til devs! Vi håper denne CMS faktisk ikke er så dårlig, men den er laget for folk som vil få hendene skitten og som faktisk redigerer koden. Denne CMS hjelper deg bare med å lage en grunnleggende struktur for nettsiden din! Hvorfor ikke komme i gang, da?",
+        "getStarted": "Sett i gang!"
     },
     "dashboardPage": {
-        "dashboard": "Dashboard",
-        "projects": "Projects",
-        "settings": "Settings",
+        "dashboard": "Kontrollpanel",
+        "projects": "Prosjekter",
+        "settings": "Innstillinger",
         "settingsMenu": {
-            "language": "Language",
+            "language": "Språk",
             "translation": {
-                "start": "This project is being translated on",
-                "end": "Contributions are greatly appreciated!"
+                "start": "Dette prosjektet er oversatt til",
+                "end": "Bidrag er høyt verdsatt!"
             }
         }
     },
     "editorPage": {
-        "errorDeleting": "Error deleting project!",
+        "errorDeleting": "Feil ved sletting av prosjekt!",
         "settings": {
-            "miscellaneous": "miscellaneous",
-            "dangerZone": "DANGER ZONE"
+            "miscellaneous": "diverse",
+            "dangerZone": "ENDRINGER ZONE"
         }
     },
     "editorPopoutPage": {
-        "loadingEditor": "Loading editor..."
+        "loadingEditor": "Laster redigeringsprogram ..."
     },
     "errorPage": {
         "ohno": "Oh no!",
-        "gobackhome": "Go back home"
+        "gobackhome": "Gå hjem igjen"
     },
     "getStartedPage": {
-        "projectName": "Project Name",
-        "projectIcon": "Project Icon",
+        "projectName": "Prosjektets navn",
+        "projectIcon": "Prosjekt ikon",
         "templates": {
             "templateBasic": {
-                "name": "Basic",
-                "description": "A basic template."
+                "name": "Grunnleggende",
+                "description": "En grunnleggende mal."
             },
             "templateBlog": {
-                "name": "Blog",
-                "description": "A template for a blog."
+                "name": "Blogg",
+                "description": "En mal til en blogg."
             },
             "templatePortfolio": {
-                "name": "Portfolio",
-                "description": "A template for a portfolio."
+                "name": "Portefølje",
+                "description": "En mal for en portefølje."
             },
             "templateWebsite": {
-                "name": "Website",
-                "description": "A template for a website."
+                "name": "Nettside",
+                "description": "En mal for et nettsted."
             },
             "templateNoTemplate": {
-                "name": "No Template",
-                "description": "No template, start from scratch."
+                "name": "Ingen mal",
+                "description": "Ingen mal, start fra bunnen av."
             }
         }
     },
     "notFoundPage": {
-        "couldNotFindPage": "Couldn't find the page you're looking for!",
-        "page": "Page:",
-        "goBackHome": "Go back home"
+        "couldNotFindPage": "Kunne ikke finne siden du leter etter!",
+        "page": "Side:",
+        "goBackHome": "Gå hjem igjen"
     },
     "templatePage": {
-        "creatingProject": "Creating project..."
+        "creatingProject": "Oppretter prosjekt..."
     },
     "elementsComponent": {
-        "attributes": "Attributes",
-        "addAttribute": "Add attribute",
-        "editAttribute": "Edit attribute",
+        "attributes": "Attributter",
+        "addAttribute": "Legg til attributt",
+        "editAttribute": "Rediger attributt",
         "element": "Element",
-        "deleteElement": "Delete element",
-        "duplicateElement": "Duplicate element",
-        "editAsHTML": "Edit as HTML",
-        "expandRecursively": "Expand Recursively",
-        "collapseChildren": "Collapse Children"
+        "deleteElement": "Slett element",
+        "duplicateElement": "Dupliser element",
+        "editAsHTML": "Rediger som HTML",
+        "expandRecursively": "Utvid gjentakende",
+        "collapseChildren": "Kollaps Barn"
     },
     "JSNodesComponent": {},
     "paneSelectorComponent": {
         "tabs": "Tabs",
-        "propertyManagement": "Property Management",
-        "elements": "Elements",
-        "javascriptNodes": "Javascript Nodes",
-        "settings": "Settings",
-        "layoutEditor": "Layout Editor",
-        "deleteFile": "Delete file",
-        "renameFile": "Rename file",
-        "saveFile": "saveFile",
-        "openFileExplorer": "Open in file explorer",
-        "openInPopout": "Open in popout window",
-        "deleteFolder": "Delete folder",
-        "renameFolder": "Rename folder",
-        "fileNeedsName": "File must have a name",
-        "fileNeedsExtension": "Extension must not be empty",
-        "fileNameTooLong": "Filename must be shorter than 100 characters",
-        "invalidFileCharacter": "Filename cannot contain the chataracter",
-        "folderNeedsName": "Folder must have a name",
-        "folderNameTooLong": "Folder name must be shorter than 100 characters",
-        "invalidFolderCharacter": "Folder name cannot contain the chataracter",
-        "fileName": "File name...",
-        "folderName": "Folder name..."
+        "propertyManagement": "Administrere egenskaper",
+        "elements": "Elementer",
+        "javascriptNodes": "Javascript noder",
+        "settings": "Innstillinger",
+        "layoutEditor": "Oppsett redigerer",
+        "deleteFile": "Slett fil",
+        "renameFile": "Gi nytt filnavn",
+        "saveFile": "lagreFil",
+        "openFileExplorer": "Åpne i filutforsker",
+        "openInPopout": "Åpne i popout-vindu",
+        "deleteFolder": "Slett mappe",
+        "renameFolder": "Endre mappenavn",
+        "fileNeedsName": "Filen må ha et navn",
+        "fileNeedsExtension": "Utvidelsen kan ikke være tom",
+        "fileNameTooLong": "Filnavnet må være kortere enn 100 tegn",
+        "invalidFileCharacter": "Filnavn kan ikke inneholde chataracter",
+        "folderNeedsName": "Mappen må ha et navn",
+        "folderNameTooLong": "Mappenavn må være kortere enn 100 tegn",
+        "invalidFolderCharacter": "Mappenavn kan ikke inneholde chataracter",
+        "fileName": "Filnavn...",
+        "folderName": "Mappenavn ..."
     },
     "creatorComponent": {
-        "clickElement": "Click on an element to change it",
-        "classList": "Class List",
-        "className": "Class Name",
-        "properties": "Properties",
+        "clickElement": "Klikk på et element for å endre det",
+        "classList": "Klasse liste",
+        "className": "Klasse navn",
+        "properties": "Egenskaper",
         "styles": "Styles"
     }
 }

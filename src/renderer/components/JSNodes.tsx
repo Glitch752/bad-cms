@@ -80,27 +80,94 @@ function NodeEditor(props) {
     document.nodes = nodes;
 
     useEffect(() => {
-        setNodes(scripts.length > 0 ? parseNodes(acorn.parse(scripts[selectedScript].code, {ecmaVersion: "latest"}).body).nodes : []);
+        setNodes(scripts.length > 0 ? parseNodes(acorn.parse(scripts[selectedScript].code, {ecmaVersion: "latest"}).body, true).nodes : []);
     }, [selectedScript]);
 
-    const parseNodes = (nodes, startX = 0, startY = 0) => {
-        let parsedNodes = [];
+    // TODO: Refactor because this is a mess
+
+    const parseNodes = (nodes, start, startX = 0, startY = 0, parentNode = null) => {
+        let parsedNodes: any[] = start ? [{
+            type: "start",
+            x: -150,
+            y: 100,
+            inputs: [],
+            outputs: []
+        }] : [];
+        if(parentNode === null) parentNode = parsedNodes[0];
         for(let j = 0; j < nodes.length; j++) {
             let node = nodes[j];
             parsedNodes.push({
                 ...node,
                 x: 100 + 250 * startX,
                 y: 170 * (j + startY) + 100,
-                inputs: parseNodeInputs(node),
-                outputs: parseNodeOutputs(node),
+                inputs: parseNodeInputs(node, parentNode, start),
+                outputs: parseNodeOutputs(node, parentNode),
+                start: start
             });
 
+            if(!start) {
+                parentNode.outputs.push({
+                    to: {node: parsedNodes[parsedNodes.length - 1]},
+                });
+            }
+
             if(node.body) {
-                const nodesParsed = parseNodes(node.body.body, startX + 1, startY + j);
+                const nodesParsed = parseNodes(node.body.body, false, startX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
                 parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                 startY += nodesParsed.yOffset;
             }
         };
+
+        if(start) {
+            for(let i = 0; i < parsedNodes.length; i++) {
+                let node = parsedNodes[i];
+                if(node.start) {
+                    node.inputs.push({
+                        from: parsedNodes[0]
+                    });
+                    if(parsedNodes[0].outputs.length < 1) {
+                        parsedNodes[0].outputs.push({
+                            to: [{node: node, index: 0}],
+                        });
+                    } else {
+                        parsedNodes[0].outputs[0].to.push({node: node, index: 0});
+                    }
+                    for(let j = 0; j < node.inputs.length - 1; j++) {
+                        let outputs = node.inputs[j].from.outputs;
+                        let output = outputs.find(output => {
+                            if(output.to instanceof Array) {
+                                return output.to.find(to => to.node === node)
+                            } else {
+                                return output.to.node === node
+                            }
+                        });
+                        if(output) {
+                            if(!output.to.index) output.to.index = 0;
+                            output.to.index++;
+                        }
+                    }
+                }
+                if(node.type === "ExpressionStatement") {
+                    if(node.expression.type === "CallExpression") {
+                        const callee = node.expression.callee;
+                        if(callee.type === "Identifier") {
+                            const callFunction = callee.name;
+
+                            for(let j = 0; j < parsedNodes.length; j++) {
+                                if(parsedNodes[j].type === "FunctionDeclaration" && parsedNodes[j].id.name === callFunction) {
+                                    node.outputs.push({
+                                        to: {node: parsedNodes[j]}
+                                    });
+                                    parsedNodes[j].inputs.push({
+                                        from: node
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         return {
             nodes: parsedNodes,
@@ -108,24 +175,27 @@ function NodeEditor(props) {
         };
     }
 
-    const parseNodeInputs = (node) => {
-        return [{}];
+    const parseNodeInputs = (node, parentNode, start) => {
+        if(start) return [];
+
+        return [{
+            from: parentNode
+        }];
     }
-    const parseNodeOutputs = (node) => {
-        return [{}];
+    const parseNodeOutputs = (node, parentNode) => {
+        return [];
     }
 
     const parseNodeContent = (node) => {
-        if(node.type === "ExpressionStatement") {
+        if(node.type === "start") {
+            return "Program";
+        } else if(node.type === "ExpressionStatement") {
             return parseNodeExpression(node.expression);
-        }
-        if(node.type === "FunctionDeclaration") {
+        } else if(node.type === "FunctionDeclaration") {
             return node.id.name;
-        }
-        if(node.type === "VariableDeclaration") {
+        } else if(node.type === "VariableDeclaration") {
             return node.declarations[0].id.name;
-        }
-        if(node.type === "IfStatement") {
+        } else if(node.type === "IfStatement") {
             return "If";
         }
     }
@@ -199,23 +269,32 @@ function NodeEditor(props) {
         for(let i = 0; i < nodes.length; i++) {
             let node = nodes[i];
 
-            if(node.type === "ExpressionStatement") {
-                if(node.expression.type === "CallExpression") {
-                    const callee = node.expression.callee;
-                    if(callee.type === "Identifier") {
-                        const callFunction = callee.name;
-
-                        for(let j = 0; j < nodes.length; j++) {
-                            if(nodes[j].type === "FunctionDeclaration" && nodes[j].id.name === callFunction) {
-                                lines.push({
-                                    x1: node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
-                                    y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1),
-                                    x2: nodes[j].x,
-                                    y2: nodes[j].y + document.getElementById(`JSNodesNodeContent${j}`).offsetHeight / (nodes[j].inputs.length + 1),
-                                });
-                            }
-                        }
+            for(let j = 0; j < node.outputs.length; j++) {
+                let output = node.outputs[j];
+                if(output.to instanceof Array) {
+                    for(let k = 0; k < output.to.length; k++) {
+                        let outputNode = output.to[k].node;
+                        let outputIndex = output.to[k].index;
+                        if(!outputIndex) outputIndex = 0;
+                        let outputNodeIndex = nodes.indexOf(outputNode);
+                        lines.push({
+                            x1: node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
+                            y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
+                            x2: outputNode.x,
+                            y2: outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
+                        });
                     }
+                } else {
+                    let outputNode = output.to.node;
+                    let outputIndex = output.to.index;
+                    if(!outputIndex) outputIndex = 0;
+                    let outputNodeIndex = nodes.indexOf(outputNode);
+                    lines.push({
+                        x1: node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
+                        y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
+                        x2: outputNode.x,
+                        y2: outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
+                    });
                 }
             }
         }
@@ -228,7 +307,15 @@ function NodeEditor(props) {
             ctx.beginPath();
             let x1 = line.x1 + offset.x, y1 = line.y1 + offset.y, x2 = line.x2 + offset.x, y2 = line.y2 + offset.y;
             ctx.moveTo(x1, y1);
-            ctx.bezierCurveTo(x1 + (x2 - x1) / 2, y1, x1 + (x2 - x1) / 2, y2, x2, y2);
+            const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+            // Unnecessarily complicated equation, but it looks really cool
+            ctx.bezierCurveTo(
+                x1 + (clamp(80 - (x2 - x1), 50, 160))/* + (clamp(-100 + (x2 - x1), 0, 400))*/,
+                y1 + ((y2 - y1) / 2) - clamp((x2 - x1) / 3, -200, 0),
+                x2 + (clamp(-80 + (x2 - x1), -150, -50))/* + (clamp(100 - (x2 - x1), -400, 0))*/,
+                y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200),
+                x2, y2
+            );
             ctx.stroke();
             
             // ctx.moveTo(line.x1 + offset.x, line.y1 + offset.y - 24);

@@ -544,6 +544,9 @@
 .JSNodeOrange {
   background-color: #ff9900;
 }
+.JSNodeGray {
+  background-color: #9a9a9a;
+}
 
 .JSNodesDropdown {
   height: 24px;
@@ -584,4 +587,26 @@
   height: calc(100% - 24px);
   z-index: 1000;
   pointer-events: none;
+}
+
+.JSNodesKey {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 5px;
+  background-color: #00000077;
+}
+.JSNodesKeyItem {
+  display: block;
+}
+.JSNodesKeyItemColor {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin: 0 2px;
+}
+.JSNodesKeyItemTitle {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 16px;
 }

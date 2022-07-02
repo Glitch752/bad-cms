@@ -79,14 +79,62 @@ function NodeEditor(props) {
     document.nodes = nodes;
 
     useEffect(() => {
-        setNodes(scripts.length > 0 ? acorn.parse(scripts[selectedScript].code, {ecmaVersion: "latest"}).body.map((node, index) => {
-            return {
-                type: node.type,
-                x: 200 * index + 100,
-                y: 100
-            }
-        }) : []);
+        setNodes(scripts.length > 0 ? parseNodes(acorn.parse(scripts[selectedScript].code, {ecmaVersion: "latest"}).body).nodes : []);
     }, [selectedScript]);
+
+    const parseNodes = (nodes, startX = 0, startY = 0) => {
+        let parsedNodes = [];
+        for(let j = 0; j < nodes.length; j++) {
+            let node = nodes[j];
+            parsedNodes.push({
+                ...node,
+                x: 100 + 250 * startX,
+                y: 170 * (j + startY) + 100,
+            });
+
+            if(node.body) {
+                const nodesParsed = parseNodes(node.body.body, startX + 1, startY + j);
+                parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
+                startY += nodesParsed.yOffset;
+            }
+        };
+
+        return {
+            nodes: parsedNodes,
+            yOffset: nodes.length - 1
+        };
+    }
+
+    const parseNodeContent = (node) => {
+        if(node.type === "ExpressionStatement") {
+            return parseNodeExpression(node.expression);
+        }
+        if(node.type === "FunctionDeclaration") {
+            return node.id.name;
+        }
+        if(node.type === "VariableDeclaration") {
+            return node.declarations[0].id.name;
+        }
+        if(node.type === "IfStatement") {
+            return "If";
+        }
+    }
+
+    const parseNodeExpression = (node) => {
+        if(node.type === "CallExpression") {
+            const callee = node.callee;
+            const args = node.arguments;
+            if(callee.type === "MemberExpression") {
+                return callee.object.name + "." + callee.property.name;
+            } else if(callee.type === "Identifier") {
+                return `Run "${callee.name}"\n
+                    ${(args.length > 0 ? 
+                        "With arguments: " + args.map(arg => arg.name).join(", ") :
+                        "With no arguments")}
+                    `;
+            }
+        }
+    }
 
     useEffect(() => {
         const nodesAreaElem = nodesArea.current;
@@ -139,11 +187,11 @@ function NodeEditor(props) {
                                 {code.type}
                             </div>
                             <div className={styles.JSNodesNodeContent}>
-                                Content<br />
-                                And stuff<br />
-                                And things<br />
-                                And stuff<br />
-                                And things<br />
+                                {parseNodeContent(code).split("\n").map((line, index) => {
+                                    return (
+                                        <div key={index}>{line}</div>
+                                    )
+                                })}
                                 <div className={styles.JSNodesNodeInputs}>
                                     <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputBlue}`} />
                                     <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputGreen}`} />

@@ -3,7 +3,7 @@
   --titlebar-height: 24px;
 }
 .widePane {
-  --menu-width: 30rem;
+  --menu-width: 40rem; /* 30rem */
 }
 .leaveIcon {
   font-size: 18px;

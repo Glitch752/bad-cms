@@ -69,6 +69,7 @@ function NodeEditor(props) {
     const [nodes, setNodes] = useState([]);
     const [offset, setOffset] = useState({x: 0, y: 0});
     const nodesArea = useRef(null);
+    const overlayCanvas = useRef(null);
     let dragging = false, draggingNode = null;
 
     // I don't know why I have to do this to make the data work, but it's the only way I can get it to work
@@ -90,6 +91,8 @@ function NodeEditor(props) {
                 ...node,
                 x: 100 + 250 * startX,
                 y: 170 * (j + startY) + 100,
+                inputs: parseNodeInputs(node),
+                outputs: parseNodeOutputs(node),
             });
 
             if(node.body) {
@@ -103,6 +106,13 @@ function NodeEditor(props) {
             nodes: parsedNodes,
             yOffset: nodes.length - 1
         };
+    }
+
+    const parseNodeInputs = (node) => {
+        return [{}];
+    }
+    const parseNodeOutputs = (node) => {
+        return [{}];
     }
 
     const parseNodeContent = (node) => {
@@ -151,7 +161,7 @@ function NodeEditor(props) {
         }
     }, []);
 
-    function nodesMouseDown(e) {
+    const nodesMouseDown = (e) => {
         // Check if we clicked on an element with the class styles.JSNodesNodeTitle
         if(e.target.classList.contains(styles.JSNodesNodeTitle)) {
             draggingNode = e.target.dataset.index;
@@ -159,7 +169,7 @@ function NodeEditor(props) {
             dragging = true;
         }
     }
-    function nodesMouseMove(e) {
+    const nodesMouseMove = (e) => {
         if(dragging) {
             // @ts-ignore
             setOffset({x: document.offset.x + e.movementX, y: document.offset.y + e.movementY});
@@ -172,42 +182,102 @@ function NodeEditor(props) {
             setNodes(newNodes);
         }
     }
-    function nodesMouseUp(e) {
+    const nodesMouseUp = (e) => {
         dragging = false;
         draggingNode = null;
     }
+
+    const drawCanvas = async () => {
+        const overlayCanvasElem = overlayCanvas.current;
+        if(!overlayCanvasElem) return;
+        overlayCanvasElem.width = nodesArea.current.offsetWidth;
+        overlayCanvasElem.height = nodesArea.current.offsetHeight;
+        const ctx = overlayCanvasElem.getContext("2d");
+
+        const lines = [];
+        
+        for(let i = 0; i < nodes.length; i++) {
+            let node = nodes[i];
+
+            if(node.type === "ExpressionStatement") {
+                if(node.expression.type === "CallExpression") {
+                    const callee = node.expression.callee;
+                    if(callee.type === "Identifier") {
+                        const callFunction = callee.name;
+
+                        for(let j = 0; j < nodes.length; j++) {
+                            if(nodes[j].type === "FunctionDeclaration" && nodes[j].id.name === callFunction) {
+                                lines.push({
+                                    x1: node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
+                                    y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1),
+                                    x2: nodes[j].x,
+                                    y2: nodes[j].y + document.getElementById(`JSNodesNodeContent${j}`).offsetHeight / (nodes[j].inputs.length + 1),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+
+        for(let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            ctx.beginPath();
+            let x1 = line.x1 + offset.x, y1 = line.y1 + offset.y, x2 = line.x2 + offset.x, y2 = line.y2 + offset.y;
+            ctx.moveTo(x1, y1);
+            ctx.bezierCurveTo(x1 + (x2 - x1) / 2, y1, x1 + (x2 - x1) / 2, y2, x2, y2);
+            ctx.stroke();
+            
+            // ctx.moveTo(line.x1 + offset.x, line.y1 + offset.y - 24);
+            // ctx.lineTo(line.x2 + offset.x, line.y2 + offset.y - 24);
+            // ctx.stroke();
+        }
+    }
+
+    requestAnimationFrame(drawCanvas);
 
     return (
         <div className={styles.JSNodesNodeArea} ref={nodesArea}>
             {
                 nodes.map((code, index) => {
                     return (
-                        <div key={index} className={styles.JSNodesNode} style={{"left": `${code.x + offset.x}px`, "top": `${code.y + offset.y}px`}}>
+                        <div id={"JSNodesNode" + index} key={index} className={styles.JSNodesNode} style={{"left": `${code.x + offset.x}px`, "top": `${code.y + offset.y}px`}}>
                             <div className={styles.JSNodesNodeTitle} data-index={index}>
                                 {code.type}
                             </div>
-                            <div className={styles.JSNodesNodeContent}>
+                            <div id={"JSNodesNodeContent" + index} className={styles.JSNodesNodeContent}>
                                 {parseNodeContent(code).split("\n").map((line, index) => {
                                     return (
                                         <div key={index}>{line}</div>
                                     )
                                 })}
                                 <div className={styles.JSNodesNodeInputs}>
-                                    <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputBlue}`} />
-                                    <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputGreen}`} />
-                                    <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputBlue}`} />
-                                    <div className={`${styles.JSNodesNodeInput} ${styles.JSNodeInputGreen}`} />
+                                    {
+                                        code.inputs.map((input, index) => {
+                                            return (
+                                                <div key={index} className={`${styles.JSNodesNodeInput} ${styles.JSNodeBlue}`} />
+                                            )
+                                        })
+                                    }
                                 </div>
                                 <div className={styles.JSNodesNodeOutputs}>
-                                    <div className={`${styles.JSNodesNodeOutput} ${styles.JSNodeOutputRed}`} />
-                                    <div className={`${styles.JSNodesNodeOutput} ${styles.JSNodeOutputOrange}`} />
-                                    <div className={`${styles.JSNodesNodeOutput} ${styles.JSNodeOutputRed}`} />
+                                    {
+                                        code.outputs.map((output, index) => {
+                                            return (
+                                                <div key={index} className={`${styles.JSNodesNodeOutput} ${styles.JSNodeBlue}`} />
+                                            )
+                                        })
+                                    }
                                 </div>
                             </div>
                         </div>
                     );
                 })
             }
+            <canvas className={styles.JSNodesOverlayCanvas} ref={overlayCanvas} />
         </div>
         
     )

@@ -482,6 +482,8 @@
 }
 .JSNodesNodeArea {
   height: 100%;
+  margin: -10px;
+  margin-top: 0;
 }
 .JSNodesNodeTitle {
   background-color: #0c151b;
@@ -512,12 +514,6 @@
   width: 10px;
   height: 10px;
 }
-.JSNodeInputBlue {
-  background-color: #0066ff;
-}
-.JSNodeInputGreen {
-  background-color: #00ff00;
-}
 
 .JSNodesNodeOutputs {
   position: absolute;
@@ -535,10 +531,17 @@
   width: 10px;
   height: 10px;
 }
-.JSNodeOutputRed {
+
+.JSNodeBlue {
+  background-color: #0066ff;
+}
+.JSNodeGreen {
+  background-color: #00ff00;
+}
+.JSNodeRed {
   background-color: #ff0000;
 }
-.JSNodeOutputOrange {
+.JSNodeOrange {
   background-color: #ff9900;
 }
 
@@ -571,4 +574,14 @@
 }
 .JSNodesDropdownIcon:hover {
   color: #ccc;
+}
+
+.JSNodesOverlayCanvas {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 24px);
+  z-index: 1000;
+  pointer-events: none;
 }

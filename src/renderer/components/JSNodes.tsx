@@ -68,7 +68,7 @@ function JSNodes() {
 function NodeEditor(props) {
     const {scripts, selectedScript} = props;
     const [nodes, setNodes] = useState([]);
-    const [offset, setOffset] = useState({x: 0, y: 0});
+    const [offset, setOffset] = useState({x: 0, y: 0, oldX: 0, oldY: 0});
     const nodesArea = useRef(null);
     const overlayCanvas = useRef(null);
     let dragging = false, draggingNode = null;
@@ -334,12 +334,19 @@ function NodeEditor(props) {
             draggingNode = e.target.dataset.index;
         } else {
             dragging = true;
+            // @ts-ignore
+            document.offset.oldX = e.clientX;
+            // @ts-ignore
+            document.offset.oldY = e.clientY;
         }
     }
     const nodesMouseMove = (e) => {
         if(dragging) {
             // @ts-ignore
-            setOffset({x: document.offset.x + e.movementX, y: document.offset.y + e.movementY});
+            let currentX = document.offset.x + (e.clientX - document.offset.oldX);
+            // @ts-ignore
+            let currentY = document.offset.y + (e.clientY - document.offset.oldY);
+            setOffset({ x: currentX, y: currentY, oldX: e.clientX, oldY: e.clientY });
         } else if(draggingNode !== null) {
             // @ts-ignore
             let newNodes = [...document.nodes];
@@ -403,8 +410,6 @@ function NodeEditor(props) {
             // @ts-ignore
             document.lines = lines;
         }
-
-        console.log(lines);
 
         ctx.lineWidth = 2;
 

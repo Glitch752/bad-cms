@@ -77,8 +77,13 @@ function NodeEditor(props) {
     // FIXME: Find a better way to do this
     // @ts-ignore
     document.offset = offset;
+    let nodesChanged = false;
     // @ts-ignore
-    document.nodes = nodes;
+    if(document.nodes !== nodes) {
+        nodesChanged = true;
+        // @ts-ignore
+        document.nodes = nodes;
+    }
 
     useEffect(() => {
         setNodes(scripts.length > 0 ? parseNodes(acorn.parse(scripts[selectedScript].code, {ecmaVersion: "latest"}).body, true).nodes : []);
@@ -92,7 +97,7 @@ function NodeEditor(props) {
             x: -150,
             y: 100,
             inputs: [],
-            outputs: []
+            outputs: [],
         }] : [];
         if(parentNode === null) parentNode = parsedNodes[0];
         for(let j = 0; j < nodes.length; j++) {
@@ -248,6 +253,8 @@ function NodeEditor(props) {
                         to.node.inputs[index].from.type = to.type;
                     }
                 }
+
+                node.content = parseNodeContent(node);
             }
         }
 
@@ -354,17 +361,33 @@ function NodeEditor(props) {
         overlayCanvasElem.height = nodesArea.current.offsetHeight;
         const ctx = overlayCanvasElem.getContext("2d");
 
-        const lines = [];
+        // @ts-ignore
+        let lines = document.lines;
         
-        for(let i = 0; i < nodes.length; i++) {
-            let node = nodes[i];
+        if(nodesChanged || !lines) {
+            lines = [];
+            for(let i = 0; i < nodes.length; i++) {
+                let node = nodes[i];
 
-            for(let j = 0; j < node.outputs.length; j++) {
-                let output = node.outputs[j];
-                if(output.to instanceof Array) {
-                    for(let k = 0; k < output.to.length; k++) {
-                        let outputNode = output.to[k].node;
-                        let outputIndex = output.to[k].index;
+                for(let j = 0; j < node.outputs.length; j++) {
+                    let output = node.outputs[j];
+                    if(output.to instanceof Array) {
+                        for(let k = 0; k < output.to.length; k++) {
+                            let outputNode = output.to[k].node;
+                            let outputIndex = output.to[k].index;
+                            if(!outputIndex) outputIndex = 0;
+                            let outputNodeIndex = nodes.indexOf(outputNode);
+                            lines.push({
+                                x1: node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
+                                y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
+                                x2: outputNode.x,
+                                y2: outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
+                                type: output.to[k].type
+                            });
+                        }
+                    } else {
+                        let outputNode = output.to.node;
+                        let outputIndex = output.to.index;
                         if(!outputIndex) outputIndex = 0;
                         let outputNodeIndex = nodes.indexOf(outputNode);
                         lines.push({
@@ -372,24 +395,16 @@ function NodeEditor(props) {
                             y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
                             x2: outputNode.x,
                             y2: outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
-                            type: output.to[k].type
+                            type: output.to.type
                         });
                     }
-                } else {
-                    let outputNode = output.to.node;
-                    let outputIndex = output.to.index;
-                    if(!outputIndex) outputIndex = 0;
-                    let outputNodeIndex = nodes.indexOf(outputNode);
-                    lines.push({
-                        x1: node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
-                        y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
-                        x2: outputNode.x,
-                        y2: outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
-                        type: output.to.type
-                    });
                 }
             }
+            // @ts-ignore
+            document.lines = lines;
         }
+
+        console.log(lines);
 
         ctx.lineWidth = 2;
 
@@ -418,10 +433,6 @@ function NodeEditor(props) {
                 x2, y2
             );
             ctx.stroke();
-            
-            // ctx.moveTo(line.x1 + offset.x, line.y1 + offset.y - 24);
-            // ctx.lineTo(line.x2 + offset.x, line.y2 + offset.y - 24);
-            // ctx.stroke();
         }
     }
 
@@ -437,7 +448,7 @@ function NodeEditor(props) {
                                 {code.type}
                             </div>
                             <div id={"JSNodesNodeContent" + index} className={styles.JSNodesNodeContent}>
-                                {parseNodeContent(code).split("\n").map((line, index) => {
+                                {code.content.split("\n").map((line, index) => {
                                     return (
                                         <div key={index}>{line}</div>
                                     )

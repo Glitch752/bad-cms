@@ -91,7 +91,7 @@ function NodeEditor(props) {
 
     // TODO: Refactor because this is a mess
 
-    const parseNodes = (nodes, start, startX = 0, startY = 0, parentNode = null) => {
+    const parseNodes = (nodesToParse, start, startX = 0, startY = 0, parentNode = null) => {
         let parsedNodes: any[] = start ? [{
             type: "start",
             x: -150,
@@ -100,8 +100,8 @@ function NodeEditor(props) {
             outputs: [],
         }] : [];
         if(parentNode === null) parentNode = parsedNodes[0];
-        for(let j = 0; j < nodes.length; j++) {
-            let node = nodes[j];
+        for(let j = 0; j < nodesToParse.length; j++) {
+            let node = nodesToParse[j];
             parsedNodes.push({
                 ...node,
                 x: 100 + 250 * startX,
@@ -112,12 +112,21 @@ function NodeEditor(props) {
             });
 
             if(!start) {
-                parentNode.outputs.push({
-                    to: {
+                if(j === 0) {
+                    parentNode.outputs.push({
+                        to: [{
+                            node: parsedNodes[parsedNodes.length - 1],
+                            type: "codeFlow",
+                            text: 1
+                        }],
+                    });
+                } else {
+                    parentNode.outputs[parentNode.outputs.length - 1].to.push({
                         node: parsedNodes[parsedNodes.length - 1],
-                        type: "codeFlow"
-                    },
-                });
+                        type: "codeFlow",
+                        text: j + 1
+                    });
+                }
             }
 
             if(node.body) {
@@ -126,14 +135,27 @@ function NodeEditor(props) {
                 startY += nodesParsed.yOffset;
             } else if(node.type === "IfStatement") {
                 const parentNode = parsedNodes[parsedNodes.length - 1];
-
-                let nodesParsed = parseNodes(node.alternate.body, false, startX + 1, startY + j, parentNode);
+                let nodeConsequent = node.consequent;
+                if(nodeConsequent.type === "BlockStatement") {
+                    nodeConsequent = nodeConsequent.body;
+                } else {
+                    nodeConsequent = [nodeConsequent];
+                }
+                let nodesParsed = parseNodes(nodeConsequent, false, startX + 1, startY + j, parentNode);
                 parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                 startY += nodesParsed.yOffset;
                 
-                nodesParsed = parseNodes(node.consequent.body, false, startX + 1, startY + j, parentNode);
-                parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
-                startY += nodesParsed.yOffset;
+                if(node.alternate) {
+                    let nodeAlternate = node.alternate;
+                    if(nodeAlternate.type === "BlockStatement") {
+                        nodeAlternate = nodeAlternate.body;
+                    } else {
+                        nodeAlternate = [nodeAlternate];
+                    }
+                    nodesParsed = parseNodes(nodeAlternate, false, startX + 1, startY + j, parentNode);
+                    parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
+                    startY += nodesParsed.yOffset;
+                }
             }
         };
 
@@ -151,14 +173,16 @@ function NodeEditor(props) {
                             to: [{
                                 node: node, 
                                 index: 0,
-                                type: "codeFlow"
+                                type: "codeFlow",
+                                text: 1
                             }],
                         });
                     } else {
                         parsedNodes[0].outputs[0].to.push({
                             node: node, 
                             index: 0,
-                            type: "codeFlow"
+                            type: "codeFlow",
+                            text: parsedNodes[0].outputs[0].to.length + 1
                         });
                     }
                     for(let j = 0; j < node.inputs.length - 1; j++) {
@@ -260,7 +284,7 @@ function NodeEditor(props) {
 
         return {
             nodes: parsedNodes,
-            yOffset: nodes.length
+            yOffset: parsedNodes.length
         };
     }
 
@@ -389,7 +413,8 @@ function NodeEditor(props) {
                                 y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
                                 x2: outputNode.x,
                                 y2: outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
-                                type: output.to[k].type
+                                type: output.to[k].type,
+                                text: output.to[k].text
                             });
                         }
                     } else {
@@ -402,7 +427,8 @@ function NodeEditor(props) {
                             y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
                             x2: outputNode.x,
                             y2: outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
-                            type: output.to.type
+                            type: output.to.type,
+                            text: output.to.text
                         });
                     }
                 }
@@ -430,15 +456,80 @@ function NodeEditor(props) {
             ctx.moveTo(x1, y1);
             const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
             // Unnecessarily complicated equation, but it looks really cool
-            ctx.bezierCurveTo(
-                x1 + (clamp(80 - (x2 - x1), 50, 160))/* + (clamp(-100 + (x2 - x1), 0, 400))*/,
-                y1 + ((y2 - y1) / 2) - clamp((x2 - x1) / 3, -200, 0),
-                x2 + (clamp(-80 + (x2 - x1), -150, -50))/* + (clamp(100 - (x2 - x1), -400, 0))*/,
-                y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200),
-                x2, y2
-            );
+            const cp1x = x1 + (clamp(80 - (x2 - x1), 50, 160))/* + (clamp(-100 + (x2 - x1), 0, 400))*/,
+                  cp1y = y1 + ((y2 - y1) / 2) - clamp((x2 - x1) / 3, -200, 0),
+                  cp2x = x2 + (clamp(-80 + (x2 - x1), -150, -50))/* + (clamp(100 - (x2 - x1), -400, 0))*/,
+                  cp2y = y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200);
+            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x2, y2);
             ctx.stroke();
+            if(lines[i].text !== undefined) {
+                const { x, y } = getBezierXY(0.5, x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2);
+                const digits = lines[i].text.toString().length;
+
+                ctx.clearRoundRect(x - ((digits * 5) + 10), y - 15, digits * 10 + 20, 30, 10);
+                ctx.beginPath();
+                ctx.roundRect(x - ((digits * 5) + 5), y - 10, digits * 10 + 10, 20, 10);
+                ctx.stroke();
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "16px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(lines[i].text, x, y + 6);
+            }
         }
+    }
+
+    // @ts-ignore
+    CanvasRenderingContext2D.prototype.roundRect = function (x, y, width, height, radius) {
+        var cornerRadius = { upperLeft: radius, upperRight: radius, lowerLeft: radius, lowerRight: radius };
+        if (typeof radius === "object") {
+            for (var side in radius) {
+                cornerRadius[side] = radius[side];
+            }
+        }
+    
+        this.beginPath();
+        this.moveTo(x + cornerRadius.upperLeft, y);
+        this.lineTo(x + width - cornerRadius.upperRight, y);
+        this.quadraticCurveTo(x + width, y, x + width, y + cornerRadius.upperRight);
+        this.lineTo(x + width, y + height - cornerRadius.lowerRight);
+        this.quadraticCurveTo(x + width, y + height, x + width - cornerRadius.lowerRight, y + height);
+        this.lineTo(x + cornerRadius.lowerLeft, y + height);
+        this.quadraticCurveTo(x, y + height, x, y + height - cornerRadius.lowerLeft);
+        this.lineTo(x, y + cornerRadius.upperLeft);
+        this.quadraticCurveTo(x, y, x + cornerRadius.upperLeft, y);
+    }
+
+    // @ts-ignore
+    CanvasRenderingContext2D.prototype.clearRoundRect = function (x, y, width, height, radius) {
+        this.globalCompositeOperation = 'destination-out';
+        var cornerRadius = { upperLeft: radius, upperRight: radius, lowerLeft: radius, lowerRight: radius };
+        if (typeof radius === "object") {
+            for (var side in radius) {
+                cornerRadius[side] = radius[side];
+            }
+        }
+    
+        this.beginPath();
+        this.moveTo(x + cornerRadius.upperLeft, y);
+        this.lineTo(x + width - cornerRadius.upperRight, y);
+        this.quadraticCurveTo(x + width, y, x + width, y + cornerRadius.upperRight);
+        this.lineTo(x + width, y + height - cornerRadius.lowerRight);
+        this.quadraticCurveTo(x + width, y + height, x + width - cornerRadius.lowerRight, y + height);
+        this.lineTo(x + cornerRadius.lowerLeft, y + height);
+        this.quadraticCurveTo(x, y + height, x, y + height - cornerRadius.lowerLeft);
+        this.lineTo(x, y + cornerRadius.upperLeft);
+        this.quadraticCurveTo(x, y, x + cornerRadius.upperLeft, y);
+        this.fill();
+        this.globalCompositeOperation = "source-over";
+    }
+
+    const getBezierXY = (t, sx, sy, cp1x, cp1y, cp2x, cp2y, ex, ey) => {
+        return {
+          x: Math.pow(1-t,3) * sx + 3 * t * Math.pow(1 - t, 2) * cp1x 
+            + 3 * t * t * (1 - t) * cp2x + t * t * t * ex,
+          y: Math.pow(1-t,3) * sy + 3 * t * Math.pow(1 - t, 2) * cp1y 
+            + 3 * t * t * (1 - t) * cp2y + t * t * t * ey
+        };
     }
 
     requestAnimationFrame(drawCanvas);
@@ -524,8 +615,7 @@ function NodeEditor(props) {
                 </div>
             </div>
         </div>
-        
-    )
+    );
 }
 
 export default JSNodes;

@@ -303,15 +303,17 @@ function NodeEditor(props) {
 
     const parseNodeContent = (node) => {
         if(node.type === "start") {
-            return "Program";
+            return "\\*Program\\*";
         } else if(node.type === "ExpressionStatement") {
             return parseNodeExpression(node.expression);
         } else if(node.type === "FunctionDeclaration") {
-            return node.id.name;
+            return `\\*${node.id.name}\\*`;
         } else if(node.type === "VariableDeclaration") {
-            return node.declarations[0].id.name;
+            return parseVariableDeclaration(node);
         } else if(node.type === "IfStatement") {
-            return "If";
+            return "\\*If\\*";
+        } else if (node.type === "ForStatement") {
+            return parseForStatement(node);
         } else {
             return node.type;
         }
@@ -321,20 +323,62 @@ function NodeEditor(props) {
         if(node.type === "CallExpression") {
             const callee = node.callee;
             const args = node.arguments;
-            if(callee.type === "MemberExpression") {
-                return callee.object.name + "." + callee.property.name;
-            } else if(callee.type === "Identifier") {
-                return `Run "${callee.name}"\n
-                    ${(args.length > 0 ? 
-                        "With arguments: " + args.map(arg => arg.name).join(", ") :
-                        "With no arguments")}
-                    `;
-            } else {
-                return "Unknown";
-            }
+            return `\\*Call\\* "${parseNodeExpression(callee)}"\n
+                ${(args.length > 0 ? 
+                    "With arguments: " + args.map(arg => parseNodeExpression(arg)).join(", ") :
+                    "With no arguments")}
+                `;
+        } else if(node.type === "Literal") {
+            return node.value;
+        } else if(node.type === "BinaryExpression") {
+            return `${parseNodeExpression(node.left)} ${node.operator} ${parseNodeExpression(node.right)}`;
+        } else if(node.type === "Identifier") {
+            return node.name;
+        } else if(node.type === "MemberExpression") {
+            return node.object.name + "." + node.property.name;
         } else {
             return node.type;
         }
+    }
+
+    const parseForStatement = (node) => {
+        let content = "\\*For\\*\n";
+
+        if(node.init) {
+            content += "\\*Initialization:\\*\n";
+            if(node.init.type === "VariableDeclaration") {
+                content += parseVariableDeclaration(node.init) + "\n";
+            } else {
+                content += parseNodeExpression(node.init) + "\n";
+            }
+        } else {
+            content += "\\*Initialization:\\* None\n";
+        }
+
+        if(node.test) {
+            content += "\\*Test:\\*\n" + parseNodeExpression(node.test) + "\n";
+        } else {
+            content += "\\*Test:\\* None\n";
+        }
+
+        if(node.update) {
+            content += "\\*Update:\\*\n" + parseNodeExpression(node.update) + "\n";
+        } else {
+            content += "\\*Update:\\* None\n";
+        }
+
+        return content;
+    }
+
+    const parseVariableDeclaration = (node) => {
+        let content = "";
+        for(let i = 0; i < node.declarations.length; i++) {
+            content += (node.declarations[i].init ? 
+                ("Initialize " + node.declarations[i].id.name + " to " + parseNodeExpression(node.declarations[i].init))
+                : "Define " + node.declarations[i].id.name) + ((i < node.declarations.length - 1) ? ",\n" : "\n");
+        }
+
+        return content;
     }
 
     useEffect(() => {
@@ -343,14 +387,20 @@ function NodeEditor(props) {
         nodesAreaElem.addEventListener("mousemove", nodesMouseMove);
         nodesAreaElem.addEventListener("mouseup", nodesMouseUp);
         nodesAreaElem.addEventListener("mouseleave", nodesMouseUp);
+        window.addEventListener("resize", resizeWindow);
 
         return () => {
             nodesAreaElem.removeEventListener("mousedown", nodesMouseDown);
             nodesAreaElem.removeEventListener("mousemove", nodesMouseMove);
             nodesAreaElem.removeEventListener("mouseup", nodesMouseUp);
             nodesAreaElem.removeEventListener("mouseleave", nodesMouseUp);
+            window.removeEventListener("resize", resizeWindow);
         }
     }, []);
+
+    const resizeWindow = () => {
+        setOffset({...offset});
+    }
 
     const nodesMouseDown = (e) => {
         // Check if we clicked on an element with the class styles.JSNodesNodeTitle
@@ -546,7 +596,12 @@ function NodeEditor(props) {
                             <div id={"JSNodesNodeContent" + index} className={styles.JSNodesNodeContent}>
                                 {code.content.split("\n").map((line, index) => {
                                     return (
-                                        <div key={index}>{line}</div>
+                                        <div key={index}>{line.split("\\*").map((section, index) => {
+                                            if(index % 2 === 0) {
+                                                return <span key={index}>{section}</span>;
+                                            }
+                                            return <b key={index}>{section}</b>;
+                                        })}</div>
                                     )
                                 })}
                                 <div className={styles.JSNodesNodeInputs}>
@@ -607,7 +662,7 @@ function NodeEditor(props) {
                 </div>
                 <div className={styles.JSNodesKeyItem}>
                     <div className={`${styles.JSNodesKeyItemColor} ${styles.JSNodeGreen}`}></div>
-                    <div className={styles.JSNodesKeyItemTitle}>Number</div>
+                    <div className={styles.JSNodesKeyItemTitle}>Data</div>
                 </div>
                 <div className={styles.JSNodesKeyItem}>
                     <div className={`${styles.JSNodesKeyItemColor} ${styles.JSNodeRed}`}></div>

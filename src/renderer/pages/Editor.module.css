@@ -479,6 +479,8 @@
   top: 50px;
   left: 20px;
   user-select: none;
+  width: max-content;
+  max-width: 200px;
 }
 .JSNodesNodeArea {
   height: 100%;

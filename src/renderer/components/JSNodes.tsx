@@ -68,7 +68,7 @@ function JSNodes() {
 function NodeEditor(props) {
     const {scripts, selectedScript} = props;
     const [nodes, setNodes] = useState([]);
-    const [offset, setOffset] = useState({x: 0, y: 0, oldX: 0, oldY: 0});
+    const [offset, setOffset] = useState({x: 0, y: 0, oldX: 0, oldY: 0, scale: 1});
     const nodesArea = useRef(null);
     const overlayCanvas = useRef(null);
     let dragging = false, draggingNode = null;
@@ -162,7 +162,7 @@ function NodeEditor(props) {
             }
 
             if(content.addNodes !== undefined && content.addNodes.length > 0) {
-                const nodesParsed = parseNodes(content.addNodes.map(node => node[0]), false, startX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
+                const nodesParsed = parseNodes(content.addNodes.map(node => node instanceof Array ? node[0] : node), false, startX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
                 parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                 startY += nodesParsed.yOffset;
             }
@@ -382,16 +382,20 @@ function NodeEditor(props) {
                 content: parseNodeExpression(node.object).content + "." + parseNodeExpression(node.property).content
             };
         } else if(node.type === "AssignmentPattern") {
+            const expression = parseNodeExpression(node.right);
             return {
-                content: `${parseNodeExpression(node.left).content} = ${parseNodeExpression(node.right).content}`
+                content: `${parseNodeExpression(node.left).content} = ${expression.content}`,
+                addNodes: expression.addNodes
             };
         } else if(node.type === "UpdateExpression") {
             return {
                 content: `${parseNodeExpression(node.argument).content} ${node.operator}`
             };
         } else if(node.type === "AssignmentExpression") {
+            const expression = parseNodeExpression(node.right);
             return {
-                content: `${parseNodeExpression(node.left).content} ${node.operator} ${parseNodeExpression(node.right).content}`
+                content: `${parseNodeExpression(node.left).content} ${node.operator} ${expression.content}`,
+                addNodes: expression.addNodes
             };
         } else if(node.type === "FunctionExpression") {
             return {
@@ -463,6 +467,7 @@ function NodeEditor(props) {
         nodesAreaElem.addEventListener("mousemove", nodesMouseMove);
         nodesAreaElem.addEventListener("mouseup", nodesMouseUp);
         nodesAreaElem.addEventListener("mouseleave", nodesMouseUp);
+        nodesAreaElem.addEventListener("wheel", nodesScroll);
         window.addEventListener("resize", resizeWindow);
 
         return () => {
@@ -470,12 +475,28 @@ function NodeEditor(props) {
             nodesAreaElem.removeEventListener("mousemove", nodesMouseMove);
             nodesAreaElem.removeEventListener("mouseup", nodesMouseUp);
             nodesAreaElem.removeEventListener("mouseleave", nodesMouseUp);
+            nodesAreaElem.removeEventListener("wheel", nodesScroll);
             window.removeEventListener("resize", resizeWindow);
         }
     }, []);
 
     const resizeWindow = () => {
         setOffset({...offset});
+    }
+
+    const nodesScroll = (e) => {
+        // @ts-ignore
+        let offset = document.offset;
+        let scaleBy = Math.sign(e.deltaY) === 1 ? 1 / 1.1 : 1.1;
+        let x = e.clientX - nodesArea.current.getBoundingClientRect().left;
+        let y = e.clientY - nodesArea.current.getBoundingClientRect().top;
+
+        setOffset({
+            ...offset,
+            scale: offset.scale * scaleBy,
+            x: x - (x - offset.x) * scaleBy,
+            y: y - (y - offset.y) * scaleBy
+        });
     }
 
     const nodesMouseDown = (e) => {
@@ -496,12 +517,15 @@ function NodeEditor(props) {
             let currentX = document.offset.x + (e.clientX - document.offset.oldX);
             // @ts-ignore
             let currentY = document.offset.y + (e.clientY - document.offset.oldY);
-            setOffset({ x: currentX, y: currentY, oldX: e.clientX, oldY: e.clientY });
+            // @ts-ignore
+            setOffset({ x: currentX, y: currentY, oldX: e.clientX, oldY: e.clientY, scale: document.offset.scale });
         } else if(draggingNode !== null) {
             // @ts-ignore
             let newNodes = [...document.nodes];
-            newNodes[draggingNode].x = newNodes[draggingNode].x + e.movementX;
-            newNodes[draggingNode].y = newNodes[draggingNode].y + e.movementY;
+            // @ts-ignore
+            newNodes[draggingNode].x = newNodes[draggingNode].x + e.movementX / document.offset.scale;
+            // @ts-ignore
+            newNodes[draggingNode].y = newNodes[draggingNode].y + e.movementY / document.offset.scale;
 
             setNodes(newNodes);
         }
@@ -563,7 +587,7 @@ function NodeEditor(props) {
             document.lines = lines;
         }
 
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2 * offset.scale;
 
         for(let i = 0; i < lines.length; i++) {
             if(lines[i].type === "codeFlow") {
@@ -578,29 +602,55 @@ function NodeEditor(props) {
 
             const line = lines[i];
             ctx.beginPath();
-            let x1 = line.x1 + offset.x, y1 = line.y1 + offset.y, x2 = line.x2 + offset.x, y2 = line.y2 + offset.y;
-            ctx.moveTo(x1, y1);
+            let {x1, y1, x2, y2} = line;
+            ctx.moveTo(toScreenCoords(x1, 0, offset).x, toScreenCoords(0, y1, offset).y);
             const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
             // Unnecessarily complicated equation, but it looks really cool
             const cp1x = x1 + (clamp(80 - (x2 - x1), 50, 160))/* + (clamp(-100 + (x2 - x1), 0, 400))*/,
                   cp1y = y1 + ((y2 - y1) / 2) - clamp((x2 - x1) / 3, -200, 0),
                   cp2x = x2 + (clamp(-80 + (x2 - x1), -150, -50))/* + (clamp(100 - (x2 - x1), -400, 0))*/,
                   cp2y = y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200);
-            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x2, y2);
+            ctx.bezierCurveTo(
+                toScreenCoords(cp1x, 0, offset).x, 
+                toScreenCoords(0, cp1y, offset).y, 
+                toScreenCoords(cp2x, 0, offset).x, 
+                toScreenCoords(0, cp2y, offset).y,
+                toScreenCoords(x2, 0, offset).x,
+                toScreenCoords(0, y2, offset).y
+            );
             ctx.stroke();
             if(lines[i].text !== undefined) {
                 const { x, y } = getBezierXY(0.5, x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2);
                 const digits = lines[i].text.toString().length;
 
-                ctx.clearRoundRect(x - ((digits * 5) + 10), y - 15, digits * 10 + 20, 30, 10);
+                ctx.clearRoundRect(
+                    toScreenCoords(x - ((digits * 5) + 10), 0, offset).x,
+                    toScreenCoords(0, y - 15, offset).y,
+                    (digits * 10 + 20) * offset.scale,
+                    30 * offset.scale,
+                    10 * offset.scale
+                );
                 ctx.beginPath();
-                ctx.roundRect(x - ((digits * 5) + 5), y - 10, digits * 10 + 10, 20, 10);
+                ctx.roundRect(
+                    toScreenCoords(x - ((digits * 5) + 5), 0, offset).x,
+                    toScreenCoords(0, y - 10, offset).y,
+                    (digits * 10 + 10) * offset.scale,
+                    20 * offset.scale,
+                    10 * offset.scale
+                );
                 ctx.stroke();
                 ctx.fillStyle = "#ffffff";
-                ctx.font = "16px Arial";
+                ctx.font = `${16 * offset.scale}px Arial`;
                 ctx.textAlign = "center";
-                ctx.fillText(lines[i].text, x, y + 6);
+                ctx.fillText(lines[i].text, toScreenCoords(x, 0, offset).x, toScreenCoords(0, y + 6, offset).y);
             }
+        }
+    }
+
+    const toScreenCoords = (x, y, offset) => {
+        return {
+            x: x * offset.scale + offset.x,
+            y: y * offset.scale + offset.y
         }
     }
 
@@ -661,11 +711,14 @@ function NodeEditor(props) {
     requestAnimationFrame(drawCanvas);
 
     return (
-        <div className={styles.JSNodesNodeArea} ref={nodesArea}>
+        // TODO: Figure out why the weird offset.y + offset.scale * -25 + 25 is needed to keep the elements lined up to the canvas
+        // @ts-ignore
+        <div className={styles.JSNodesNodeArea} ref={nodesArea} style={{"--scale": offset.scale, "--offsetX": `${offset.x}px`, "--offsetY": `${offset.y + offset.scale * -25 + 25}px`}}>
             {
                 nodes.map((code, index) => {
                     return (
-                        <div id={"JSNodesNode" + index} key={index} className={styles.JSNodesNode} style={{"left": `${code.x + offset.x}px`, "top": `${code.y + offset.y}px`}}>
+                        // @ts-ignore
+                        <div id={"JSNodesNode" + index} key={index} className={styles.JSNodesNode} style={{"--left": `${code.x}px`, "--top": `${code.y}px`}}>
                             <div className={styles.JSNodesNodeTitle} data-index={index}>
                                 {code.type}
                             </div>

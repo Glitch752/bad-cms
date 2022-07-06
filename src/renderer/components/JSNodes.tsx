@@ -98,17 +98,20 @@ function NodeEditor(props) {
             y: 100,
             inputs: [],
             outputs: [],
+            content: "Program"
         }] : [];
         if(parentNode === null) parentNode = parsedNodes[0];
         for(let j = 0; j < nodesToParse.length; j++) {
             let node = nodesToParse[j];
+            const content = parseNodeContent(node);
             parsedNodes.push({
                 ...node,
                 x: 100 + 250 * startX,
                 y: 170 * (j + startY) + 100,
                 inputs: parseNodeInputs(node, parentNode, start),
                 outputs: parseNodeOutputs(node, parentNode),
-                startNode: start
+                startNode: start,
+                content: content.content
             });
 
             if(!start) {
@@ -156,6 +159,12 @@ function NodeEditor(props) {
                     parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                     startY += nodesParsed.yOffset;
                 }
+            }
+
+            if(content.addNodes !== undefined && content.addNodes.length > 0) {
+                const nodesParsed = parseNodes(content.addNodes.map(node => node[0]), false, startX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
+                parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
+                startY += nodesParsed.yOffset;
             }
         };
 
@@ -277,8 +286,6 @@ function NodeEditor(props) {
                         to.node.inputs[index].from.type = to.type;
                     }
                 }
-
-                node.content = parseNodeContent(node);
             }
         }
 
@@ -303,19 +310,45 @@ function NodeEditor(props) {
 
     const parseNodeContent = (node) => {
         if(node.type === "start") {
-            return "\\*Program\\*";
+            return {
+                content: "\\*Program\\*"
+            };
         } else if(node.type === "ExpressionStatement") {
-            return parseNodeExpression(node.expression);
+            const expression = parseNodeExpression(node.expression);
+            return {
+                content: expression.content,
+                addNodes: expression.addNodes
+            };
         } else if(node.type === "FunctionDeclaration") {
-            return `\\*${node.id.name}\\*`;
+            return {
+                content: `Define function \\*${node.id.name}\\*\n
+                ${node.params.length > 0 ? `\\*Parameters:\\*\n
+                    ${node.params.map(param => {
+                        return `${parseNodeExpression(param).content} ${param.type === "AssignmentPattern" ? "(Optional)" : ""}\n`;
+                    })}` : "No parameters"}`
+            };
         } else if(node.type === "VariableDeclaration") {
-            return parseVariableDeclaration(node);
+            const declaration = parseVariableDeclaration(node);
+            return {
+                content: declaration.declaration,
+                addNodes: declaration.nodes
+            };
         } else if(node.type === "IfStatement") {
-            return "\\*If\\*";
+            return {
+                content: `\\*If\\*\n${parseNodeExpression(node.test).content}`
+            };
         } else if (node.type === "ForStatement") {
-            return parseForStatement(node);
+            return {
+                content: parseForStatement(node)
+            };
+        } else if(node.type === "WhileStatement") {
+            return {
+                content: parseWhileStatement(node)
+            };
         } else {
-            return node.type;
+            return {
+                content: node.type
+            };
         }
     }
 
@@ -323,21 +356,52 @@ function NodeEditor(props) {
         if(node.type === "CallExpression") {
             const callee = node.callee;
             const args = node.arguments;
-            return `\\*Call\\* "${parseNodeExpression(callee)}"\n
-                ${(args.length > 0 ? 
-                    "With arguments: " + args.map(arg => parseNodeExpression(arg)).join(", ") :
-                    "With no arguments")}
-                `;
+            const expressions = args.map(arg => parseNodeExpression(arg));
+            return {
+                content: `\\*Call\\* "${parseNodeExpression(callee).content}"\n
+                    ${(args.length > 0 ? 
+                        "With arguments: " + expressions.map(expression => expression.content).join(", ") :
+                        "With no arguments")}
+                    `,
+                addNodes: expressions.map(expression => expression.addNodes).filter(expression => expression !== undefined)
+            };
         } else if(node.type === "Literal") {
-            return node.value;
+            return {
+                content: node.value
+            };
         } else if(node.type === "BinaryExpression") {
-            return `${parseNodeExpression(node.left)} ${node.operator} ${parseNodeExpression(node.right)}`;
+            return {
+                content: `${parseNodeExpression(node.left).content} ${node.operator} ${parseNodeExpression(node.right).content}`
+            };
         } else if(node.type === "Identifier") {
-            return node.name;
+            return {
+                content: node.name
+            };
         } else if(node.type === "MemberExpression") {
-            return node.object.name + "." + node.property.name;
+            return {
+                content: parseNodeExpression(node.object).content + "." + parseNodeExpression(node.property).content
+            };
+        } else if(node.type === "AssignmentPattern") {
+            return {
+                content: `${parseNodeExpression(node.left).content} = ${parseNodeExpression(node.right).content}`
+            };
+        } else if(node.type === "UpdateExpression") {
+            return {
+                content: `${parseNodeExpression(node.argument).content} ${node.operator}`
+            };
+        } else if(node.type === "AssignmentExpression") {
+            return {
+                content: `${parseNodeExpression(node.left).content} ${node.operator} ${parseNodeExpression(node.right).content}`
+            };
+        } else if(node.type === "FunctionExpression") {
+            return {
+                content: "(Inline function)",
+                addNodes: [node]
+            };
         } else {
-            return node.type;
+            return {
+                content: node.type
+            };
         }
     }
 
@@ -347,22 +411,22 @@ function NodeEditor(props) {
         if(node.init) {
             content += "\\*Initialization:\\*\n";
             if(node.init.type === "VariableDeclaration") {
-                content += parseVariableDeclaration(node.init) + "\n";
+                content += parseVariableDeclaration(node.init).declaration + "\n";
             } else {
-                content += parseNodeExpression(node.init) + "\n";
+                content += parseNodeExpression(node.init).content + "\n";
             }
         } else {
             content += "\\*Initialization:\\* None\n";
         }
 
         if(node.test) {
-            content += "\\*Test:\\*\n" + parseNodeExpression(node.test) + "\n";
+            content += "\\*Test:\\*\n" + parseNodeExpression(node.test).content + "\n";
         } else {
             content += "\\*Test:\\* None\n";
         }
 
         if(node.update) {
-            content += "\\*Update:\\*\n" + parseNodeExpression(node.update) + "\n";
+            content += "\\*Update:\\*\n" + parseNodeExpression(node.update).content + "\n";
         } else {
             content += "\\*Update:\\* None\n";
         }
@@ -370,15 +434,27 @@ function NodeEditor(props) {
         return content;
     }
 
+    function parseWhileStatement(node) {
+        return `\\*While\\*\n${parseNodeExpression(node.test).content}`;
+    }
+
     const parseVariableDeclaration = (node) => {
         let content = "";
+        let addNodes = [];
         for(let i = 0; i < node.declarations.length; i++) {
-            content += (node.declarations[i].init ? 
-                ("Initialize " + node.declarations[i].id.name + " to " + parseNodeExpression(node.declarations[i].init))
-                : "Define " + node.declarations[i].id.name) + ((i < node.declarations.length - 1) ? ",\n" : "\n");
+            if(node.declarations[i].init) {
+                let expression = parseNodeExpression(node.declarations[i].init);
+                if(expression.addNodes) addNodes = addNodes.concat(expression.addNodes);
+                content += "Initialize " + node.declarations[i].id.name + " to " + expression.content + "\n";
+            } else {
+                content += ("Define " + node.declarations[i].id.name) + ((i < node.declarations.length - 1) ? ",\n" : "\n");
+            }
         }
 
-        return content;
+        return {
+            declaration: content,
+            nodes: addNodes
+        };
     }
 
     useEffect(() => {

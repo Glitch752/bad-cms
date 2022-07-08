@@ -83,8 +83,11 @@ const configuration: webpack.Configuration = {
     minimizer: [
       new TerserPlugin({
         parallel: true,
+        exclude: /.*\/templates\/.*/
       }),
-      new CssMinimizerPlugin(),
+      new CssMinimizerPlugin({
+        exclude: /.*\/templates\/.*/
+      }),
     ],
   },
 

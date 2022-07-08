@@ -236,6 +236,18 @@ function NodeEditor(props) {
 
                             for(let j = 0; j < parsedNodes.length; j++) {
                                 if(parsedNodes[j].type === "FunctionDeclaration" && parsedNodes[j].id.name === callFunction) {
+                                    if(parsedNodes[j].inputs.filter(input => input.type === "functionCall").length < 1) {
+                                        parsedNodes[j].inputs.push({
+                                            from: [{
+                                                node: node
+                                            }],
+                                            type: "functionCall"
+                                        });
+                                    } else {
+                                        parsedNodes[j].inputs[parsedNodes[j].inputs.indexOf(parsedNodes[j].inputs.filter(input => input.type === "functionCall")[0])].from.push({
+                                            node: node
+                                        });
+                                    }
                                     node.outputs.push({
                                         to: {
                                             node: parsedNodes[j],
@@ -243,17 +255,6 @@ function NodeEditor(props) {
                                             index: 1
                                         }
                                     });
-                                    if(parsedNodes[j].inputs.length < 2) {
-                                        parsedNodes[j].inputs.push({
-                                            from: [{
-                                                node: node
-                                            }]
-                                        });
-                                    } else {
-                                        parsedNodes[j].inputs[1].from.push({
-                                            node: node
-                                        });
-                                    }
                                 }
                             }
                         }

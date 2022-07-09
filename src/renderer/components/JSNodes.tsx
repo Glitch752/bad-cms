@@ -325,7 +325,7 @@ function NodeEditor(props) {
                 content: `Define function \\*${node.id.name}\\*\n
                 ${node.params.length > 0 ? `\\*Parameters:\\*\n
                     ${node.params.map(param => {
-                        return `${parseNodeExpression(param).content} ${param.type === "AssignmentPattern" ? "(Optional)" : ""}\n`;
+                        return `${parseNodeExpression(param, false).content} ${param.type === "AssignmentPattern" ? "(Optional)" : ""}\n`;
                     })}` : "No parameters"}`
             };
         } else if(node.type === "VariableDeclaration") {
@@ -336,7 +336,7 @@ function NodeEditor(props) {
             };
         } else if(node.type === "IfStatement") {
             return {
-                content: `\\*If\\*\n${parseNodeExpression(node.test).content}`
+                content: `\\*If\\*\n${parseNodeExpression(node.test, false).content}`
             };
         } else if (node.type === "ForStatement") {
             return {
@@ -353,17 +353,17 @@ function NodeEditor(props) {
         }
     }
 
-    const parseNodeExpression = (node) => {
+    const parseNodeExpression = (node, topLayer = true) => {
         if(node.type === "CallExpression") {
             const callee = node.callee;
             const args = node.arguments;
-            const expressions = args.map(arg => parseNodeExpression(arg));
+            const expressions = args.map(arg => parseNodeExpression(arg, false));
             return {
-                content: `\\*Call\\* "${parseNodeExpression(callee).content}"\n
+                content: `${!topLayer ? "(" : ""}\\*Call\\* "${parseNodeExpression(callee, false).content}"\n
                     ${(args.length > 0 ? 
                         "With arguments: " + expressions.map(expression => expression.content).join(", ") :
                         "With no arguments")}
-                    `,
+                    ${!topLayer ? ")" : ""}`,
                 addNodes: expressions.map(expression => expression.addNodes).filter(expression => expression !== undefined)
             };
         } else if(node.type === "Literal") {
@@ -372,7 +372,7 @@ function NodeEditor(props) {
             };
         } else if(node.type === "BinaryExpression") {
             return {
-                content: `${parseNodeExpression(node.left).content} ${node.operator} ${parseNodeExpression(node.right).content}`
+                content: `${parseNodeExpression(node.left, false).content} ${node.operator} ${parseNodeExpression(node.right, false).content}`
             };
         } else if(node.type === "Identifier") {
             return {
@@ -380,22 +380,22 @@ function NodeEditor(props) {
             };
         } else if(node.type === "MemberExpression") {
             return {
-                content: parseNodeExpression(node.object).content + "." + parseNodeExpression(node.property).content
+                content: parseNodeExpression(node.object, false).content + "." + parseNodeExpression(node.property, false).content
             };
         } else if(node.type === "AssignmentPattern") {
-            const expression = parseNodeExpression(node.right);
+            const expression = parseNodeExpression(node.right, false);
             return {
-                content: `${parseNodeExpression(node.left).content} = ${expression.content}`,
+                content: `${parseNodeExpression(node.left, false).content} = ${expression.content}`,
                 addNodes: expression.addNodes
             };
         } else if(node.type === "UpdateExpression") {
             return {
-                content: `${parseNodeExpression(node.argument).content} ${node.operator}`
+                content: `${parseNodeExpression(node.argument, false).content} ${node.operator}`
             };
         } else if(node.type === "AssignmentExpression") {
-            const expression = parseNodeExpression(node.right);
+            const expression = parseNodeExpression(node.right, false);
             return {
-                content: `${parseNodeExpression(node.left).content} ${node.operator} ${expression.content}`,
+                content: `${parseNodeExpression(node.left, false).content} ${node.operator} ${expression.content}`,
                 addNodes: expression.addNodes
             };
         } else if(node.type === "FunctionExpression") {
@@ -418,20 +418,20 @@ function NodeEditor(props) {
             if(node.init.type === "VariableDeclaration") {
                 content += parseVariableDeclaration(node.init).declaration + "\n";
             } else {
-                content += parseNodeExpression(node.init).content + "\n";
+                content += parseNodeExpression(node.init, false).content + "\n";
             }
         } else {
             content += "\\*Initialization:\\* None\n";
         }
 
         if(node.test) {
-            content += "\\*Test:\\*\n" + parseNodeExpression(node.test).content + "\n";
+            content += "\\*Test:\\*\n" + parseNodeExpression(node.test, false).content + "\n";
         } else {
             content += "\\*Test:\\* None\n";
         }
 
         if(node.update) {
-            content += "\\*Update:\\*\n" + parseNodeExpression(node.update).content + "\n";
+            content += "\\*Update:\\*\n" + parseNodeExpression(node.update, false).content + "\n";
         } else {
             content += "\\*Update:\\* None\n";
         }
@@ -440,7 +440,7 @@ function NodeEditor(props) {
     }
 
     function parseWhileStatement(node) {
-        return `\\*While\\*\n${parseNodeExpression(node.test).content}`;
+        return `\\*While\\*\n${parseNodeExpression(node.test, false).content}`;
     }
 
     const parseVariableDeclaration = (node) => {
@@ -448,7 +448,7 @@ function NodeEditor(props) {
         let addNodes = [];
         for(let i = 0; i < node.declarations.length; i++) {
             if(node.declarations[i].init) {
-                let expression = parseNodeExpression(node.declarations[i].init);
+                let expression = parseNodeExpression(node.declarations[i].init, false);
                 if(expression.addNodes) addNodes = addNodes.concat(expression.addNodes);
                 content += "Initialize " + node.declarations[i].id.name + " to " + expression.content + "\n";
             } else {

@@ -107,6 +107,7 @@ function NodeEditor(props) {
             const content: any = parseNodeContent(node);
 
             let midNodes = content.midNodes;
+            let inputNodes = content.inputNodes;
             if(midNodes && midNodes.length > 0) {
                 for(let i = 0; i < midNodes.length; i++) {
                     let midNode = midNodes[i];
@@ -139,30 +140,61 @@ function NodeEditor(props) {
                 }
             }
 
-            const currentX = startX + (midNodes ? midNodes.length : 0);
+            const currentX = startX + (midNodes ? midNodes.length : 0) + (inputNodes && inputNodes.length > 0 ? 1 : 0),
+                  currentY = (j + startY);
 
             parsedNodes.push({
                 ...node,
                 x: 100 + 250 * currentX,
-                y: 170 * (j + startY) + 100,
+                y: 170 * currentY + 100,
                 inputs: parseNodeInputs(node, iterationParentNode, start && !(midNodes && midNodes.length > 0)),
                 outputs: parseNodeOutputs(node, iterationParentNode),
                 startNode: start && !(midNodes && midNodes.length > 0),
                 content: content.content
             });
+            let childNode = parsedNodes[parsedNodes.length - 1];
+
+            if(inputNodes && inputNodes.length > 0) {
+                for(let i = 0; i < inputNodes.length; i++) {
+                    let inputNode = inputNodes[i];
+                    startY++;
+                    parsedNodes.push({
+                        ...inputNode,
+                        x: 100 + 250 * startX,
+                        y: 170 * (j + startY) + 100,
+                        inputs: [],
+                        outputs: [],
+                        startNode: false,
+                    });
+                    let currentNode = parsedNodes[parsedNodes.length - 1];
+                    currentNode.outputs.push({
+                        to: {
+                            node: childNode,
+                            type: inputNode.outputType ? inputNode.outputType : "codeFlow",
+                            text: inputNode.text ? inputNode.text : ">",
+                            index: childNode.inputs.length
+                        }
+                    });
+                    childNode.inputs.push({
+                        from: {
+                            node: currentNode
+                        }
+                    });
+                }
+            }
 
             if(!(start && !(midNodes && midNodes.length > 0))) {
                 if(iterationParentNode.outputs.length < 1) {
                     iterationParentNode.outputs.push({
                         to: [{
-                            node: parsedNodes[parsedNodes.length - 1],
+                            node: childNode,
                             type: "codeFlow",
                             text: 1
                         }],
                     });
                 } else {
                     iterationParentNode.outputs[iterationParentNode.outputs.length - 1].to.push({
-                        node: parsedNodes[parsedNodes.length - 1],
+                        node: childNode,
                         type: "codeFlow",
                         text: j + 1
                     });
@@ -170,7 +202,7 @@ function NodeEditor(props) {
             }
 
             if(node.body) {
-                const nodesParsed = parseNodes(node.body.body, false, currentX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
+                const nodesParsed = parseNodes(node.body.body, false, currentX + 1, startY + j, childNode);
                 parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                 startY += nodesParsed.yOffset;
             } else if(node.type === "IfStatement") {
@@ -180,7 +212,7 @@ function NodeEditor(props) {
                 } else {
                     nodeConsequent = [nodeConsequent];
                 }
-                let nodesParsed = parseNodes(nodeConsequent, false, currentX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
+                let nodesParsed = parseNodes(nodeConsequent, false, currentX + 1, startY + j, childNode);
                 parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                 startY += nodesParsed.yOffset;
                 
@@ -191,7 +223,7 @@ function NodeEditor(props) {
                     } else {
                         nodeAlternate = [nodeAlternate];
                     }
-                    nodesParsed = parseNodes(nodeAlternate, false, currentX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
+                    nodesParsed = parseNodes(nodeAlternate, false, currentX + 1, startY + j, childNode);
                     parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                     startY += nodesParsed.yOffset;
                 }
@@ -208,6 +240,7 @@ function NodeEditor(props) {
             for(let i = 0; i < parsedNodes.length; i++) {
                 let node = parsedNodes[i];
                 if(node.startNode) {
+                    node.inputs.splice(0, 1);
                     node.inputs.unshift({
                         from: {
                             node: parsedNodes[0]
@@ -230,39 +263,40 @@ function NodeEditor(props) {
                             text: parsedNodes[0].outputs[0].to.length + 1
                         });
                     }
-                    for(let j = 0; j < node.inputs.length - 1; j++) {
-                        let from = node.inputs[j].from;
-                        let outputs;
-                        if(from instanceof Array) {
-                            for(let k = 0; k < from.length; k++) {
-                                outputs = from[k].node.outputs;
-                                let output = outputs.find(output => {
-                                    if(output.to instanceof Array) {
-                                        return output.to.find(to => to.node === node)
-                                    } else {
-                                        return output.to.node === node
-                                    }
-                                });
-                                if(output) {
-                                    if(!output.to.index) output.to.index = 0;
-                                    output.to.index++;
-                                }
-                            }
-                        } else {
-                            outputs = from.node.outputs;
-                            let output = outputs.find(output => {
-                                if(output.to instanceof Array) {
-                                    return output.to.find(to => to.node === node)
-                                } else {
-                                    return output.to.node === node
-                                }
-                            });
-                            if(output) {
-                                if(!output.to.index) output.to.index = 0;
-                                output.to.index++;
-                            }
-                        }
-                    }
+                    // Not required... For some reason.
+                    // for(let j = 0; j < node.inputs.length; j++) {
+                    //     let from = node.inputs[j].from;
+                    //     let outputs;
+                    //     if(from instanceof Array) {
+                    //         for(let k = 0; k < from.length; k++) {
+                    //             outputs = from[k].node.outputs;
+                    //             let output = outputs.find(output => {
+                    //                 if(output.to instanceof Array) {
+                    //                     return output.to.find(to => to.node === node)
+                    //                 } else {
+                    //                     return output.to.node === node
+                    //                 }
+                    //             });
+                    //             if(output) {
+                    //                 if(!output.to.index) output.to.index = 0;
+                    //                 // output.to.index++;
+                    //             }
+                    //         }
+                    //     } else {
+                    //         outputs = from.node.outputs;
+                    //         let output = outputs.find(output => {
+                    //             if(output.to instanceof Array) {
+                    //                 return output.to.find(to => to.node === node)
+                    //             } else {
+                    //                 return output.to.node === node
+                    //             }
+                    //         });
+                    //         if(output) {
+                    //             if(!output.to.index) output.to.index = 0;
+                    //             // output.to.index++;
+                    //         }
+                    //     }
+                    // }
                 }
                 if(node.type === "ExpressionStatement") {
                     if(node.expression.type === "CallExpression") {
@@ -333,7 +367,7 @@ function NodeEditor(props) {
     }
 
     const parseNodeInputs = (node, parentNode, start) => {
-        if(start) return [];
+        if(start) return [{}];
 
         return [{
             from: {
@@ -369,7 +403,8 @@ function NodeEditor(props) {
             return {
                 content: declaration.declaration,
                 addNodes: declaration.nodes,
-                // midNodes: declaration.midNodes
+                // midNodes: declaration.midNodes,
+                inputNodes: declaration.inputNodes
             };
         } else if(node.type === "IfStatement") {
             return {
@@ -487,11 +522,18 @@ function NodeEditor(props) {
         //     type: "Type test",
         //     content: "Content test"
         // }];
+        let inputNodes = [];
         for(let i = 0; i < node.declarations.length; i++) {
             if(node.declarations[i].init) {
                 let expression = parseNodeExpression(node.declarations[i].init, false);
                 if(expression.addNodes) addNodes = addNodes.concat(expression.addNodes);
-                content += "Initialize " + node.declarations[i].id.name + " to " + expression.content + "\n";
+                content += "Initialize " + node.declarations[i].id.name + "\n";
+                inputNodes.push({
+                    type: "VariableDeclarationInput",
+                    content: expression.content.toString(),
+                    text: "Initial value of " + node.declarations[i].id.name,
+                    outputType: "data"
+                });
             } else {
                 content += ("Define " + node.declarations[i].id.name) + ((i < node.declarations.length - 1) ? ",\n" : "\n");
             }
@@ -500,7 +542,8 @@ function NodeEditor(props) {
         return {
             declaration: content,
             nodes: addNodes,
-            // midNodes: midNodes
+            // midNodes: midNodes,
+            inputNodes: inputNodes
         };
     }
 
@@ -635,7 +678,7 @@ function NodeEditor(props) {
         for(let i = 0; i < lines.length; i++) {
             if(lines[i].type === "codeFlow") {
                 ctx.strokeStyle = "#222299";
-            } else if(lines[i].type === "number") {
+            } else if(lines[i].type === "data") {
                 ctx.strokeStyle = "#229944";
             } else if(lines[i].type === "functionCall") {
                 ctx.strokeStyle = "#992244";
@@ -666,13 +709,16 @@ function NodeEditor(props) {
                 const { x, y } = getBezierXY(0.5, x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2);
                 const digits = lines[i].text.toString().length;
 
-                ctx.clearRoundRect(
+                ctx.beginPath();
+                ctx.fillStyle = "#10191f";
+                ctx.roundRect(
                     toScreenCoords(x - ((digits * 5) + 10), 0, offset).x,
                     toScreenCoords(0, y - 15, offset).y,
                     (digits * 10 + 20) * offset.scale,
                     30 * offset.scale,
-                    10 * offset.scale
+                    15 * offset.scale
                 );
+                ctx.fill();
                 ctx.beginPath();
                 ctx.roundRect(
                     toScreenCoords(x - ((digits * 5) + 5), 0, offset).x,
@@ -683,7 +729,7 @@ function NodeEditor(props) {
                 );
                 ctx.stroke();
                 ctx.fillStyle = "#ffffff";
-                ctx.font = `${16 * offset.scale}px Arial`;
+                ctx.font = `${16 * offset.scale}px monospace`;
                 ctx.textAlign = "center";
                 ctx.fillText(lines[i].text, toScreenCoords(x, 0, offset).x, toScreenCoords(0, y + 6, offset).y);
             }
@@ -716,30 +762,6 @@ function NodeEditor(props) {
         this.quadraticCurveTo(x, y + height, x, y + height - cornerRadius.lowerLeft);
         this.lineTo(x, y + cornerRadius.upperLeft);
         this.quadraticCurveTo(x, y, x + cornerRadius.upperLeft, y);
-    }
-
-    // @ts-ignore
-    CanvasRenderingContext2D.prototype.clearRoundRect = function (x, y, width, height, radius) {
-        this.globalCompositeOperation = 'destination-out';
-        var cornerRadius = { upperLeft: radius, upperRight: radius, lowerLeft: radius, lowerRight: radius };
-        if (typeof radius === "object") {
-            for (var side in radius) {
-                cornerRadius[side] = radius[side];
-            }
-        }
-    
-        this.beginPath();
-        this.moveTo(x + cornerRadius.upperLeft, y);
-        this.lineTo(x + width - cornerRadius.upperRight, y);
-        this.quadraticCurveTo(x + width, y, x + width, y + cornerRadius.upperRight);
-        this.lineTo(x + width, y + height - cornerRadius.lowerRight);
-        this.quadraticCurveTo(x + width, y + height, x + width - cornerRadius.lowerRight, y + height);
-        this.lineTo(x + cornerRadius.lowerLeft, y + height);
-        this.quadraticCurveTo(x, y + height, x, y + height - cornerRadius.lowerLeft);
-        this.lineTo(x, y + cornerRadius.upperLeft);
-        this.quadraticCurveTo(x, y, x + cornerRadius.upperLeft, y);
-        this.fill();
-        this.globalCompositeOperation = "source-over";
     }
 
     const getBezierXY = (t, sx, sy, cp1x, cp1y, cp2x, cp2y, ex, ey) => {
@@ -783,7 +805,7 @@ function NodeEditor(props) {
                                             let nodeColor;
                                             if(inputFrom.type === "codeFlow") {
                                                 nodeColor = styles.JSNodeBlue;
-                                            } else if(inputFrom.type === "number") {
+                                            } else if(inputFrom.type === "data") {
                                                 nodeColor = styles.JSNodeGreen;
                                             } else if(inputFrom.type === "functionCall") {
                                                 nodeColor = styles.JSNodeRed;
@@ -808,7 +830,7 @@ function NodeEditor(props) {
                                             let nodeColor;
                                             if(outputTo.type === "codeFlow") {
                                                 nodeColor = styles.JSNodeBlue;
-                                            } else if(outputTo.type === "number") {
+                                            } else if(outputTo.type === "data") {
                                                 nodeColor = styles.JSNodeGreen;
                                             } else if(outputTo.type === "functionCall") {
                                                 nodeColor = styles.JSNodeRed;

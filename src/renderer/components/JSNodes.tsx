@@ -103,20 +103,57 @@ function NodeEditor(props) {
         if(parentNode === null) parentNode = parsedNodes[0];
         for(let j = 0; j < nodesToParse.length; j++) {
             let node = nodesToParse[j];
-            const content = parseNodeContent(node);
+            let iterationParentNode = parentNode;
+            const content: any = parseNodeContent(node);
+
+            let midNodes = content.midNodes;
+            if(midNodes && midNodes.length > 0) {
+                for(let i = 0; i < midNodes.length; i++) {
+                    let midNode = midNodes[i];
+                    parsedNodes.push({
+                        ...midNode,
+                        x: 100 + 250 * (startX + i),
+                        y: 170 * (j + startY) + 100,
+                        inputs: parseNodeInputs(node, iterationParentNode, start || i > 0),
+                        outputs: parseNodeOutputs(node, iterationParentNode),
+                        startNode: start,
+                    });
+                    if(!start || i > 0) {
+                        if(iterationParentNode.outputs.length < 1) {
+                            iterationParentNode.outputs.push({
+                                to: [{
+                                    node: parsedNodes[parsedNodes.length - 1],
+                                    type: "codeFlow",
+                                    text: 1
+                                }],
+                            });
+                        } else {
+                            iterationParentNode.outputs[iterationParentNode.outputs.length - 1].to.push({
+                                node: parsedNodes[parsedNodes.length - 1],
+                                type: "codeFlow",
+                                text: j + 1
+                            });
+                        }
+                    }
+                    iterationParentNode = parsedNodes[parsedNodes.length - 1];
+                }
+            }
+
+            const currentX = startX + (midNodes ? midNodes.length : 0);
+
             parsedNodes.push({
                 ...node,
-                x: 100 + 250 * startX,
+                x: 100 + 250 * currentX,
                 y: 170 * (j + startY) + 100,
-                inputs: parseNodeInputs(node, parentNode, start),
-                outputs: parseNodeOutputs(node, parentNode),
-                startNode: start,
+                inputs: parseNodeInputs(node, iterationParentNode, start && !(midNodes && midNodes.length > 0)),
+                outputs: parseNodeOutputs(node, iterationParentNode),
+                startNode: start && !(midNodes && midNodes.length > 0),
                 content: content.content
             });
 
-            if(!start) {
-                if(j === 0) {
-                    parentNode.outputs.push({
+            if(!(start && !(midNodes && midNodes.length > 0))) {
+                if(iterationParentNode.outputs.length < 1) {
+                    iterationParentNode.outputs.push({
                         to: [{
                             node: parsedNodes[parsedNodes.length - 1],
                             type: "codeFlow",
@@ -124,7 +161,7 @@ function NodeEditor(props) {
                         }],
                     });
                 } else {
-                    parentNode.outputs[parentNode.outputs.length - 1].to.push({
+                    iterationParentNode.outputs[iterationParentNode.outputs.length - 1].to.push({
                         node: parsedNodes[parsedNodes.length - 1],
                         type: "codeFlow",
                         text: j + 1
@@ -133,18 +170,17 @@ function NodeEditor(props) {
             }
 
             if(node.body) {
-                const nodesParsed = parseNodes(node.body.body, false, startX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
+                const nodesParsed = parseNodes(node.body.body, false, currentX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
                 parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                 startY += nodesParsed.yOffset;
             } else if(node.type === "IfStatement") {
-                const parentNode = parsedNodes[parsedNodes.length - 1];
                 let nodeConsequent = node.consequent;
                 if(nodeConsequent.type === "BlockStatement") {
                     nodeConsequent = nodeConsequent.body;
                 } else {
                     nodeConsequent = [nodeConsequent];
                 }
-                let nodesParsed = parseNodes(nodeConsequent, false, startX + 1, startY + j, parentNode);
+                let nodesParsed = parseNodes(nodeConsequent, false, currentX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
                 parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                 startY += nodesParsed.yOffset;
                 
@@ -155,14 +191,14 @@ function NodeEditor(props) {
                     } else {
                         nodeAlternate = [nodeAlternate];
                     }
-                    nodesParsed = parseNodes(nodeAlternate, false, startX + 1, startY + j, parentNode);
+                    nodesParsed = parseNodes(nodeAlternate, false, currentX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
                     parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                     startY += nodesParsed.yOffset;
                 }
             }
 
             if(content.addNodes !== undefined && content.addNodes.length > 0) {
-                const nodesParsed = parseNodes(content.addNodes.map(node => node instanceof Array ? node[0] : node), false, startX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
+                const nodesParsed = parseNodes(content.addNodes.map(node => node instanceof Array ? node[0] : node), false, currentX + 1, startY + j, parsedNodes[parsedNodes.length - 1]);
                 parsedNodes = [...parsedNodes, ...nodesParsed.nodes];
                 startY += nodesParsed.yOffset;
             }
@@ -332,7 +368,8 @@ function NodeEditor(props) {
             const declaration = parseVariableDeclaration(node);
             return {
                 content: declaration.declaration,
-                addNodes: declaration.nodes
+                addNodes: declaration.nodes,
+                // midNodes: declaration.midNodes
             };
         } else if(node.type === "IfStatement") {
             return {
@@ -446,6 +483,10 @@ function NodeEditor(props) {
     const parseVariableDeclaration = (node) => {
         let content = "";
         let addNodes = [];
+        // let midNodes = [{
+        //     type: "Type test",
+        //     content: "Content test"
+        // }];
         for(let i = 0; i < node.declarations.length; i++) {
             if(node.declarations[i].init) {
                 let expression = parseNodeExpression(node.declarations[i].init, false);
@@ -458,7 +499,8 @@ function NodeEditor(props) {
 
         return {
             declaration: content,
-            nodes: addNodes
+            nodes: addNodes,
+            // midNodes: midNodes
         };
     }
 

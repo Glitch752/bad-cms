@@ -77,6 +77,7 @@ function NodeEditor(props) {
     // FIXME: Find a better way to do this
     // @ts-ignore
     document.offset = offset;
+
     let nodesChanged = false;
     // @ts-ignore
     if(document.nodes !== nodes) {
@@ -604,7 +605,8 @@ function NodeEditor(props) {
             // @ts-ignore
             let currentY = document.offset.y + (e.clientY - document.offset.oldY);
             // @ts-ignore
-            setOffset({ x: currentX, y: currentY, oldX: e.clientX, oldY: e.clientY, scale: document.offset.scale });
+            document.offset = { x: currentX, y: currentY, oldX: e.clientX, oldY: e.clientY, scale: document.offset.scale };
+            updateOffset();
         } else if(draggingNode !== null) {
             // @ts-ignore
             let newNodes = [...document.nodes];
@@ -613,8 +615,19 @@ function NodeEditor(props) {
             // @ts-ignore
             newNodes[draggingNode].y = newNodes[draggingNode].y + e.movementY / document.offset.scale;
 
+            // @ts-ignore
+            setOffset({...document.offset});
+            
             setNodes(newNodes);
         }
+    }
+    const updateOffset = () => {
+        const nodesAreaElem = nodesArea.current;
+        // @ts-ignore
+        const offset = document.offset;
+        nodesAreaElem.style.setProperty("--offsetX", `${offset.x}px`);
+        nodesAreaElem.style.setProperty("--offsetY", `${offset.y + offset.scale * -25 + 25}px`);
+        requestAnimationFrame(drawCanvas);
     }
     const nodesMouseUp = (e) => {
         dragging = false;
@@ -628,10 +641,15 @@ function NodeEditor(props) {
         overlayCanvasElem.height = nodesArea.current.offsetHeight;
         const ctx = overlayCanvasElem.getContext("2d");
 
+        ctx.clearRect(0, 0, overlayCanvasElem.width, overlayCanvasElem.height);
+
         // @ts-ignore
         let lines = document.lines;
-        
+        // @ts-ignore
+        const offset = document.offset;
+
         if(nodesChanged || !lines) {
+            nodesChanged = false;
             lines = [];
             for(let i = 0; i < nodes.length; i++) {
                 let node = nodes[i];

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { fromPromise } from "xstate/lib/behaviors";
+import { Bezier } from "bezier-js";
 import styles from "../pages/Editor.module.css";
 
 const acorn = require("acorn");
@@ -617,7 +617,7 @@ function NodeEditor(props) {
 
             // @ts-ignore
             setOffset({...document.offset});
-            
+
             setNodes(newNodes);
         }
     }
@@ -632,6 +632,28 @@ function NodeEditor(props) {
     const nodesMouseUp = (e) => {
         dragging = false;
         draggingNode = null;
+
+        let x = e.clientX - nodesArea.current.getBoundingClientRect().left;
+        let y = e.clientY - nodesArea.current.getBoundingClientRect().top;
+
+        // @ts-ignore
+        let { lines, offset } = document;
+        let lowestDist = null;
+        for(let i = 0; i < lines.length; i++) {
+            let line = lines[i];
+            let { bezier } = line;
+            let dist = bezier.project(toWorldCoords(x, y, offset));
+            if(lowestDist === null || dist.d < lowestDist.d) {
+                lowestDist = dist;
+                lowestDist.line = i;
+            }
+        }
+        if(lowestDist.d < 15) {
+            lines[lowestDist.line].collapsed = !lines[lowestDist.line].collapsed;
+            // @ts-ignore
+            document.lines = lines;
+            drawCanvas();
+        }
     }
 
     const drawCanvas = async () => {
@@ -650,6 +672,7 @@ function NodeEditor(props) {
 
         if(nodesChanged || !lines) {
             nodesChanged = false;
+            const oldLines = lines ? lines.slice() : [];
             lines = [];
             for(let i = 0; i < nodes.length; i++) {
                 let node = nodes[i];
@@ -662,13 +685,21 @@ function NodeEditor(props) {
                             let outputIndex = output.to[k].index;
                             if(!outputIndex) outputIndex = 0;
                             let outputNodeIndex = nodes.indexOf(outputNode);
+                            const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+                            const x1 = node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
+                                  y1 = node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
+                                  x2 = outputNode.x,
+                                  y2 = outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
+                                  cp1x = x1 + (clamp(80 - (x2 - x1), 50, 160))/* + (clamp(-100 + (x2 - x1), 0, 400))*/,
+                                  cp1y = y1 + ((y2 - y1) / 2) - clamp((x2 - x1) / 3, -200, 0),
+                                  cp2x = x2 + (clamp(-80 + (x2 - x1), -150, -50))/* + (clamp(100 - (x2 - x1), -400, 0))*/,
+                                  cp2y = y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200);
                             lines.push({
-                                x1: node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
-                                y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
-                                x2: outputNode.x,
-                                y2: outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
+                                x1, y1, x2, y2, cp1x, cp1y, cp2x, cp2y,
                                 type: output.to[k].type,
-                                text: output.to[k].text
+                                text: output.to[k].text,
+                                bezier: new Bezier(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2),
+                                collapsed: oldLines[lines.length] ? oldLines[lines.length].collapsed : false
                             });
                         }
                     } else {
@@ -676,13 +707,21 @@ function NodeEditor(props) {
                         let outputIndex = output.to.index;
                         if(!outputIndex) outputIndex = 0;
                         let outputNodeIndex = nodes.indexOf(outputNode);
+                        const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+                        const x1 = node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
+                                y1 = node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
+                                x2 = outputNode.x,
+                                y2 = outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
+                                cp1x = x1 + (clamp(80 - (x2 - x1), 50, 160))/* + (clamp(-100 + (x2 - x1), 0, 400))*/,
+                                cp1y = y1 + ((y2 - y1) / 2) - clamp((x2 - x1) / 3, -200, 0),
+                                cp2x = x2 + (clamp(-80 + (x2 - x1), -150, -50))/* + (clamp(100 - (x2 - x1), -400, 0))*/,
+                                cp2y = y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200);
                         lines.push({
-                            x1: node.x + document.getElementById(`JSNodesNode${i}`).offsetWidth,
-                            y1: node.y + document.getElementById(`JSNodesNodeContent${i}`).offsetHeight / (nodes[i].outputs.length + 1) * (j + 1),
-                            x2: outputNode.x,
-                            y2: outputNode.y + document.getElementById(`JSNodesNodeContent${outputNodeIndex}`).offsetHeight / (outputNode.inputs.length + 1) * (outputIndex + 1),
+                            x1, y1, x2, y2, cp1x, cp1y, cp2x, cp2y,
                             type: output.to.type,
-                            text: output.to.text
+                            text: output.to.text,
+                            bezier: new Bezier(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2),
+                            collapsed: oldLines[lines.length] ? oldLines[lines.length].collapsed : false
                         });
                     }
                 }
@@ -705,59 +744,115 @@ function NodeEditor(props) {
             }
 
             const line = lines[i];
-            ctx.beginPath();
-            let {x1, y1, x2, y2} = line;
-            ctx.moveTo(toScreenCoords(x1, 0, offset).x, toScreenCoords(0, y1, offset).y);
-            const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-            // Unnecessarily complicated equation, but it looks really cool
-            const cp1x = x1 + (clamp(80 - (x2 - x1), 50, 160))/* + (clamp(-100 + (x2 - x1), 0, 400))*/,
-                  cp1y = y1 + ((y2 - y1) / 2) - clamp((x2 - x1) / 3, -200, 0),
-                  cp2x = x2 + (clamp(-80 + (x2 - x1), -150, -50))/* + (clamp(100 - (x2 - x1), -400, 0))*/,
-                  cp2y = y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200);
-            ctx.bezierCurveTo(
-                toScreenCoords(cp1x, 0, offset).x, 
-                toScreenCoords(0, cp1y, offset).y, 
-                toScreenCoords(cp2x, 0, offset).x, 
-                toScreenCoords(0, cp2y, offset).y,
-                toScreenCoords(x2, 0, offset).x,
-                toScreenCoords(0, y2, offset).y
-            );
-            ctx.stroke();
-            if(lines[i].text !== undefined) {
-                const { x, y } = getBezierXY(0.5, x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2);
-                const digits = lines[i].text.toString().length;
-
+            if(!line.collapsed) {
                 ctx.beginPath();
-                ctx.fillStyle = "#10191f";
-                ctx.roundRect(
-                    toScreenCoords(x - ((digits * 5) + 10), 0, offset).x,
-                    toScreenCoords(0, y - 15, offset).y,
-                    (digits * 10 + 20) * offset.scale,
-                    30 * offset.scale,
-                    15 * offset.scale
-                );
-                ctx.fill();
-                ctx.beginPath();
-                ctx.roundRect(
-                    toScreenCoords(x - ((digits * 5) + 5), 0, offset).x,
-                    toScreenCoords(0, y - 10, offset).y,
-                    (digits * 10 + 10) * offset.scale,
-                    20 * offset.scale,
-                    10 * offset.scale
+                let {x1, y1, x2, y2, cp1x, cp1y, cp2x, cp2y, bezier} = line;
+                ctx.moveTo(toScreenCoords(x1, 0, offset).x, toScreenCoords(0, y1, offset).y);
+                // Unnecessarily complicated equation, but it looks really cool
+                ctx.bezierCurveTo(
+                    toScreenCoords(cp1x, 0, offset).x, 
+                    toScreenCoords(0, cp1y, offset).y, 
+                    toScreenCoords(cp2x, 0, offset).x, 
+                    toScreenCoords(0, cp2y, offset).y,
+                    toScreenCoords(x2, 0, offset).x,
+                    toScreenCoords(0, y2, offset).y
                 );
                 ctx.stroke();
-                ctx.fillStyle = "#ffffff";
+                if(lines[i].text !== undefined) {
+                    const { x, y } = bezier.get(0.5);
+                    const digits = lines[i].text.toString().length;
+
+                    ctx.beginPath();
+                    ctx.fillStyle = "#10191f";
+                    ctx.roundRect(
+                        toScreenCoords(x - ((digits * 5) + 10), 0, offset).x,
+                        toScreenCoords(0, y - 15, offset).y,
+                        (digits * 10 + 20) * offset.scale,
+                        30 * offset.scale,
+                        15 * offset.scale
+                    );
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.roundRect(
+                        toScreenCoords(x - ((digits * 5) + 5), 0, offset).x,
+                        toScreenCoords(0, y - 10, offset).y,
+                        (digits * 10 + 10) * offset.scale,
+                        20 * offset.scale,
+                        10 * offset.scale
+                    );
+                    ctx.stroke();
+                    ctx.fillStyle = "#ffffff";
+                    ctx.font = `${16 * offset.scale}px monospace`;
+                    ctx.textAlign = "center";
+                    ctx.fillText(lines[i].text, toScreenCoords(x, 0, offset).x, toScreenCoords(0, y + 6, offset).y);
+                }
+            } else {
+                let { bezier } = line;
+                const len = bezier.length();
+                let sideLength = 100 / len;
+                sideLength = sideLength > 0.3 ? 0.3 : sideLength;
+                const bezier1 = bezier.split(0, sideLength);
+                const bezier2 = bezier.split(1 - sideLength, 1);
+
+                ctx.beginPath();
+                ctx.moveTo(toScreenCoords(bezier1.points[0].x, 0, offset).x, toScreenCoords(0, bezier1.points[0].y, offset).y);
+                ctx.bezierCurveTo(
+                    toScreenCoords(bezier1.points[1].x, 0, offset).x,
+                    toScreenCoords(0, bezier1.points[1].y, offset).y,
+                    toScreenCoords(bezier1.points[2].x, 0, offset).x,
+                    toScreenCoords(0, bezier1.points[2].y, offset).y,
+                    toScreenCoords(bezier1.points[3].x, 0, offset).x,
+                    toScreenCoords(0, bezier1.points[3].y, offset).y
+                );
+                ctx.stroke();
+                
+                let normalDerivative1 = normaizeVector(bezier1.derivative(1));
+
+                ctx.fillStyle = ctx.strokeStyle;
                 ctx.font = `${16 * offset.scale}px monospace`;
                 ctx.textAlign = "center";
-                ctx.fillText(lines[i].text, toScreenCoords(x, 0, offset).x, toScreenCoords(0, y + 6, offset).y);
+                ctx.fillText("...", 
+                    toScreenCoords(bezier1.points[3].x, 0, offset).x + 20 * offset.scale * normalDerivative1.x, 
+                    toScreenCoords(0, bezier1.points[3].y, offset).y + 20 * offset.scale * normalDerivative1.y
+                );
+
+                ctx.beginPath();
+                ctx.moveTo(toScreenCoords(bezier2.points[0].x, 0, offset).x, toScreenCoords(0, bezier2.points[0].y, offset).y);
+                ctx.bezierCurveTo(
+                    toScreenCoords(bezier2.points[1].x, 0, offset).x,
+                    toScreenCoords(0, bezier2.points[1].y, offset).y,
+                    toScreenCoords(bezier2.points[2].x, 0, offset).x,
+                    toScreenCoords(0, bezier2.points[2].y, offset).y,
+                    toScreenCoords(bezier2.points[3].x, 0, offset).x,
+                    toScreenCoords(0, bezier2.points[3].y, offset).y
+                );
+                ctx.stroke();
+                
+                let normalDerivative2 = normaizeVector(bezier2.derivative(1));
+
+                ctx.fillText("...", 
+                    toScreenCoords(bezier2.points[0].x, 0, offset).x + 20 * offset.scale * -normalDerivative2.x, 
+                    toScreenCoords(0, bezier2.points[0].y, offset).y + 20 * offset.scale * -normalDerivative2.y
+                );
             }
         }
+    }
+
+    const normaizeVector = (vec) => {
+        let mag = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+        return {x: vec.x / mag, y: vec.y / mag};
     }
 
     const toScreenCoords = (x, y, offset) => {
         return {
             x: x * offset.scale + offset.x,
             y: y * offset.scale + offset.y
+        }
+    }
+    const toWorldCoords = (x, y, offset) => {
+        return {
+            x: (x - offset.x) / offset.scale,
+            y: (y - offset.y) / offset.scale
         }
     }
 
@@ -780,15 +875,6 @@ function NodeEditor(props) {
         this.quadraticCurveTo(x, y + height, x, y + height - cornerRadius.lowerLeft);
         this.lineTo(x, y + cornerRadius.upperLeft);
         this.quadraticCurveTo(x, y, x + cornerRadius.upperLeft, y);
-    }
-
-    const getBezierXY = (t, sx, sy, cp1x, cp1y, cp2x, cp2y, ex, ey) => {
-        return {
-          x: Math.pow(1-t,3) * sx + 3 * t * Math.pow(1 - t, 2) * cp1x 
-            + 3 * t * t * (1 - t) * cp2x + t * t * t * ex,
-          y: Math.pow(1-t,3) * sy + 3 * t * Math.pow(1 - t, 2) * cp1y 
-            + 3 * t * t * (1 - t) * cp2y + t * t * t * ey
-        };
     }
 
     requestAnimationFrame(drawCanvas);

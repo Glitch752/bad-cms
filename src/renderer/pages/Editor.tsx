@@ -579,6 +579,10 @@ export default function Editor(props) {
     }
   });
 
+  if(editorTabs[editorTab] === undefined) {
+    editorTab = 0;
+  }
+
   if (state.matches({ editor: { editor: 'settings' } })) {
     const isDeleting = state.matches({
       editor: { editor: { settings: 'deleteOpen' } },

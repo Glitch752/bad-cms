@@ -88,6 +88,7 @@ function NodeEditor(props) {
 
     useEffect(() => {
         setNodes(scripts.length > 0 ? parseNodes(acorn.parse(scripts[selectedScript].code, {ecmaVersion: "latest"}).body, true).nodes : []);
+        updateOffset();
     }, [selectedScript]);
 
     // TODO: Refactor because this is a mess
@@ -882,7 +883,7 @@ function NodeEditor(props) {
     return (
         // TODO: Figure out why the weird offset.y + offset.scale * -25 + 25 is needed to keep the elements lined up to the canvas
         // @ts-ignore
-        <div className={styles.JSNodesNodeArea} ref={nodesArea} style={{"--scale": offset.scale, "--offsetX": `${offset.x}px`, "--offsetY": `${offset.y + offset.scale * -25 + 25}px`}}>
+        <div className={styles.JSNodesNodeArea} ref={nodesArea} style={{"--scale": offset.scale, "--offsetX": `${offset.x}px`, "--offsetY": `${offset.y + document.offset.scale * -25 + 25}px`}}>
             {
                 nodes.map((code, index) => {
                     return (

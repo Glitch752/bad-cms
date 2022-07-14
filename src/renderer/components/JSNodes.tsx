@@ -477,6 +477,21 @@ function NodeEditor(props) {
                 content: "(Inline function)",
                 addNodes: [node]
             };
+        } else if(node.type === "ArrayExpression") {
+            console.log(node);
+            return {
+                content: "[" + node.elements.map(element => parseNodeExpression(element, false).content).join(", ") + "]"
+            };
+        } else if(node.type === "ObjectExpression") {
+            console.log(node);
+            return {
+                content: "\\*Object\\*"
+            };
+        } else if(node.type === "TemplateLiteral") {
+            console.log(node);
+            return {
+                content: "Template literal"
+            }
         } else {
             return {
                 content: node.type
@@ -600,7 +615,7 @@ function NodeEditor(props) {
         }
     }
     const nodesMouseMove = (e) => {
-        if(dragging) {
+        if(dragging === true) {
             // @ts-ignore
             let currentX = document.offset.x + (e.clientX - document.offset.oldX);
             // @ts-ignore
@@ -608,6 +623,13 @@ function NodeEditor(props) {
             // @ts-ignore
             document.offset = { x: currentX, y: currentY, oldX: e.clientX, oldY: e.clientY, scale: document.offset.scale };
             updateOffset();
+
+            // TODO: Find a better solution for this. For now, it works.
+            dragging = null;
+            setTimeout(() => {
+                if(dragging === false) return;
+                dragging = true;
+            }, 1000 / 60);
         } else if(draggingNode !== null) {
             // @ts-ignore
             let newNodes = [...document.nodes];
@@ -653,7 +675,7 @@ function NodeEditor(props) {
             lines[lowestDist.line].collapsed = !lines[lowestDist.line].collapsed;
             // @ts-ignore
             document.lines = lines;
-            drawCanvas();
+            requestAnimationFrame(drawCanvas);
         }
     }
 
@@ -694,12 +716,14 @@ function NodeEditor(props) {
                                   cp1x = x1 + (clamp(80 - (x2 - x1), 50, 160))/* + (clamp(-100 + (x2 - x1), 0, 400))*/,
                                   cp1y = y1 + ((y2 - y1) / 2) - clamp((x2 - x1) / 3, -200, 0),
                                   cp2x = x2 + (clamp(-80 + (x2 - x1), -150, -50))/* + (clamp(100 - (x2 - x1), -400, 0))*/,
-                                  cp2y = y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200);
+                                  cp2y = y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200),
+                                  bezier = new Bezier(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2);
                             lines.push({
                                 x1, y1, x2, y2, cp1x, cp1y, cp2x, cp2y,
                                 type: output.to[k].type,
                                 text: output.to[k].text,
-                                bezier: new Bezier(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2),
+                                bezier: bezier,
+                                bounds: bezier.bbox(),
                                 collapsed: oldLines[lines.length] ? oldLines[lines.length].collapsed : false
                             });
                         }
@@ -716,12 +740,14 @@ function NodeEditor(props) {
                                 cp1x = x1 + (clamp(80 - (x2 - x1), 50, 160))/* + (clamp(-100 + (x2 - x1), 0, 400))*/,
                                 cp1y = y1 + ((y2 - y1) / 2) - clamp((x2 - x1) / 3, -200, 0),
                                 cp2x = x2 + (clamp(-80 + (x2 - x1), -150, -50))/* + (clamp(100 - (x2 - x1), -400, 0))*/,
-                                cp2y = y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200);
+                                cp2y = y2 + ((y1 - y2) / 2) - clamp((x1 - x2) / 3, 0, 200),
+                                bezier = new Bezier(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2);
                         lines.push({
                             x1, y1, x2, y2, cp1x, cp1y, cp2x, cp2y,
                             type: output.to.type,
                             text: output.to.text,
-                            bezier: new Bezier(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2),
+                            bezier: bezier,
+                            bounds: bezier.bbox(),
                             collapsed: oldLines[lines.length] ? oldLines[lines.length].collapsed : false
                         });
                     }
@@ -734,17 +760,25 @@ function NodeEditor(props) {
         ctx.lineWidth = 2 * offset.scale;
 
         for(let i = 0; i < lines.length; i++) {
-            if(lines[i].type === "codeFlow") {
+            const line = lines[i];
+            if(!rectanglesColliding(
+                toScreenCoords(line.bounds.x.min, 0, offset).x,
+                toScreenCoords(0, line.bounds.y.min, offset).y,
+                toScreenCoords(line.bounds.x.max, 0, offset).x,
+                toScreenCoords(0, line.bounds.y.max, offset).y,
+                0, 0, overlayCanvasElem.offsetWidth, overlayCanvasElem.offsetHeight
+            )) continue;
+
+            if(line.type === "codeFlow") {
                 ctx.strokeStyle = "#222299";
-            } else if(lines[i].type === "data") {
+            } else if(line.type === "data") {
                 ctx.strokeStyle = "#229944";
-            } else if(lines[i].type === "functionCall") {
+            } else if(line.type === "functionCall") {
                 ctx.strokeStyle = "#992244";
             } else {
                 ctx.strokeStyle = "#9999";
             }
 
-            const line = lines[i];
             if(!line.collapsed) {
                 ctx.beginPath();
                 let {x1, y1, x2, y2, cp1x, cp1y, cp2x, cp2y, bezier} = line;
@@ -855,6 +889,10 @@ function NodeEditor(props) {
             x: (x - offset.x) / offset.scale,
             y: (y - offset.y) / offset.scale
         }
+    }
+
+    const rectanglesColliding = (r1x1, r1y1, r1x2, r1y2, r2x1, r2y1, r2x2, r2y2) => {
+        return !(r2x1 > r1x2 || r2x2 < r1x1 || r2y1 > r1y2 || r2y2 < r1y1);
     }
 
     // @ts-ignore

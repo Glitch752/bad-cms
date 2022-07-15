@@ -478,17 +478,16 @@ function NodeEditor(props) {
                 addNodes: [node]
             };
         } else if(node.type === "ArrayExpression") {
-            console.log(node);
             return {
                 content: "[" + node.elements.map(element => parseNodeExpression(element, false).content).join(", ") + "]"
             };
         } else if(node.type === "ObjectExpression") {
-            console.log(node);
             return {
-                content: "\\*Object\\*"
+                content: "\\*Object\\*\nProperties:\n" + node.properties.map(property => {
+                    return `${parseNodeExpression(property.key, false).content}: ${parseNodeExpression(property.value, false).content}`;
+                }).join("\n")
             };
         } else if(node.type === "TemplateLiteral") {
-            console.log(node);
             return {
                 content: "Template literal"
             }
@@ -542,18 +541,57 @@ function NodeEditor(props) {
         let inputNodes = [];
         for(let i = 0; i < node.declarations.length; i++) {
             if(node.declarations[i].init) {
-                let expression = parseNodeExpression(node.declarations[i].init, false);
-                if(expression.addNodes) addNodes = addNodes.concat(expression.addNodes);
-                content += "Initialize " + node.declarations[i].id.name + "\n";
-                inputNodes.push({
-                    type: "VariableDeclarationInput",
-                    content: expression.content.toString(),
-                    text: "Initial value of " + node.declarations[i].id.name,
-                    outputType: "data"
-                });
+                const idType = node.declarations[i].id.type;
+                content += "Initialize ";
+                if(idType === "Identifier") {
+                    content += node.declarations[i].id.name;
+                    let expression = parseNodeExpression(node.declarations[i].init, false);
+                    if(expression.addNodes) addNodes = addNodes.concat(expression.addNodes);
+                    inputNodes.push({
+                        type: "VariableDeclarationInput",
+                        content: expression.content.toString(),
+                        text: "Initial value of " + node.declarations[i].id.name,
+                        outputType: "data"
+                    });
+                } else if(idType === "ArrayPattern") {
+                    const elements = node.declarations[i].id.elements;
+                    for(let j = 0; j < elements.length; j++) {
+                        if(elements[j].type === "Identifier") {
+                            content += elements[j].name;
+                            if(elements.length === 2 && j === 0) {
+                                content += " and ";
+                            } else if(j === elements.length - 2) {
+                                content += ", and ";
+                            } else if(j !== elements.length - 1) {
+                                content += ", ";
+                            }
+                        }
+                    }
+                    content += " from the first " + elements.length + " elements of " + parseNodeExpression(node.declarations[i].init, false).content;
+                } else if(idType === "ObjectPattern") {
+                    const properties = node.declarations[i].id.properties;
+                    let listContent = "";
+                    for(let j = 0; j < properties.length; j++) {
+                        if(properties[j].type === "Property") {
+                            listContent += properties[j].key.name;
+                            if(properties.length === 2 && j === 0) {
+                                listContent += " and ";
+                            } else if(j === properties.length - 2) {
+                                listContent += ", and ";
+                            } else if(j !== properties.length - 1) {
+                                listContent += ", ";
+                            }
+                        }
+                    }
+                    content += listContent;
+                    content += " from the " + listContent + " properties of " + parseNodeExpression(node.declarations[i].init, false).content + " respectively";
+                } else {
+                    content += "unknown";
+                }
             } else {
-                content += ("Define " + node.declarations[i].id.name) + ((i < node.declarations.length - 1) ? ",\n" : "\n");
+                content += ("Define " + node.declarations[i].id.name);
             }
+            content += ((i < node.declarations.length - 1) ? ",\n" : "\n");
         }
 
         return {

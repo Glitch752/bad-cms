@@ -152,7 +152,8 @@ function NodeEditor(props) {
                 inputs: parseNodeInputs(node, iterationParentNode, start && !(midNodes && midNodes.length > 0)),
                 outputs: parseNodeOutputs(node, iterationParentNode),
                 startNode: start && !(midNodes && midNodes.length > 0),
-                content: content.content
+                content: content.content,
+                inputConnections: content.inputConnections
             });
             let childNode = parsedNodes[parsedNodes.length - 1];
 
@@ -241,6 +242,49 @@ function NodeEditor(props) {
         if(start) {
             for(let i = 0; i < parsedNodes.length; i++) {
                 let node = parsedNodes[i];
+
+                let inputConnections = node.inputConnections;
+                if(inputConnections && inputConnections.length > 0) {
+                    for(let j = 0; j < inputConnections.length; j++) {
+                        let fromNode = null;
+
+                        for(let k = 0; k < parsedNodes.length; k++) {
+                            if(parsedNodes[k].declarations) {
+                                for(let l = 0; l < parsedNodes[k].declarations.length; l++) {
+                                    let declaration = parsedNodes[k].declarations[l];
+                                    if(inputConnections[j].condition(declaration)) {
+                                        fromNode = parsedNodes[k];
+                                        break;
+                                    }
+                                }
+                                if(fromNode) break;
+                            } else {
+                                if(inputConnections[j].condition(parsedNodes[k])) {
+                                    fromNode = parsedNodes[k];
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(fromNode === null) continue;
+                        let inputConnection = {
+                            from: {
+                                node: fromNode,
+                            }
+                        };
+                        node.inputs.push(inputConnection);
+
+                        fromNode.outputs.push({
+                            to: {
+                                node: node,
+                                type: "data",
+                                text: "data",
+                                index: node.inputs.length - 1
+                            }
+                        });
+                    }
+                }
+
                 if(node.startNode) {
                     node.inputs.splice(0, 1);
                     node.inputs.unshift({
@@ -406,7 +450,8 @@ function NodeEditor(props) {
                 content: declaration.declaration,
                 addNodes: declaration.nodes,
                 // midNodes: declaration.midNodes,
-                inputNodes: declaration.inputNodes
+                inputNodes: declaration.inputNodes,
+                inputConnections: declaration.inputConnections,
             };
         } else if(node.type === "IfStatement") {
             return {
@@ -414,7 +459,7 @@ function NodeEditor(props) {
             };
         } else if (node.type === "ForStatement") {
             return {
-                content: parseForStatement(node)
+                content: parseForStatement(node).content
             };
         } else if(node.type === "WhileStatement") {
             return {
@@ -449,8 +494,13 @@ function NodeEditor(props) {
                 content: `${parseNodeExpression(node.left, false).content} ${node.operator} ${parseNodeExpression(node.right, false).content}`
             };
         } else if(node.type === "Identifier") {
+            let identifierPossibilities = [];
+            identifierPossibilities.push({
+                condition: (testnode) => testnode.id?.name === node.name
+            });
             return {
-                content: node.name
+                content: node.name,
+                inputConnections: identifierPossibilities
             };
         } else if(node.type === "MemberExpression") {
             return {
@@ -500,11 +550,14 @@ function NodeEditor(props) {
 
     const parseForStatement = (node) => {
         let content = "\\*For\\*\n";
+        let inputConnections = [];
 
         if(node.init) {
             content += "\\*Initialization:\\*\n";
             if(node.init.type === "VariableDeclaration") {
-                content += parseVariableDeclaration(node.init).declaration + "\n";
+                const variableDeclaration = parseVariableDeclaration(node.init);
+                if(variableDeclaration.inputConnections) inputConnections = variableDeclaration.inputConnections;
+                content += variableDeclaration.declaration + "\n";
             } else {
                 content += parseNodeExpression(node.init, false).content + "\n";
             }
@@ -524,7 +577,10 @@ function NodeEditor(props) {
             content += "\\*Update:\\* None\n";
         }
 
-        return content;
+        return {
+            content: content,
+            inputConnections: inputConnections
+        };
     }
 
     function parseWhileStatement(node) {
@@ -539,35 +595,37 @@ function NodeEditor(props) {
         //     content: "Content test"
         // }];
         let inputNodes = [];
+        let inputConnections = [];
         for(let i = 0; i < node.declarations.length; i++) {
             if(node.declarations[i].init) {
                 const idType = node.declarations[i].id.type;
                 content += "Initialize ";
                 if(idType === "Identifier") {
-                    content += node.declarations[i].id.name;
+                    const name = parseNodeExpression(node.declarations[i].id, false).content;
+                    content += name;
                     let expression = parseNodeExpression(node.declarations[i].init, false);
                     if(expression.addNodes) addNodes = addNodes.concat(expression.addNodes);
                     inputNodes.push({
                         type: "VariableDeclarationInput",
                         content: expression.content.toString(),
-                        text: "Initial value of " + node.declarations[i].id.name,
+                        text: "Initial value of " + name,
                         outputType: "data"
                     });
                 } else if(idType === "ArrayPattern") {
                     const elements = node.declarations[i].id.elements;
                     for(let j = 0; j < elements.length; j++) {
-                        if(elements[j].type === "Identifier") {
-                            content += elements[j].name;
-                            if(elements.length === 2 && j === 0) {
-                                content += " and ";
-                            } else if(j === elements.length - 2) {
-                                content += ", and ";
-                            } else if(j !== elements.length - 1) {
-                                content += ", ";
-                            }
+                        content += parseNodeExpression(elements[j], false).content;
+                        if(elements.length === 2 && j === 0) {
+                            content += " and ";
+                        } else if(j === elements.length - 2) {
+                            content += ", and ";
+                        } else if(j !== elements.length - 1) {
+                            content += ", ";
                         }
                     }
-                    content += " from the first " + elements.length + " elements of " + parseNodeExpression(node.declarations[i].init, false).content;
+                    const originalArray = parseNodeExpression(node.declarations[i].init, false);
+                    if(originalArray.inputConnections) inputConnections = inputConnections.concat(originalArray.inputConnections);
+                    content += " from the first " + elements.length + " elements of " + originalArray.content;
                 } else if(idType === "ObjectPattern") {
                     const properties = node.declarations[i].id.properties;
                     let listContent = "";
@@ -598,7 +656,8 @@ function NodeEditor(props) {
             declaration: content,
             nodes: addNodes,
             // midNodes: midNodes,
-            inputNodes: inputNodes
+            inputNodes: inputNodes,
+            inputConnections: inputConnections
         };
     }
 

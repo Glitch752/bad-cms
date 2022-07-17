@@ -153,7 +153,8 @@ function NodeEditor(props) {
                 outputs: parseNodeOutputs(node, iterationParentNode),
                 startNode: start && !(midNodes && midNodes.length > 0),
                 content: content.content,
-                inputConnections: content.inputConnections
+                inputConnections: content.inputConnections,
+                definedVars: content.definedVars
             });
             let childNode = parsedNodes[parsedNodes.length - 1];
 
@@ -249,20 +250,9 @@ function NodeEditor(props) {
                         let fromNode = null;
 
                         for(let k = 0; k < parsedNodes.length; k++) {
-                            if(parsedNodes[k].declarations) {
-                                for(let l = 0; l < parsedNodes[k].declarations.length; l++) {
-                                    let declaration = parsedNodes[k].declarations[l];
-                                    if(inputConnections[j].condition(declaration)) {
-                                        fromNode = parsedNodes[k];
-                                        break;
-                                    }
-                                }
-                                if(fromNode) break;
-                            } else {
-                                if(inputConnections[j].condition(parsedNodes[k])) {
-                                    fromNode = parsedNodes[k];
-                                    break;
-                                }
+                            if(inputConnections[j].condition(parsedNodes[k])) {
+                                fromNode = parsedNodes[k];
+                                break;
                             }
                         }
 
@@ -434,15 +424,20 @@ function NodeEditor(props) {
             const expression = parseNodeExpression(node.expression);
             return {
                 content: expression.content,
-                addNodes: expression.addNodes
+                addNodes: expression.addNodes,
+                inputConnections: expression.inputConnections,
             };
         } else if(node.type === "FunctionDeclaration") {
+            let inputConnections = [];
+            let parametersText = node.params.map(param => {
+                const paramExpression = parseNodeExpression(param, false);
+                if(paramExpression.inputConnections) inputConnections = inputConnections.concat(paramExpression.inputConnections);
+                return `${paramExpression.content} ${param.type === "AssignmentPattern" ? "(Optional)" : ""}\n`;
+            });
             return {
                 content: `Define function \\*${node.id.name}\\*\n
                 ${node.params.length > 0 ? `\\*Parameters:\\*\n
-                    ${node.params.map(param => {
-                        return `${parseNodeExpression(param, false).content} ${param.type === "AssignmentPattern" ? "(Optional)" : ""}\n`;
-                    })}` : "No parameters"}`
+                    ${parametersText}` : "No parameters"}`
             };
         } else if(node.type === "VariableDeclaration") {
             const declaration = parseVariableDeclaration(node);
@@ -452,18 +447,26 @@ function NodeEditor(props) {
                 // midNodes: declaration.midNodes,
                 inputNodes: declaration.inputNodes,
                 inputConnections: declaration.inputConnections,
+                definedVars: declaration.definedVars
             };
         } else if(node.type === "IfStatement") {
+            const ifStatement = parseNodeExpression(node.test, false);
             return {
-                content: `\\*If\\*\n${parseNodeExpression(node.test, false).content}`
+                content: `\\*If\\*\n${ifStatement.content}`,
+                inputConnections: ifStatement.inputConnections,
             };
         } else if (node.type === "ForStatement") {
+            const forStatement = parseForStatement(node);
             return {
-                content: parseForStatement(node).content
+                content: forStatement.content,
+                inputConnections: forStatement.inputConnections,
+                definedVars: forStatement.definedVars
             };
         } else if(node.type === "WhileStatement") {
+            const whileStatement = parseWhileStatement(node);
             return {
-                content: parseWhileStatement(node)
+                content: whileStatement.content,
+                inputConnections: whileStatement.inputConnections
             };
         } else {
             return {
@@ -476,51 +479,96 @@ function NodeEditor(props) {
         if(node.type === "CallExpression") {
             const callee = node.callee;
             const args = node.arguments;
-            const expressions = args.map(arg => parseNodeExpression(arg, false));
+            let inputConnections = [];
+            const expressions = args.map(arg => {
+                let argExpression = parseNodeExpression(arg, false);
+                if(argExpression.inputConnections) inputConnections = inputConnections.concat(argExpression.inputConnections);
+                return argExpression;
+            });
+            let callExpression = parseNodeExpression(callee, false);
+            // if(callExpression.inputConnections) inputConnections = inputConnections.concat(callExpression.inputConnections); 
+            //Conflicts with already existing functionCall functionality
             return {
-                content: `${!topLayer ? "(" : ""}\\*Call\\* "${parseNodeExpression(callee, false).content}"\n
+                content: `${!topLayer ? "(" : ""}\\*Call\\* "${callExpression.content}"\n
                     ${(args.length > 0 ? 
                         "With arguments: " + expressions.map(expression => expression.content).join(", ") :
                         "With no arguments")}
                     ${!topLayer ? ")" : ""}`,
-                addNodes: expressions.map(expression => expression.addNodes).filter(expression => expression !== undefined)
+                addNodes: expressions.map(expression => expression.addNodes).filter(expression => expression !== undefined),
+                inputConnections: inputConnections
             };
         } else if(node.type === "Literal") {
             return {
-                content: node.value
+                content: node.raw
             };
         } else if(node.type === "BinaryExpression") {
+            const leftExpression = parseNodeExpression(node.left, false);
+            const rightExpression = parseNodeExpression(node.right, false);
+            let inputConnections = [];
+            if(leftExpression.inputConnections) inputConnections = inputConnections.concat(leftExpression.inputConnections);
+            if(rightExpression.inputConnections) inputConnections = inputConnections.concat(rightExpression.inputConnections);
             return {
-                content: `${parseNodeExpression(node.left, false).content} ${node.operator} ${parseNodeExpression(node.right, false).content}`
+                content: `${leftExpression.content} ${node.operator} ${rightExpression.content}`,
+                inputConnections: inputConnections
             };
         } else if(node.type === "Identifier") {
             let identifierPossibilities = [];
             identifierPossibilities.push({
-                condition: (testnode) => testnode.id?.name === node.name
+                condition: (testnode) => 
+                    testnode.definedVars?.find(definedVar => definedVar === node.name),
+                    // testnode.id?.name === node.name || 
+                    // testnode.params?.find(param => 
+                    //     (param.type === "AssignmentPattern" &&
+                    //         param.left.name === node.name) ||
+                    //     param.name === node.name
+                    // ) !== undefined,
+                name: node.name
             });
             return {
                 content: node.name,
                 inputConnections: identifierPossibilities
             };
         } else if(node.type === "MemberExpression") {
+            const leftMember = parseNodeExpression(node.object, false);
+            const rightMember = parseNodeExpression(node.property, false);
+            let inputConnections = [];
+            if(leftMember.inputConnections) inputConnections = inputConnections.concat(leftMember.inputConnections);
+            if(rightMember.inputConnections) inputConnections = inputConnections.concat(rightMember.inputConnections);
             return {
-                content: parseNodeExpression(node.object, false).content + "." + parseNodeExpression(node.property, false).content
+                content: leftMember.content + "." + rightMember.content,
+                inputConnections: inputConnections
             };
         } else if(node.type === "AssignmentPattern") {
-            const expression = parseNodeExpression(node.right, false);
+            const rightExpression = parseNodeExpression(node.right, false);
+            const leftExpression = parseNodeExpression(node.left, false);
+            let inputConnections = [];
+            if(rightExpression.inputConnections) inputConnections = inputConnections.concat(rightExpression.inputConnections);
             return {
-                content: `${parseNodeExpression(node.left, false).content} = ${expression.content}`,
-                addNodes: expression.addNodes
+                content: `${leftExpression.content} = ${rightExpression.content}`,
+                addNodes: rightExpression.addNodes,
+                inputConnections: inputConnections,
+                definedVars: [{
+                    name: node.left.name
+                }]
             };
         } else if(node.type === "UpdateExpression") {
+            const argumentExpression = parseNodeExpression(node.argument, false);
+            let inputConnections = [];
+            if(argumentExpression.inputConnections) inputConnections = inputConnections.concat(argumentExpression.inputConnections);
             return {
-                content: `${parseNodeExpression(node.argument, false).content} ${node.operator}`
+                content: `${argumentExpression.content} ${node.operator}`,
+                inputConnections: inputConnections
             };
         } else if(node.type === "AssignmentExpression") {
-            const expression = parseNodeExpression(node.right, false);
+            const rightExpression = parseNodeExpression(node.right, false);
+            const leftExpression = parseNodeExpression(node.left, false);
+            let inputConnections = [];
+            if(rightExpression.inputConnections) inputConnections = inputConnections.concat(rightExpression.inputConnections);
+            if(leftExpression.inputConnections) inputConnections = inputConnections.concat(leftExpression.inputConnections);
             return {
-                content: `${parseNodeExpression(node.left, false).content} ${node.operator} ${expression.content}`,
-                addNodes: expression.addNodes
+                content: `${leftExpression.content} ${node.operator} ${rightExpression.content}`,
+                addNodes: rightExpression.addNodes,
+                inputConnections: inputConnections
             };
         } else if(node.type === "FunctionExpression") {
             return {
@@ -528,14 +576,27 @@ function NodeEditor(props) {
                 addNodes: [node]
             };
         } else if(node.type === "ArrayExpression") {
+            let inputConnections = [];
+            const elementsText = node.elements.map(element => {
+                const elementExpression = parseNodeExpression(element, false);
+                if(elementExpression.inputConnections) inputConnections = inputConnections.concat(elementExpression.inputConnections);
+                return elementExpression.content;
+            });
             return {
-                content: "[" + node.elements.map(element => parseNodeExpression(element, false).content).join(", ") + "]"
+                content: "[" + elementsText.join(", ") + "]",
+                inputConnections: inputConnections
             };
         } else if(node.type === "ObjectExpression") {
+            let inputConnections = [];
+            const propertiesText = node.properties.map(property => {
+                const keyExpression = parseNodeExpression(property.key, false);
+                const valueExpression = parseNodeExpression(property.value, false);
+                if(keyExpression.inputConnections) inputConnections = inputConnections.concat(keyExpression.inputConnections);
+                if(valueExpression.inputConnections) inputConnections = inputConnections.concat(valueExpression.inputConnections);
+                return `${keyExpression.content}: ${valueExpression.content}`;
+            })
             return {
-                content: "\\*Object\\*\nProperties:\n" + node.properties.map(property => {
-                    return `${parseNodeExpression(property.key, false).content}: ${parseNodeExpression(property.value, false).content}`;
-                }).join("\n")
+                content: "\\*Object\\*\nProperties:\n" + propertiesText.join("\n")
             };
         } else if(node.type === "TemplateLiteral") {
             return {
@@ -551,40 +612,55 @@ function NodeEditor(props) {
     const parseForStatement = (node) => {
         let content = "\\*For\\*\n";
         let inputConnections = [];
+        let definedVars = [];
 
         if(node.init) {
             content += "\\*Initialization:\\*\n";
             if(node.init.type === "VariableDeclaration") {
                 const variableDeclaration = parseVariableDeclaration(node.init);
                 if(variableDeclaration.inputConnections) inputConnections = variableDeclaration.inputConnections;
+                if(variableDeclaration.definedVars) definedVars = definedVars.concat(variableDeclaration.definedVars);
                 content += variableDeclaration.declaration + "\n";
             } else {
-                content += parseNodeExpression(node.init, false).content + "\n";
+                const initExpression = parseNodeExpression(node.init, false);
+                if(initExpression.inputConnections) inputConnections = inputConnections.concat(initExpression.inputConnections);
+                content += initExpression.content + "\n";
             }
         } else {
             content += "\\*Initialization:\\* None\n";
         }
 
         if(node.test) {
-            content += "\\*Test:\\*\n" + parseNodeExpression(node.test, false).content + "\n";
+            const testExpression = parseNodeExpression(node.test, false);
+            if(testExpression.inputConnections) inputConnections = inputConnections.concat(testExpression.inputConnections);
+            content += "\\*Test:\\*\n" + testExpression.content + "\n";
         } else {
             content += "\\*Test:\\* None\n";
         }
 
         if(node.update) {
-            content += "\\*Update:\\*\n" + parseNodeExpression(node.update, false).content + "\n";
+            const updateExpression = parseNodeExpression(node.update, false);
+            if(updateExpression.inputConnections) inputConnections = inputConnections.concat(updateExpression.inputConnections);
+            content += "\\*Update:\\*\n" + updateExpression.content + "\n";
         } else {
             content += "\\*Update:\\* None\n";
         }
 
         return {
             content: content,
-            inputConnections: inputConnections
+            inputConnections: inputConnections,
+            definedVars: definedVars
         };
     }
 
     function parseWhileStatement(node) {
-        return `\\*While\\*\n${parseNodeExpression(node.test, false).content}`;
+        let inputConnections = [];
+        const testExpression = parseNodeExpression(node.test, false);
+        if(testExpression.inputConnections) inputConnections = inputConnections.concat(testExpression.inputConnections);
+        return {
+            content: `\\*While\\*\n${testExpression.content}`,
+            inputConnections: inputConnections
+        };
     }
 
     const parseVariableDeclaration = (node) => {
@@ -596,6 +672,7 @@ function NodeEditor(props) {
         // }];
         let inputNodes = [];
         let inputConnections = [];
+        let definedVars = [];
         for(let i = 0; i < node.declarations.length; i++) {
             if(node.declarations[i].init) {
                 const idType = node.declarations[i].id.type;
@@ -605,16 +682,20 @@ function NodeEditor(props) {
                     content += name;
                     let expression = parseNodeExpression(node.declarations[i].init, false);
                     if(expression.addNodes) addNodes = addNodes.concat(expression.addNodes);
+                    if(expression.inputConnections) inputConnections = inputConnections.concat(expression.inputConnections);
                     inputNodes.push({
                         type: "VariableDeclarationInput",
                         content: expression.content.toString(),
                         text: "Initial value of " + name,
                         outputType: "data"
                     });
+                    definedVars.push(name);
                 } else if(idType === "ArrayPattern") {
                     const elements = node.declarations[i].id.elements;
                     for(let j = 0; j < elements.length; j++) {
-                        content += parseNodeExpression(elements[j], false).content;
+                        let elementExpression = parseNodeExpression(elements[j], false);
+                        definedVars.push(elementExpression.content);
+                        content += elementExpression.content;
                         if(elements.length === 2 && j === 0) {
                             content += " and ";
                         } else if(j === elements.length - 2) {
@@ -632,6 +713,7 @@ function NodeEditor(props) {
                     for(let j = 0; j < properties.length; j++) {
                         if(properties[j].type === "Property") {
                             listContent += properties[j].key.name;
+                            definedVars.push(properties[j].key.name);
                             if(properties.length === 2 && j === 0) {
                                 listContent += " and ";
                             } else if(j === properties.length - 2) {
@@ -642,7 +724,9 @@ function NodeEditor(props) {
                         }
                     }
                     content += listContent;
-                    content += " from the " + listContent + " properties of " + parseNodeExpression(node.declarations[i].init, false).content + " respectively";
+                    const originalObject = parseNodeExpression(node.declarations[i].init, false);
+                    if(originalObject.inputConnections) inputConnections = inputConnections.concat(originalObject.inputConnections);
+                    content += " from the " + listContent + " properties of " + originalObject.content + " respectively";
                 } else {
                     content += "unknown";
                 }
@@ -657,7 +741,8 @@ function NodeEditor(props) {
             nodes: addNodes,
             // midNodes: midNodes,
             inputNodes: inputNodes,
-            inputConnections: inputConnections
+            inputConnections: inputConnections,
+            definedVars: definedVars
         };
     }
 

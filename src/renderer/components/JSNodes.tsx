@@ -304,7 +304,7 @@ function NodeEditor(props) {
                             to: {
                                 node: node,
                                 type: "data",
-                                text: "data",
+                                text: inputConnections[j].text,
                                 index: node.inputs.length - 1
                             }
                         });
@@ -557,7 +557,6 @@ function NodeEditor(props) {
         } else if(node.type === "Identifier") {
             let identifierPossibilities = [];
             const arrayStartsWith = (array, startArray) => {
-                console.log(array, startArray);
                 for(let i = 0; i < startArray.length; i++) {
                     if(array[i] !== startArray[i]) return false;
                 }
@@ -573,6 +572,7 @@ function NodeEditor(props) {
                     //         param.left.name === node.name) ||
                     //     param.name === node.name
                     // ) !== undefined,
+                text: `Reference to ${node.name}`,
             });
             return {
                 content: node.name,

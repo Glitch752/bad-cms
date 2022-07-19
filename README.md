@@ -1,16 +1,14 @@
 # Bad CMS for Devs
 
-Basically what it sounds like. A bad content management system for developers.  
-  
-In the future, this app will let you create all kinds of sites, like blogs and portfolios.
+A bad content management system for developers.  
+Honestly, the name doesn't even fully explain it. This application is intended to be the quickest and easiest way to create a website for people who have at least *some* development experience.
+This application includes a visual layout editor for changing properties of elements, a node-based JavaScript editor for simple code editing (In progress), and a lot more to come.
 
 ## [ todo ]
 - Make the visual layout editor easier to use
 - Let the user organize the workspace
 - Make the app more accessible
 - Add multiple themes
-- Add multiple languages / translations
-- Visual node-based javascript editor???
 
 ## Installing
 

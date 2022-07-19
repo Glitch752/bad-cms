@@ -534,10 +534,19 @@ function NodeEditor(props) {
             return {
                 content: `${!topLayer ? "(" : ""}\\*Call\\* "${callExpression.content}"\n
                     ${(args.length > 0 ? 
-                        "With arguments: " + expressions.map(expression => expression.content).join(", ") :
+                        "With arguments connected arguments" :
                         "With no arguments")}
                     ${!topLayer ? ")" : ""}`,
                 addNodes: expressions.map(expression => expression.addNodes).filter(expression => expression !== undefined),
+                // TODO: Add inputNodes to everything so these changes propagate through the whole node
+                inputNodes: expressions.map((expression, index) => {
+                    return {
+                        type: "FunctionArgument",
+                        content: expression.content.toString(),
+                        text: "Argument" + index + 1,
+                        outputType: "data"
+                    };
+                }),
                 inputConnections: inputConnections
             };
         } else if(node.type === "Literal") {

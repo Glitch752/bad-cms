@@ -142,7 +142,7 @@ function NodeEditor(props) {
                 }
             }
 
-            const currentX = startX + (midNodes ? midNodes.length : 0) + (inputNodes && inputNodes.length > 0 ? 1 : 0),
+            const currentX = startX + (midNodes ? midNodes.length : 0),
                   currentY = (j + startY);
             
             parsedNodes.push({
@@ -159,33 +159,13 @@ function NodeEditor(props) {
             });
             let childNode = parsedNodes[parsedNodes.length - 1];
 
+            
             if(inputNodes && inputNodes.length > 0) {
-                for(let i = 0; i < inputNodes.length; i++) {
-                    let inputNode = inputNodes[i];
-                    startY++;
-                    parsedNodes.push({
-                        ...inputNode,
-                        x: 100 + 250 * startX,
-                        y: 170 * (j + startY) + 100,
-                        inputs: [],
-                        outputs: [],
-                        startNode: false,
-                    });
-                    let currentNode = parsedNodes[parsedNodes.length - 1];
-                    currentNode.outputs.push({
-                        to: {
-                            node: childNode,
-                            type: inputNode.outputType ? inputNode.outputType : "codeFlow",
-                            text: inputNode.text ? inputNode.text : ">",
-                            index: childNode.inputs.length
-                        }
-                    });
-                    childNode.inputs.push({
-                        from: {
-                            node: currentNode
-                        }
-                    });
-                }
+                const inputNodesParsed = parseInputNodes(inputNodes, childNode, startX, startY, j, parsedNodes);
+
+                childNode.x += (inputNodes && inputNodes.length > 0 ? inputNodesParsed.maxRecursiveDepth : 0) * 250;
+                startY = inputNodesParsed.startY;
+                parsedNodes = inputNodesParsed.parsedNodes;
             }
 
             if(!(start && !(midNodes && midNodes.length > 0))) {
@@ -438,6 +418,59 @@ function NodeEditor(props) {
         };
     }
 
+    const parseInputNodes = (inputNodes, childNode, startX, startY, j, parsedNodes, maxRecursiveDepth = 1, currentRecursiveDepth = 1) => {
+        for(let i = 0; i < inputNodes.length; i++) {
+            let inputNode = inputNodes[i];
+            startY++;
+            parsedNodes.push({
+                ...inputNode,
+                x: 100 + 250 * startX,
+                y: 170 * (j + startY) + 100,
+                inputs: [],
+                outputs: [],
+                startNode: false,
+            });
+            const setNode = parsedNodes[parsedNodes.length - 1];
+            
+            let currentNode = parsedNodes[parsedNodes.length - 1];
+            currentNode.outputs.push({
+                to: {
+                    node: childNode,
+                    type: inputNode.outputType ? inputNode.outputType : "codeFlow",
+                    text: inputNode.text ? inputNode.text : ">",
+                    index: childNode.inputs.length
+                }
+            });
+            childNode.inputs.push({
+                from: {
+                    node: currentNode
+                }
+            });
+
+            if(inputNode.inputNodes && inputNode.inputNodes.length > 0) {
+                let parsedInputNodes = parseInputNodes(
+                    inputNode.inputNodes,
+                    parsedNodes[parsedNodes.length - 1],
+                    startX,
+                    startY,
+                    j,
+                    parsedNodes,
+                    maxRecursiveDepth + 1,
+                    currentRecursiveDepth + 1
+                );
+                startY = parsedInputNodes.startY;
+                parsedNodes = parsedInputNodes.parsedNodes;
+                if(parsedInputNodes.maxRecursiveDepth > maxRecursiveDepth) maxRecursiveDepth = parsedInputNodes.maxRecursiveDepth;
+                setNode.x += 250 * (maxRecursiveDepth - currentRecursiveDepth);
+            }
+        }
+        return {
+            maxRecursiveDepth: maxRecursiveDepth,
+            startY: startY,
+            parsedNodes: parsedNodes
+        }
+    }
+
     const parseNodeInputs = (node, parentNode, start) => {
         if(start) return [{}];
 
@@ -544,7 +577,7 @@ function NodeEditor(props) {
                         type: "FunctionArgument",
                         content: expression.content.toString(),
                         text: "Argument" + index + 1,
-                        outputType: "data"
+                        outputType: "data",
                     };
                 }),
                 inputConnections: inputConnections

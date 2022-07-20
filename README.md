@@ -9,6 +9,7 @@ This application includes a visual layout editor for changing properties of elem
 - Let the user organize the workspace
 - Make the app more accessible
 - Add multiple themes
+- Finish the node-based Javascript editor
 
 ## Installing
 

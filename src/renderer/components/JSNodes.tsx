@@ -178,11 +178,17 @@ function NodeEditor(props) {
                         }],
                     });
                 } else {
-                    iterationParentNode.outputs[iterationParentNode.outputs.length - 1].to.push({
+                    let to = iterationParentNode.outputs[iterationParentNode.outputs.length - 1].to;
+                    const newElem = {
                         node: childNode,
                         type: "codeFlow",
                         text: j + 1
-                    });
+                    };
+                    if(to instanceof Array) {
+                        to.push(newElem);
+                    } else {
+                        to = [to, newElem];
+                    }
                 }
             }
 
@@ -495,6 +501,7 @@ function NodeEditor(props) {
                 content: expression.content,
                 addNodes: expression.addNodes,
                 inputConnections: expression.inputConnections,
+                inputNodes: expression.inputNodes,
             };
         } else if(node.type === "FunctionDeclaration") {
             let inputConnections = [];
@@ -567,7 +574,7 @@ function NodeEditor(props) {
             return {
                 content: `${!topLayer ? "(" : ""}\\*Call\\* "${callExpression.content}"\n
                     ${(args.length > 0 ? 
-                        "With arguments connected arguments" :
+                        "With connected arguments" :
                         "With no arguments")}
                     ${!topLayer ? ")" : ""}`,
                 addNodes: expressions.map(expression => expression.addNodes).filter(expression => expression !== undefined),

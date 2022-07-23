@@ -580,13 +580,14 @@ function NodeEditor(props) {
                 addNodes: expressions.map(expression => expression.addNodes).filter(expression => expression !== undefined),
                 // TODO: Add inputNodes to everything so these changes propagate through the whole node
                 inputNodes: expressions.map((expression, index) => {
+                    if(expression.type === "Identifier") return null;
                     return {
                         type: "FunctionArgument",
                         content: expression.content.toString(),
                         text: "Argument" + index + 1,
                         outputType: "data",
                     };
-                }),
+                }).filter(expression => expression !== null),
                 inputConnections: inputConnections
             };
         } else if(node.type === "Literal") {
@@ -625,7 +626,8 @@ function NodeEditor(props) {
             });
             return {
                 content: node.name,
-                inputConnections: identifierPossibilities
+                inputConnections: identifierPossibilities,
+                type: "Identifier",
             };
         } else if(node.type === "MemberExpression") {
             const leftMember = parseNodeExpression(node.object, callOrder, false);

@@ -584,8 +584,9 @@ function NodeEditor(props) {
                     return {
                         type: "FunctionArgument",
                         content: expression.content.toString(),
-                        text: "Argument" + index + 1,
+                        text: "Argument" + (index + 1),
                         outputType: "data",
+                        inputNodes: expression.inputNodes,
                     };
                 }).filter(expression => expression !== null),
                 inputConnections: inputConnections
@@ -700,8 +701,24 @@ function NodeEditor(props) {
                 content: "\\*Object\\*\nProperties:\n" + propertiesText.join("\n")
             };
         } else if(node.type === "TemplateLiteral") {
+            let sections = node.quasis.concat(node.expressions);
+            sections = sections.sort((a, b) => a.start - b.start);
+            sections = sections.map(section => parseNodeExpression(section, callOrder, false));
             return {
-                content: "Template literal"
+                content: "Template literal",
+                inputNodes: sections.map((expression, index) => {
+                    return {
+                        type: "TemplateLiteralArgument",
+                        content: expression.content,
+                        text: "Section" + (index + 1),
+                        outputType: "data",
+                        inputNodes: expression.inputNodes
+                    };
+                }),
+            }
+        } else if(node.type === "TemplateElement") {
+            return {
+                content: node.value.cooked
             }
         } else {
             return {

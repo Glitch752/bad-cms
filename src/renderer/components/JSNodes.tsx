@@ -636,19 +636,29 @@ function NodeEditor(props) {
             let inputConnections = [];
             if(leftMember.inputConnections) inputConnections = inputConnections.concat(leftMember.inputConnections);
             if(rightMember.inputConnections) inputConnections = inputConnections.concat(rightMember.inputConnections);
+            let inputNodes = [];
+            if(leftMember.inputNodes) inputNodes = inputNodes.concat(leftMember.inputNodes);
+            if(rightMember.inputNodes) inputNodes = inputNodes.concat(rightMember.inputNodes);
             return {
                 content: leftMember.content + "." + rightMember.content,
-                inputConnections: inputConnections
+                inputConnections: inputConnections,
+                inputNodes: inputNodes
             };
         } else if(node.type === "AssignmentPattern") {
+            let inputNodes = [];
             const rightExpression = parseNodeExpression(node.right, callOrder, false);
+            if(rightExpression.inputNodes) inputNodes = inputNodes.concat(rightExpression.inputNodes);
             const leftExpression = parseNodeExpression(node.left, callOrder, false);
+            if(leftExpression.inputNodes) inputNodes = inputNodes.concat(leftExpression.inputNodes);
             let inputConnections = [];
             if(rightExpression.inputConnections) inputConnections = inputConnections.concat(rightExpression.inputConnections);
+            if(rightExpression.inputNodes) inputNodes = inputNodes.concat(rightExpression.inputNodes);
+            console.log(rightExpression.inputNodes, leftExpression.inputNodes, inputNodes);
             return {
                 content: `${leftExpression.content} = ${rightExpression.content}`,
                 addNodes: rightExpression.addNodes,
                 inputConnections: inputConnections,
+                inputNodes: inputNodes,
                 definedVars: [{
                     name: node.left.name
                 }]
@@ -665,11 +675,15 @@ function NodeEditor(props) {
             const rightExpression = parseNodeExpression(node.right, callOrder, false);
             const leftExpression = parseNodeExpression(node.left, callOrder, false);
             let inputConnections = [];
+            let inputNodes = [];
             if(rightExpression.inputConnections) inputConnections = inputConnections.concat(rightExpression.inputConnections);
             if(leftExpression.inputConnections) inputConnections = inputConnections.concat(leftExpression.inputConnections);
+            if(rightExpression.inputNodes) inputNodes = inputNodes.concat(rightExpression.inputNodes);
+            if(leftExpression.inputNodes) inputNodes = inputNodes.concat(leftExpression.inputNodes);
             return {
                 content: `${leftExpression.content} ${node.operator} ${rightExpression.content}`,
                 addNodes: rightExpression.addNodes,
+                inputNodes: inputNodes,
                 inputConnections: inputConnections
             };
         } else if(node.type === "FunctionExpression") {

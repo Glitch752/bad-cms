@@ -563,12 +563,13 @@ function NodeEditor(props) {
             const callee = node.callee;
             const args = node.arguments;
             let inputConnections = [];
-            const expressions = args.map(arg => {
+            let expressions = args.map(arg => {
                 let argExpression = parseNodeExpression(arg, callOrder, false);
                 if(argExpression.inputConnections) inputConnections = inputConnections.concat(argExpression.inputConnections);
                 return argExpression;
             });
             let callExpression = parseNodeExpression(callee, callOrder, false);
+            expressions = expressions.concat(callExpression.inputNodes);
             // if(callExpression.inputConnections) inputConnections = inputConnections.concat(callExpression.inputConnections); 
             //Conflicts with already existing functionCall functionality
             return {
@@ -577,10 +578,10 @@ function NodeEditor(props) {
                         "With connected arguments" :
                         "With no arguments")}
                     ${!topLayer ? ")" : ""}`,
-                addNodes: expressions.map(expression => expression.addNodes).filter(expression => expression !== undefined),
+                addNodes: expressions.map(expression => expression?.addNodes).filter(expression => expression !== undefined),
                 // TODO: Add inputNodes to everything so these changes propagate through the whole node
                 inputNodes: expressions.map((expression, index) => {
-                    if(expression.type === "Identifier") return null;
+                    if(!expression || expression.type === "Identifier") return null;
                     return {
                         type: "FunctionArgument",
                         content: expression.content.toString(),
@@ -819,7 +820,8 @@ function NodeEditor(props) {
                         type: "VariableDeclarationInput",
                         content: expression.content.toString(),
                         text: "Initial value of " + name,
-                        outputType: "data"
+                        outputType: "data",
+                        inputNodes: expression.inputNodes
                     });
                     definedVars.push(name);
                 } else if(idType === "ArrayPattern") {

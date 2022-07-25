@@ -918,14 +918,14 @@ function NodeEditor(props) {
 
     const nodesMouseDown = (e) => {
         // Check if we clicked on an element with the class styles.JSNodesNodeTitle
+        // @ts-ignore
+        document.offset.oldX = e.clientX;
+        // @ts-ignore
+        document.offset.oldY = e.clientY;
         if(e.target.classList.contains(styles.JSNodesNodeTitle)) {
             draggingNode = e.target.dataset.index;
         } else {
             dragging = true;
-            // @ts-ignore
-            document.offset.oldX = e.clientX;
-            // @ts-ignore
-            document.offset.oldY = e.clientY;
         }
     }
     const nodesMouseMove = (e) => {
@@ -948,12 +948,20 @@ function NodeEditor(props) {
             // @ts-ignore
             let newNodes = [...document.nodes];
             // @ts-ignore
-            newNodes[draggingNode].x = newNodes[draggingNode].x + e.movementX / document.offset.scale;
-            // @ts-ignore
-            newNodes[draggingNode].y = newNodes[draggingNode].y + e.movementY / document.offset.scale;
+            let offset = document.offset;
+
+            let diffX = e.clientX - offset.oldX;
+            let diffY = e.clientY - offset.oldY;
+
+            newNodes[draggingNode].x = newNodes[draggingNode].x + diffX / offset.scale;
+            newNodes[draggingNode].y = newNodes[draggingNode].y + diffY / offset.scale;
+
+            let newOffset = {...offset, oldX: e.clientX, oldY: e.clientY};
 
             // @ts-ignore
-            setOffset({...document.offset});
+            document.offset = newOffset;
+
+            setOffset(newOffset);
 
             setNodes(newNodes);
         }

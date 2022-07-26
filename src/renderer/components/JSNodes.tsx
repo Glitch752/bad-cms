@@ -551,6 +551,20 @@ function NodeEditor(props) {
                 content: whileStatement.content,
                 inputConnections: whileStatement.inputConnections
             };
+        } else if(node.type === "ClassDeclaration") {
+            // TODO: Make references to classes work
+            return {
+                content: "\\*Declare class\\* " + parseNodeExpression(node.id, callOrder).content + (node.superClass ? (" that inherits it's properties from " + node.superClass.name) : "")
+            };
+        } else if(node.type === "MethodDefinition") {
+            console.log(node);
+            return {
+                content: (node.static ? 
+                        (node.kind === "constructor" ? "\\*Static constructor method\\* " : "\\*Static method\\* ") : 
+                        (node.kind === "constructor" ? "\\*Constructor method\\* " : "\\*Method\\* ")) + 
+                    parseNodeExpression(node.key).content,
+                addNodes: node.value.body.body
+            };
         } else {
             return {
                 content: node.type

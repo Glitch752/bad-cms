@@ -553,11 +553,14 @@ function NodeEditor(props) {
             };
         } else if(node.type === "ClassDeclaration") {
             // TODO: Make references to classes work
+            const name = parseNodeExpression(node.id, callOrder).content;
             return {
-                content: "\\*Declare class\\* " + parseNodeExpression(node.id, callOrder).content + (node.superClass ? (" that inherits it's properties from " + node.superClass.name) : "")
+                content: "\\*Declare class\\* " + 
+                    name + 
+                    (node.superClass ? (" that inherits it's properties from " + node.superClass.name) : ""),
+                definedVars: [name]
             };
         } else if(node.type === "MethodDefinition") {
-            console.log(node);
             return {
                 content: (node.static ? 
                         (node.kind === "constructor" ? "\\*Static constructor method\\* " : "\\*Static method\\* ") : 
@@ -593,7 +596,6 @@ function NodeEditor(props) {
                         "With no arguments")}
                     ${!topLayer ? ")" : ""}`,
                 addNodes: expressions.map(expression => expression?.addNodes).filter(expression => expression !== undefined),
-                // TODO: Add inputNodes to everything so these changes propagate through the whole node
                 inputNodes: expressions.map((expression, index) => {
                     if(!expression || expression.type === "Identifier") return null;
                     return {
@@ -622,22 +624,10 @@ function NodeEditor(props) {
             };
         } else if(node.type === "Identifier") {
             let identifierPossibilities = [];
-            const arrayStartsWith = (array, startArray) => {
-                for(let i = 0; i < startArray.length; i++) {
-                    if(array[i] !== startArray[i]) return false;
-                }
-                return true;
-            }
             identifierPossibilities.push({
                 condition: (testnode) => 
                     testnode.definedVars?.find(definedVar => definedVar === node.name) &&
-                        arrayStartsWith(callOrder, testnode.callOrder.slice(0, testnode.callOrder.length - 1)),
-                    // testnode.id?.name === node.name || 
-                    // testnode.params?.find(param => 
-                    //     (param.type === "AssignmentPattern" &&
-                    //         param.left.name === node.name) ||
-                    //     param.name === node.name
-                    // ) !== undefined,
+                    arrayStartsWith(callOrder, testnode.callOrder.slice(0, testnode.callOrder.length - 1)),
                 text: `Reference to ${node.name}`,
             });
             return {
@@ -668,15 +658,12 @@ function NodeEditor(props) {
             let inputConnections = [];
             if(rightExpression.inputConnections) inputConnections = inputConnections.concat(rightExpression.inputConnections);
             if(rightExpression.inputNodes) inputNodes = inputNodes.concat(rightExpression.inputNodes);
-            console.log(rightExpression.inputNodes, leftExpression.inputNodes, inputNodes);
             return {
                 content: `${leftExpression.content} = ${rightExpression.content}`,
                 addNodes: rightExpression.addNodes,
                 inputConnections: inputConnections,
                 inputNodes: inputNodes,
-                definedVars: [{
-                    name: node.left.name
-                }]
+                definedVars: [node.left.name]
             };
         } else if(node.type === "UpdateExpression") {
             const argumentExpression = parseNodeExpression(node.argument, callOrder, false);
@@ -749,11 +736,42 @@ function NodeEditor(props) {
             return {
                 content: node.value.cooked
             }
+        } else if(node.type === "NewExpression") {
+            const name = parseNodeExpression(node.callee).content;
+            const expressions = node.arguments.map(argument => parseNodeExpression(argument))
+            return {
+                content: "Create a new instance of " + name +
+                    (expressions.length > 0 ? " with connected arguments" : 
+                    " with no arguemnts"),
+                inputNodes: expressions.map((expression, index) => {
+                    if(!expression || expression.type === "Identifier") return null;
+                    return {
+                        type: "FunctionArgument",
+                        content: expression.content.toString(),
+                        text: "Argument" + (index + 1),
+                        outputType: "data",
+                        inputNodes: expression.inputNodes,
+                    };
+                }).filter(expression => expression !== null),
+                inputConnections: [{
+                    condition: (testnode) => 
+                        testnode.definedVars?.find(definedVar => definedVar === name) &&
+                        arrayStartsWith(callOrder, testnode.callOrder.slice(0, testnode.callOrder.length - 1)),
+                    text: `Reference to ${name}`,
+                }],
+            }
         } else {
             return {
                 content: node.type
             };
         }
+    }
+
+    const arrayStartsWith = (array, startArray) => {
+        for(let i = 0; i < startArray.length; i++) {
+            if(array[i] !== startArray[i]) return false;
+        }
+        return true;
     }
 
     const parseForStatement = (node, callOrder) => {
@@ -829,13 +847,13 @@ function NodeEditor(props) {
                     content += name;
                     let expression = parseNodeExpression(node.declarations[i].init, callOrder, false);
                     if(expression.addNodes) addNodes = addNodes.concat(expression.addNodes);
-                    if(expression.inputConnections) inputConnections = inputConnections.concat(expression.inputConnections);
                     inputNodes.push({
                         type: "VariableDeclarationInput",
                         content: expression.content.toString(),
                         text: "Initial value of " + name,
                         outputType: "data",
-                        inputNodes: expression.inputNodes
+                        inputNodes: expression.inputNodes,
+                        inputConnections: expression.inputConnections
                     });
                     definedVars.push(name);
                 } else if(idType === "ArrayPattern") {

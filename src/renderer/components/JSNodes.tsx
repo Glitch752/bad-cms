@@ -719,22 +719,29 @@ function NodeEditor(props) {
         } else if(node.type === "TemplateLiteral") {
             let sections = node.quasis.concat(node.expressions);
             sections = sections.sort((a, b) => a.start - b.start);
-            sections = sections.map(section => parseNodeExpression(section, callOrder, false));
+            sections = sections.map(section => {
+                return {
+                    content: parseNodeExpression(section, callOrder, false).content,
+                    type: section.type
+                }
+            });
             return {
                 content: "Template literal",
                 inputNodes: sections.map((expression, index) => {
+                    if(expression.content === "") return null;
+                    if(expression.content.trim() === "") expression.content = `"${expression.content}"`;
                     return {
-                        type: "TemplateLiteralArgument",
+                        type: expression.type,
                         content: expression.content,
                         text: "Section" + (index + 1),
                         outputType: "data",
                         inputNodes: expression.inputNodes
                     };
-                }),
+                }).filter(node => node !== null),
             }
         } else if(node.type === "TemplateElement") {
             return {
-                content: node.value.cooked
+                content: node.value.raw
             }
         } else if(node.type === "NewExpression") {
             const name = parseNodeExpression(node.callee).content;

@@ -7,8 +7,8 @@ import {
   MenuHeader
 } from '@szhsin/react-menu';
 
-import Creator from './creator';
-import Elements from './elements';
+import Creator from './Creator';
+import Elements from './Elements';
 import JSNodes from './JSNodes';
 
 import { store } from 'renderer/store';

@@ -1027,6 +1027,7 @@ function NodeEditor(props) {
         let lowestDist = null;
         for(let i = 0; i < lines.length; i++) {
             let line = lines[i];
+            if(line.inactive) continue;
             let { bezier } = line;
             let dist = bezier.project(toWorldCoords(x, y, offset));
             if(lowestDist === null || dist.d < lowestDist.d) {
@@ -1040,6 +1041,28 @@ function NodeEditor(props) {
             document.lines = lines;
             requestAnimationFrame(drawCanvas);
         }
+    }
+
+    const toggleNodeConnectionType = (type, e) => {
+        let toggled = e.target.classList.toggle(styles.JSNodesKeyItemToggled);
+        // @ts-ignore
+        let lines = [...document.lines];
+        for(let i = 0; i < lines.length; i++) {
+            let line = lines[i];
+            if(toggled) {
+                if(line.type === type) {
+                    line.inactive = true;
+                }
+            } else {
+                if(line.type === type) {
+                    line.inactive = false;
+                }
+            }
+        }
+
+        // @ts-ignore
+        document.lines = lines;
+        requestAnimationFrame(drawCanvas);
     }
 
     const drawCanvas = async () => {
@@ -1124,6 +1147,8 @@ function NodeEditor(props) {
 
         for(let i = 0; i < lines.length; i++) {
             const line = lines[i];
+            if(line.inactive) continue;
+
             if(!rectanglesColliding(
                 toScreenCoords(line.bounds.x.min, 0, offset).x,
                 toScreenCoords(0, line.bounds.y.min, offset).y,
@@ -1355,18 +1380,19 @@ function NodeEditor(props) {
                 })
             }
             <canvas className={styles.JSNodesOverlayCanvas} ref={overlayCanvas} />
+            {/* TODO: Refactor so this is in a seperate component and we don't have to mess with DOM elements */}
             <div className={styles.JSNodesKey}>
                 <div className={styles.JSNodesKeyItem}>
                     <div className={`${styles.JSNodesKeyItemColor} ${styles.JSNodeBlue}`}></div>
-                    <div className={styles.JSNodesKeyItemTitle}>Code flow</div>
+                    <div className={styles.JSNodesKeyItemTitle} onClick={(e) => toggleNodeConnectionType("codeFlow", e)}>Code flow</div>
                 </div>
                 <div className={styles.JSNodesKeyItem}>
                     <div className={`${styles.JSNodesKeyItemColor} ${styles.JSNodeGreen}`}></div>
-                    <div className={styles.JSNodesKeyItemTitle}>Data</div>
+                    <div className={styles.JSNodesKeyItemTitle} onClick={(e) => toggleNodeConnectionType("data", e)}>Data</div>
                 </div>
                 <div className={styles.JSNodesKeyItem}>
                     <div className={`${styles.JSNodesKeyItemColor} ${styles.JSNodeRed}`}></div>
-                    <div className={styles.JSNodesKeyItemTitle}>Function call</div>
+                    <div className={styles.JSNodesKeyItemTitle} onClick={(e) => toggleNodeConnectionType("functionCall", e)}>Function call</div>
                 </div>
             </div>
         </div>

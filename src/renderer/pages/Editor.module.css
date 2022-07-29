@@ -597,6 +597,7 @@
   bottom: 0;
   left: 0;
   padding: 5px;
+  z-index: 1001;
   background-color: #00000077;
 }
 .JSNodesKeyItem {
@@ -612,4 +613,13 @@
   display: inline-block;
   margin-left: 4px;
   font-size: 16px;
+}
+.JSNodesKeyItemTitle:hover {
+  color: #ccc;
+}
+.JSNodesKeyItemTitle:active {
+  color: #999;
+}
+.JSNodesKeyItemToggled {
+  color: #aaa;
 }

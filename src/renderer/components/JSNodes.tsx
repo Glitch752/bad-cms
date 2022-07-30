@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Bezier } from "bezier-js";
-import styles from "../pages/Editor.module.css";
+import styles from "./JSNodes.module.css";
 
 const acorn = require("acorn");
 
@@ -577,7 +577,7 @@ function NodeEditor(props) {
 
     const parseNodeExpression = (node, callOrder = [], topLayer = true) => {
         if(node.type === "CallExpression") {
-            const callee = node.callee;
+            let callee = node.callee;
             const args = node.arguments;
             let inputConnections = [];
             let expressions = args.map(arg => {
@@ -585,10 +585,12 @@ function NodeEditor(props) {
                 if(argExpression.inputConnections) inputConnections = inputConnections.concat(argExpression.inputConnections);
                 return argExpression;
             });
+            callee.functionIdentifier = true;
             let callExpression = parseNodeExpression(callee, callOrder, false);
             expressions = expressions.concat(callExpression.inputNodes);
-            // if(callExpression.inputConnections) inputConnections = inputConnections.concat(callExpression.inputConnections); 
             //Conflicts with already existing functionCall functionality
+            // if(callExpression.inputConnections) inputConnections = inputConnections.concat(callExpression.inputConnections);
+            if(callExpression.inputConnections) inputConnections = inputConnections.concat(callExpression.inputConnections);
             return {
                 content: `${!topLayer ? "(" : ""}\\*Call\\* "${callExpression.content}"\n
                     ${(args.length > 0 ? 
@@ -630,6 +632,7 @@ function NodeEditor(props) {
                     arrayStartsWith(callOrder, testnode.callOrder.slice(0, testnode.callOrder.length - 1)),
                 text: `Reference to ${node.name}`,
             });
+            if(node.functionIdentifier) identifierPossibilities = [];
             return {
                 content: node.name,
                 inputConnections: identifierPossibilities,
@@ -1035,6 +1038,7 @@ function NodeEditor(props) {
                 lowestDist.line = i;
             }
         }
+        if(lowestDist === null) return;
         if(lowestDist.d < 15) {
             lines[lowestDist.line].collapsed = !lines[lowestDist.line].collapsed;
             // @ts-ignore

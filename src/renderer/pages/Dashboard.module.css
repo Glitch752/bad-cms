@@ -9,7 +9,7 @@
   display: inline-block;
   width: 100vw;
   height: 100px;
-  background-color: #111f29;
+  background-color: var(--backgroundPrimary);
   top: 0;
   left: 0;
   position: absolute;
@@ -28,7 +28,7 @@
   display: inline-flex;
   height: calc(100% - 100px);
   width: calc(100vw - 200px);
-  background-color: #20333f;
+  background-color: var(--backgroundSecondary);
   top: 100px;
   left: 200px;
   position: absolute;
@@ -67,7 +67,7 @@
   width: 100%;
 }
 .menuleftactive {
-  background-color: #111f29;
+  background-color: var(--backgroundPrimary);
 }
 .projectText {
   font-size: 25px;
@@ -142,7 +142,7 @@
   width: 400px;
   background-color: #2b4453;
   border-radius: 5px;
-  box-shadow: 3px 3px #20333f;
+  box-shadow: 3px 3px var(--backgroundSecondary);
   text-align: center;
 }
 .confirmDeleteText {

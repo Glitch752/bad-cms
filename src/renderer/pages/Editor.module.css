@@ -26,7 +26,7 @@
 }
 .editorOptions {
     height: 25px;
-    background-color: #20333f;
+    background-color: var(--backgroundSecondary);
 }
 .editorOptionsIcon {
     float: right;
@@ -138,7 +138,7 @@
   width: 400px;
   background-color: #2b4453;
   border-radius: 5px;
-  box-shadow: 3px 3px #20333f;
+  box-shadow: 3px 3px var(--backgroundSecondary);
   text-align: center;
 }
 .confirmDeleteText {
@@ -208,7 +208,7 @@
   flex: 1;
 }
 .selectedTabSelectorItem {
-  background-color: #20333f;
+  background-color: var(--backgroundSecondary);
 }
 
 .editorSelection {
